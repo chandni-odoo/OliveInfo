@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Fleet Vehicle -->
+        <record id="fleet_vehicle_state_active" model="fleet.vehicle.state">
+            <field name="name">Active</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="fleet_vehicle_state_repair" model="fleet.vehicle.state">
+            <field name="name">Repair</field>
+            <field name="sequence">2</field>
+        </record>
+    </data>
+</odoo>

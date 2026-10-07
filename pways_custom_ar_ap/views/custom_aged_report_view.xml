@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="aged_xlsx" model="ir.actions.report">
+            <field name="name">Aged Excel Report</field>
+            <field name="model">custom.ap.ar</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">pways_custom_ar_ap.aged_xlsx</field>
+            <field name="report_file">pways_custom_ar_ap.aged_xlsx</field>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

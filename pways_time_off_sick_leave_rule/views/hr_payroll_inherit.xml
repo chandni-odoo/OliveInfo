@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_payslip_sick_leave_form_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.sick.form</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='worked_days_input']/separator[1]" position='before'>
+                    <group>
+                        <field name="paid_sick_leave" />
+                        <field name="unpaid_sick_leave"/>
+                        <field name="is_paid_sick" invisible="1"/>
+                        <field name="is_unpaid_sick" invisible="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hr_payslip_report_people_template">
+      <t t-call="web.basic_layout">
+          <t t-foreach="docs" t-as="o">
+            <div class="page">
+                <div class="row">
+                    <div class="col-6">
+                        <strong><span t-field="o.company_id"/></strong><br/>
+                        <span t-esc="o.company_id.street"/>,<br/>
+                        <span t-esc="o.company_id.street2"/>,<br/>
+                        <span t-esc="o.company_id.city"/>,
+                        <span t-esc="o.company_id.state_id.name"/>,
+                        <span t-esc="o.company_id.zip"/>
+                    </div>
+                    <div class="col-6" style="text-align: right;">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-height:70px;"/>
+                    </div>
+                </div>
+                <div class="col-12" style='text-align: center;'>
+                    <th><h2 style='font-size:20px;'><b>Payslip for month of <span t-esc="o.get_payslip_month()"/></b></h2></th>
+                </div><br/><br/>
+                <div class="container">
+                    <div class="row" style="font-size:15px;">
+                        <div class="col-3">
+                            <span style="font-weight:600;">Employee Code</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-if="o.employee_id.emp_no" t-esc="o.employee_id.emp_no"/> 
+                        </div>
+                        <div class="col-3">
+                            <span style="font-weight:600;">QID No</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-if="o.employee_id.qid_no" t-esc="o.employee_id.qid_no"/>
+                        </div>
+                    </div>
+                    <div class="row" style="font-size:15px;">
+                        <div class="col-3">
+                            <span style="font-weight:600;">Employee Name</span>
+                        </div>
+                        <div class="col-3">
+                            <t t-if="o.employee_id.emp_no">
+                                <span t-esc="o.employee_id.name.split(' - ')[0]"/>
+                            </t>
+                            <t t-else="">
+                                <span t-field="o.employee_id"/>
+                            </t>
+                        </div>
+                        <div class="col-3">
+                            <span style="font-weight:600;">QID EXP</span>
+                        </div>
+                        <div class="col-3">
+                            <t t-if="o.employee_id.qid_validity">
+                                <span t-field="o.employee_id.qid_validity"/>
+                            </t>
+                        </div>
+                    </div>
+                    <t t-set="bank_ids" t-value="o.employee_id.bank_ids"/>
+                    <div class="row" style="font-size:15px;">
+                        <div class="col-3">
+                            <span style="font-weight:600;">Designation</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-if="o.employee_id.job_id" t-esc="o.employee_id.job_id.name"/>
+                        </div>
+                        <div class="col-3">
+                            <span style="font-weight:600;">Bank a/c No</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-if="bank_ids" t-esc="bank_ids[0].acc_number"/>
+                        </div>
+                    </div>
+                    <div class="row" style="font-size:15px;">
+                        <div class="col-3">
+                            <span style="font-weight:600;">Branch</span>
+                        </div>
+                        <div class="col-3">
+                            <t t-esc="o.employee_id.branch_id.code"/> - <t t-esc="o.employee_id.branch_id.name"/> 
+                        </div>
+                        <div class="col-3">
+                            <span style="font-weight:600;">Bank Name</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-if="bank_ids" t-esc="bank_ids[0].bank_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row" style="font-size:15px;">
+                        <div class="col-3">
+                            <span style="font-weight:600;">Passport No</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-esc="o.employee_id.get_passport_data()['passport_no']"/>
+                        </div>
+                        <div class="col-3">
+                            <span style="font-weight:600;">Passport Exp Date</span>
+                        </div>
+                        <div class="col-3">
+                            <span t-esc="o.employee_id.get_passport_data()['exp_date']"/>
+                        </div>
+                    </div>
+                    <t t-foreach="o.employee_id.ducument_line_ids" t-as="line">
+                        <t t-if="line.document_line_id.name == 'DEEL ID'">
+                            <div class="row" style="font-size:15px;">
+                                <div class="col-3">
+                                    <span style="font-weight:600;">DEEL ID:</span>
+                                </div>
+                                <div class="col-3">
+                                    <span t-esc="line.document_number"/>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <br/>
+                    <table class="table table-sm table-bordered">
+                        <t t-foreach="o['contract_id']" t-as="payment">
+                        <thead>
+                            <th style="text-align: left;">
+                                <span>Basic: </span>
+                                <span style="padding-left: 10px;" t-esc="payment.wage" t-options='{"widget": "float", "precision": 2}'/>
+                            </th>
+                            <th style="text-align: left;">
+                                <span>Allowance: </span>
+                                <span style="padding-left: 10px;" t-esc="payment.allowance" t-options='{"widget": "float", "precision": 2}'/>
+                            </th>
+                            <th style="text-align: left;">
+                                <span>Gross: </span>
+                                <span style="padding-left: 10px;" t-esc="payment.gross_amount" t-options='{"widget": "float", "precision": 2}'/>
+                            </th>
+                        </thead>
+                        </t>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody style='border: 1px solid black;'>
+                            <tr t-foreach="o.get_other_data()" t-as="data" style="font-size: 15px;">
+                                <t t-foreach="data.items()" t-as="leave">
+                                    <td>
+                                        <div style="display: inline-block;width:40%;"><span t-esc="leave[0]"/>: </div>
+                                        <div style="display: inline-block;width:20%;text-align: right;"><span t-esc="leave[1]" t-options='{"widget": "float", "precision": 2}'/></div>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" style="font-size: 15px;">
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <th colspan="2" style="text-align: center;"><b>EARNINGS</b></th>
+                                </thead>
+                                <tbody style='border: 1px solid black;'>
+                                    <tr>
+                                        <th class="text-left">
+                                            <span>Description</span> 
+                                        </th>
+                                        <th class="text-right">Amount
+                                        </th>
+                                    </tr>
+                                    <t t-set="total_earning" t-value="0"/>
+                                    <tr t-foreach="o.line_ids.filtered(lambda x: x.category_id.code not in ('DED', 'GROSS', 'NET') and x.total > 0)" t-as="l">
+                                    <t t-set="total_earning" t-value="total_earning + l.total"/>   
+                                        <td>
+                                            <span t-esc="l.name"/>
+                                        </td>
+                                        <td style='text-align:right;'>
+                                            <span t-esc="l.total" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span style="font-weight:600;font-size: 15px;">TOTAL EARNINGS</span>
+                                        </td>
+                                        <td style="text-align: right;font-weight:600;">
+                                            <t t-esc="round(total_earning,2)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> 
+                        </div>
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <th colspan="2" style="text-align: center;"><b>DEDUCTIONS</b></th>
+                                </thead>
+                                <tbody style='border: 1px solid black;'>
+                                    <tr>
+                                        <th class="text-left"><span>Description</span></th>
+                                        <th style="text-align: right;">Amount</th>
+                                    </tr>
+                                    <t t-set="total_deduction" t-value="0"/>
+                                    <tr t-foreach="o.line_ids.filtered(lambda x: x.category_id.code == 'DED' and x.total != 0)" t-as="l">
+                                        <t t-set="total_deduction" t-value="total_deduction + abs(l.total)"/>
+                                        <td>
+                                            <span t-esc="l.name"/>
+                                        </td>
+                                        <td style='text-align:right;'>
+                                            <span t-esc="abs(l.total)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <span style="font-weight:600;font-size: 15px;">TOTAL DEDUCTIONS</span>
+                                        </th>
+                                        <td style="text-align: right;font-weight:600;">
+                                            <t t-esc="round(total_deduction,2)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-set="emp_data" t-value="o.get_other_data()"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <th style="text-align: center;">
+                                    <span>Gross: </span>
+                                    <span style="padding-left: 10px;" t-esc="sum(o.line_ids.filtered(lambda x: x.category_id.code == 'GROSS').mapped('total'))" t-options='{"widget": "float", "precision": 2}'/>
+                                </th>
+                                <th style="text-align: center;">
+                                    <span>Deduction: </span>
+                                    <span style="padding-left: 10px;" t-esc="round(total_deduction, 2)" t-options='{"widget": "float", "precision": 2}'/>
+                                </th>
+                                <th style="text-align: center;">
+                                    <span>Net Pay: </span>
+                                    <span style="padding-left: 10px;" t-esc="round((total_earning-total_deduction), 2)" t-options='{"widget": "float", "precision": 2}'/>
+                                </th>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+          </t>    
+      </t>
+    </template>
+</odoo>

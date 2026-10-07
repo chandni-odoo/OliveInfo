@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!--     <template id="website_van_pay">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <div class="container text-center">
+                      <h2 class="text-center">Pay Now Button</h2>
+                      <button type="button" class="btn btn-primary pay_now_van">Primary</button>
+                      <div id="message_error_lives" class="d-none alert alert-danger" style="width: 607px;margin-left: 83px;margin-top: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template> -->
+
+    <template id="portal_hr_expense" name="Portal layout : Expense" inherit_id="portal.portal_breadcrumbs" priority="50">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+          <li t-if="expense_id" t-attf-class="breadcrumb-item #{'active ' if not expense_id else ''}">
+            <a t-if="expense_id"><t t-esc="expense_id.name"/></a>
+            <t t-else=""><t t-esc="expense_id.name"/></t>
+          </li>
+        </xpath>
+    </template>
+
+    <template id="portal_home_my_expense" name="Employee Expense" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Expense</t>
+                <t t-set="url" t-value="'/my/expense'"/>
+                <t t-set="placeholder_count" t-value="'expense_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_expense" name="Expense List">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Expense</t>
+            </t>
+            <t t-if="not expense_ids">
+              <p>There are currently no expense for your account.</p>
+            </t>
+            <t t-if="expense_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Expense Date</th>
+                        <th>Category </th>
+                        <th>Description</th>
+                        <th>Paid By</th>
+                        <th>Amount paid</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="expense_ids" t-as="record">
+                    <tr>
+                        <td><t t-esc="record.date"/></td>
+                        <td><t t-esc="record.product_id.name"/></td>
+                        <td><t t-esc="record.name"/></td>
+                        <td><span t-field="record.payment_mode"/></td>
+                        <td><span t-field="record.total_amount"/></td>
+                        <td><span t-field="record.state"/></td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_searchbar_extend_request" name="Search Information" inherit_id="portal.portal_searchbar">
+        <xpath expr="//div[@t-if='searchbar_sortings']" position="before">
+            <div class="form-inline">
+                <div class="btn-group">
+                    <button  t-if="create_expense" type="button" style="margin-right: 10px;border-radius: 2px;" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#my_expense">Create Expense</button>
+                      <div class="modal fade" id="my_expense" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title w-100 text-center">Create Expense</h5>
+                            </div>
+                            <form action="/website_expense_form" method="post" enctype="multipart/form-data" class="s_website_form">
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="row text-center">
+                                            <div class="col-4" style="margin-left:80px;">
+                                                <label class="col-form-label" style="margin-right: 192px">Category</label>
+                                                <select name="category_id" class="form-control" id="product_category">
+                                                    <option value="">Select Category...</option>
+                                                    <t t-foreach="expence_category_ids" t-as="l">
+                                                        <option t-att-value="l.id" t-att-selected="l.id" name="l.id">
+                                                            <t t-esc="l.name" />
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                            <div class="col-3" style="margin-left: -25px">
+                                                <label class="col-form-label" for="alt_disability" style="margin-left: -95px;">Expense Date</label>
+                                                <input type="date" class="form-control o_website_form_input" name="expense_date" id="expense_date"/>
+                                            </div>
+                                            <div class="col-3">
+                                                <label class="col-form-label" style="margin-left: -160px">Paid By</label>
+                                                <select name="paid_by" class="form-control" id="paid_by">
+                                                    <option value="Paid By"></option>
+                                                    <option value="employee">Employee (to reimburse)</option>
+                                                    <option value="company" style="">Company</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-1"/>
+                                        </div>
+                                        <div class="row text-center" style="margin-top:10px;margin-left: 2px;">
+                                            <div class="col-1"></div>
+                                            <div class="col-2">
+                                                <label class="col-form-label" for="alt_disability" style="margin-right:50px;">Unit Price</label>
+                                                <input type="number" class="form-control o_website_form_input" name="expense_amount" id="expense_amount" style="width: 150px;"/>
+                                            </div>
+                                            <div class="col-1" style="margin-left: 20px;">
+                                                <label class="col-form-label" style="margin-left:10px;">Currency</label>
+                                                <select name="currency_id" class="form-control" id="currency_id" style="width: 120px;">
+                                                    <t t-foreach="currency_ids" t-as="l">
+                                                        <option t-att-value="l.id" t-att-selected="l.id" name="l.id">
+                                                            <t t-esc="l.name" />
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                            <div class="col-2" style="margin-left: 65px;">
+                                                <label class="col-form-label" for="alt_disability" style="margin-right:65px;">Quantity</label>
+                                                <input type="number" class="form-control o_website_form_input" name="expense_quantity" id="expense_quantity" style="width: 180px"/>
+                                            </div>
+                                            <div class="col-2">
+                                                <label class="col-form-label" for="alt_disability" style="margin-left: 45px;">Select File</label>
+                                                <input type="file" class="form-control o_website_form_input" name="myexpencefile" id="myexpencefile" style="width: 233px;margin-left: 54px;"/>
+                                            </div>
+                                            <div class="col-1"/>
+                                        </div>
+                                        <div class="form-row" style="margin-top:20px;">
+                                            <div class="col-12">
+                                                <textarea class="form-control o_website_form_input" rows="3" name="description_expance" id="description"
+                                                    placeholder="Description" style="width: 771px;margin-left: 97px;"></textarea>
+                                            </div>
+                                            <div id="message_error_lives" class="d-none alert alert-danger" style="width: 607px;margin-left: 83px;margin-top: 10px;"></div>
+                                            <div id="message_success_lives" class="d-none alert alert-info" style="width: 607px;margin-left: 83px;margin-top: 10px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close</button>
+                                </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

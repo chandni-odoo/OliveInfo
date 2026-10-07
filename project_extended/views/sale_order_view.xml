@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ 
+    <record id="view_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='preview_sale_order']" position="before">
+                <button class="oe_stat_button" name="action_lpo_control" type="object" icon="fa-arrow-right">
+                    <field name="lpo_count" widget="statinfo" string="LPO Control"/>
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']" position="after">
+                <button name="create_lpo_control" type="object" string="Create LPO" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                <field name="sequence_ref"/>
+                <field name="employee_id"/>
+            </xpath>
+            
+            <xpath expr="//notebook" position="before">
+                <button name="get_cost_plus_charges" string="Default Additional Charges" type="object"/>
+            </xpath>
+            
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before"> -->
+                <!-- <field name ="std_hrs" attrs="{'column_invisible':[('parent.state', 'not in', ['costing', 'sale', 'draft']),('parent.branch_for', '!=', 'es')]}"/> -->
+                <!-- <field name ="std_hrs" attrs="{'column_invisible':[('parent.branch_for', '=', 'es')]}"/> -->
+            <!-- </xpath> -->
+            
+        </field>
+    </record>
+
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">25</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="is_helper"/>
+                <field name="is_driver"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

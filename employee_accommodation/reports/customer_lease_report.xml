@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_customer_lease_report" model="ir.actions.report">
+        <field name="name">Customer Lease Agreement Report</field>
+        <field name="model">client.accommodation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">employee_accommodation.customer_lease_report</field>
+        <field name="report_file">employee_accommodation.customer_lease_report</field>
+        <field name="binding_model_id" ref="employee_accommodation.model_client_accommodation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="customer_lease_report">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <style>
+                        .header {
+                            background-color: #4CAF50;
+                            color: white;
+                            padding: 15px;
+                            text-align: center;
+                            border-radius: 5px;
+                        }
+                        .headline {
+                            text-align: center;
+                            font-size: 24px;
+                            font-weight: bold;
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                            color: #E85642; 
+                        }
+                        .section-title {
+                            background-color: #E85642; 
+                            color: white; 
+                            padding: 10px;
+                            border-radius: 5px;
+                            margin-top: 20px;
+                        }
+                        .table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                        }
+                        .table th, .table td {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        .table th {
+                            background-color: #f2f2f2;
+                        }
+                        .signature-section {
+                            margin-top: 30px;
+                            padding: 15px;
+                            background-color: #f9f9f9;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                        }
+                        .signature-box {
+                            display: inline-block;
+                            width: 45%;
+                            text-align: center;
+                            margin: 10px;
+                        }
+                        .signature-box p {
+                            margin: 5px 0;
+                        }
+                        .signature-line {
+                            border-bottom: 1px solid #000;
+                            width: 80%;
+                            margin: 0 auto;
+                        }
+                    </style>
+                    <div class="headline">
+                        Tenant Lease Agreement
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <strong>Accommodation ID:</strong> <span t-field="doc.client_accommodation_id"/>
+                            <br/>
+                            <strong>Tenant:</strong> <span t-field="doc.customer_id.name"/>
+                            <br/>
+                            <strong>Contact Person:</strong> <span t-field="doc.contact_person"/>
+                            <br/>
+                            <strong>Contact Number:</strong> <span t-field="doc.contact_number"/>
+                        </div>
+                        <div class="col-6">
+                            <strong>Agreement Date:</strong> <span t-field="doc.rental_date"/>
+                            <br/>
+                            <strong>Start Date:</strong> <span t-field="doc.start_date"/>
+                            <br/>
+                            <strong>End Date:</strong> <span t-field="doc.end_date"/>
+                            <br/>
+                            <strong>Payment Terms:</strong> <span t-field="doc.payment_terms.name"/>
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <h4>Lease Details</h4>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Unit Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.product_ids" t-as="line">
+                                <tr>
+                                    <td><span t-field="line.product_id.name"/></td>
+                                    <td><span t-field="line.name"/></td>
+                                    <td><span t-field="line.quantity"/></td>
+                                    <td><span t-field="line.product_uom.name"/></td>
+                                    <td><span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                                    <td><span t-esc="line.quantity * line.price_unit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="section-title">
+                        <h4>Other Details</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Rental Type:</strong> <span t-field="doc.rental_type"/>
+                            <br/>
+                            <strong>Maintenance By:</strong> <span t-field="doc.maintenance_by"/>
+                            <br/>
+                            <t t-if="doc.unit_type">
+                                <strong>Unit Type:</strong> <span t-field="doc.unit_type"/>
+                                <br/>
+                            </t>
+                            <t t-if="doc.camp_id">
+                                <strong>Camp:</strong> <span t-field="doc.camp_id.name"/>
+                                <br/>
+                            </t>
+                        </div>
+                        <div class="col-6">
+                            <strong>No. of Units:</strong> <span t-field="doc.num_of_units"/>
+                            <br/>
+                            <strong>Allowed People:</strong> <span t-field="doc.allowed_people"/>
+                            <br/>
+                            <t t-if="doc.room_type_ids">
+                                <strong>Room Types:</strong>
+                                <span t-esc="', '.join(doc.room_type_ids.mapped('name'))"/>
+                                <br/>
+                            </t>
+                            <t t-if="doc.facilities">
+                                <strong>Assigned Facilities:</strong>
+                                <span t-esc="', '.join(doc.facilities.mapped('name'))"/>
+                                <br/>
+                            </t>
+                            <strong>Rate per Unit:</strong> <span t-field="doc.rate_unit" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            <br/>
+                            <strong>Total Rental Amount:</strong> <span t-field="doc.rental_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        </div>
+                    </div>
+
+                    <t t-if="doc.terms_conditions">
+                        <div class="section-title">
+                            <h4>Terms and Conditions</h4>
+                        </div>
+                        <div t-field="doc.terms_conditions.name"/>
+                        <div t-field="doc.terms_conditions.description"/>
+                        <div t-field="doc.notes"/>
+                    </t>
+                    <div class="signature-section" style="display: flex; justify-content: space-between;">
+                        <div class="signature-box" style="width: 45%;">
+                            <p><strong>Signed by Tenant:</strong></p>
+                            <div class="signature-line" style="border-bottom: 1px solid black; margin: 20px 0;"></div>
+                            <p>Company: <span t-field="doc.customer_id.name"/></p>
+                            <p>Name: _________________</p>
+                            <p>Designation: __________</p>
+                            <p>Date: _________________</p>
+                        </div>
+                        
+                        <div class="signature-box" style="width: 45%;">
+                            <p><strong>Signed by Landlord:</strong></p>
+                            <div class="signature-line" style="border-bottom: 1px solid black; margin: 20px 0;"></div>
+                            <p>Company: <span t-field="res_company.name"/></p>
+                            <p>Name: <span t-field="doc.signed_by"/></p>
+                            <p>Designation: <span t-field="doc.designation"/></p> 
+                            <p>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

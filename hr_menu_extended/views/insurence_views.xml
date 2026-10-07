@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_hr_insurance_line_tree" model="ir.ui.view">
+        <field name="name">hr.insurance.line.tree</field>
+        <field name="model">hr.insurance.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="employee_job_title" string="Job Title"/>
+                <field name="employee_branch" string="Branch/Department"/>
+                <field name="employee_manager" string="Manager"/>
+                <field name="employee_status" string="Status"/>
+                <field name="insurance_type_id"/>
+                <field name="plan_amount"/>
+                <field name="premium"/>
+                <field name="benefits"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="days_to_expire"/>
+                <field name="expiry_status"/>
+                <field name="insurance_company_id" domain="[('insurance_company', '=', True)]"/>
+                <field name="attachment" widget="binary"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hr_insurance_line_form" model="ir.ui.view">
+        <field name="name">hr.insurance.line.form</field>
+        <field name="model">hr.insurance.line</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Line">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="employee_job_title"/>
+                        <field name="employee_branch"/>
+                        <field name="employee_manager"/>
+                        <field name="employee_status"/>
+                    </group>
+                    <group>
+                        <field name="insurance_type_id"/>
+                        <field name="plan_amount"/>
+                        <field name="premium"/>
+                        <field name="benefits"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="insurance_company_id" domain="[('insurance_company', '=', True)]"/>
+                        <field name="attachment" widget="binary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_hr_insurance_line_search" model="ir.ui.view">
+        <field name="name">hr.insurance.line.search</field>
+        <field name="model">hr.insurance.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="employee_manager"/>
+                <field name="employee_status"/>
+                <field name="days_to_expire"/>
+                <field name="expiry_status"/>
+                
+                <filter string="Expired" name="expired" domain="[('expiry_status', '=', 'expired')]"/>
+                <filter string="Expiring Soon (≤30 days)" name="expiring_soon" domain="[('expiry_status', '=', 'soon')]"/>
+                <filter string="Expiring in 31-90 Days" name="expiring_medium" domain="[('expiry_status', '=', 'medium')]"/>
+                <filter string="Valid (>90 days)" name="valid" domain="[('expiry_status', '=', 'valid')]"/>
+                
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Expiry Status" name="group_by_expiry_status" context="{'group_by': 'expiry_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+
+    <!-- Action -->
+    <record id="action_hr_insurance_line" model="ir.actions.act_window">
+        <field name="name">Insurance Lines</field>
+        <field name="res_model">hr.insurance.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_insurance_line_tree"/>
+        <field name="search_view_id" ref="view_hr_insurance_line_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new document
+            </p>
+            <p>
+                Also you will find here all the related documents and download it by clicking on any individual
+                document.
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Menuitem -->
+    <menuitem id="menu_hr_employee_reports"
+              name="Employee Reports"
+              parent="hr.menu_hr_root"
+              sequence="7"/>
+              
+    <menuitem id="menu_hr_insurance_line"
+              name="HR Insurance Line"
+              parent="menu_hr_employee_reports"
+              action="action_hr_insurance_line"
+              sequence="3"/>
+</odoo>

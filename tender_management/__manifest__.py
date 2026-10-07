@@ -1,0 +1,28 @@
+{
+    'name': 'Tender Management',
+    'version': '15.0.1.0',
+    'summary': 'Manage Tender Details',
+    'category': 'Sales',
+    'author': 'Olive Infocraft',
+    'website': "http://www.dishicreation.com",
+    'icon': '/tender_management/static/description/icon.png',
+    'depends': ['base', 'contacts', 'mail', 'branch','branch_extended','sale_extended', 'crm'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/tender_groups.xml',
+        'data/tender_sequence.xml',
+        'reports/report_xlsx.xml',
+        'views/tender_working_status_views.xml',
+        'views/tender_views.xml',
+        'views/bid_approver.xml',
+        'views/crm_views.xml',
+        'views/sale_order_line_views.xml',
+        'views/tender_invoice_views.xml',
+        "wizard/tender_report_wizard.xml",
+        'views/tender_menu.xml',
+    ],
+    'images': ['static/description/icon.png'],
+
+    'application': True,
+    'installable': True,
+}

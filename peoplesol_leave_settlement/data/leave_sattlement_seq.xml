@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sequence_leave_sattlement" model="ir.sequence">
+            <field name="name">Leave Sattlement Sequence</field>
+            <field name="code">sequence.leave.sattlement</field>
+            <field name="prefix">LS/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

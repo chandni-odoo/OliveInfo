@@ -1,0 +1,70 @@
+<odoo>
+
+    <record id="view_budget_variance_report_wizard_form" model="ir.ui.view">
+        <field name="name">budget.variance.report.wizard.form</field>
+        <field name="model">budget.variance.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget Variance Report Parameters">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_ids" widget="many2many_tags"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                            <field name="budget_ids"  widget="many2many_tags" domain="[('company_id', '=', company_ids)]"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="report_level"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Generate Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- <record id="view_budget_variance_report_wizard_form" model="ir.ui.view">
+        <field name="name">budget.variance.report.wizard.form</field>
+        <field name="model">budget.variance.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget Variance Report Parameters">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="branch_id"/>
+                            <field name="budget_id" domain="[('company_id', '=', company_id)]"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Generate Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record> -->
+
+    <record id="action_budget_variance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Budget Variance Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">budget.variance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    
+    <menuitem id="menu_budget_variance_report" 
+        name="Variance Report" 
+        parent="account.account_reports_management_menu" 
+        action="action_budget_variance_report_wizard"
+        groups="budget_customizations.group_account_admin"/>
+</odoo>

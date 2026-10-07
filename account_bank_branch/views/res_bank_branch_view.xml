@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_bank_form_view" model="ir.ui.view">
+            <field name="name">res.bank.form.view</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <notebook> 
+                        <page name="public" string="Branches">
+                            <group>
+                                <field name="branch_ids" widget="kanban" nolabel="1">
+                                    <kanban edit="false" import="false">
+                                        <field name="branch_name"/>
+                                        <field name="branch_code"/>
+                                        <field name="swift_code"/>
+                                        <field name="iban_no"/>
+                                        <field name="bsb_no"/>
+                                        <field name="ifsc_code"/>
+                                        <field name="email"/>
+                                        <field name="phone"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_area oe_kanban_global_click o_kanban_attachment">
+                                                    <div class="o_kanban_details">
+                                                        <div class="o_kanban_details_wrapper">
+                                                            <div t-att-title="record.branch_name.raw_value" class="o_kanban_record_title">
+                                                                <strong style="font-size:14px;">Branch Name : <field name="branch_name"/></strong><br/>
+                                                                <span>Branch Code : </span><field name="branch_code"/><br/>
+                                                                <span>IFSC Code: </span><field name="ifsc_code"/><br/>
+                                                                <span>SWIFT Code : </span><field name="swift_code"/><br/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Create Branch">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="branch_name" string="Branch Name"/>
+                                                    <field name="branch_code"/>
+                                                    <field name="swift_code"/>
+                                                    <label for="street" string="Address"/>
+                                                    <div>
+                                                        <div class="o_address_format" name="div_address">
+                                                            <field name="street" placeholder="Street..." class="o_address_street"/>
+                                                            <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                                            <field name="city" placeholder="City" class="o_address_city"/>
+                                                            <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}" context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                                            <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                                            <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                                        </div>
+                                                    </div>
+                                                </group>
+                                                <group>
+                                                    <field name="ifsc_code"/>
+                                                    <field name="iban_no"/>
+                                                    <field name="bsb_no"/>
+                                                    <field name="phone" widget="phone"/>
+                                                    <field name="email" widget="email"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="swift_code"/>
+                    <field name="iban_no"/>
+                    <field name="beneficiary_name"/>
+                </xpath>
+                <xpath expr="//field[@name='bic']" position="after">
+                    <field name="ifsc_code"/>
+                    <field name="account_no"/>
+                    <field name="branch_name"/>
+                    <field name="bsb_no"/>
+                </xpath>
+                <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="placeholder">  </attribute>
+                </xpath>
+                <xpath expr="//field[@name='street2']" position="attributes">
+                    <attribute name="placeholder">Street...</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="res_partner_form_view" model="ir.ui.view">
+            <field name="name">res.partner.form.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bank_ids']/tree/field[@name='bank_id']" position="after">
+                    <field name="branch_id" domain="[('bank_id', '=', bank_id)]"/>
+                    <field name="iban_no"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

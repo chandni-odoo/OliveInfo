@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_trip_sheet_report" model="ir.actions.report">
+        <field name="name">Trip Sheet Report</field>
+        <field name="model">trip.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">skip_compactor_report.trip_report_xlsx</field>
+        <field name="report_file">skip_compactor_report.trip_report_xlsx</field>
+        <field name="binding_model_id" ref="model_trip_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

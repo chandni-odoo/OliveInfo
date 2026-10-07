@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+        <t  t-extend="hr_holidays.dashboard_calendar_header">
+            <t t-jquery=".mt-1" t-operation="replace">
+
+                 <div class="mt-1">
+                    <t t-if="requires_allocation">
+                        <t t-set="employee_requests" t-value="timeoff[1]['employee_requests'] === 'yes'"/>
+
+                        <t t-if="employee_requests">
+                            <div class="row">
+                                <div class="col-4">
+                                     <t class="o_timeoff_big o_timeoff_purple"><span class="o_timeoff_purple">FUTURE</span></t> <span class="o_timeoff_purple">LEAVES </span><br/>
+                                     <t t-if="has_icon"><img height="30px" t-attf-src="{{timeoff[1]['icon']}}"/></t><span t-esc="timeoff[1]['exist_allowing_leave']" class="o_timeoff_huge o_timeoff_purple font-weight-bold align-middle"/><br/>
+                                     <t class="o_timeoff_big o_timeoff_purple"><span class="o_timeoff_purple">DAYS</span></t> <span class="o_timeoff_purple">AVAILABLE </span>
+
+                                </div>
+                                <div class="col-4">
+                                     <t t-if="has_icon"><img height="30px" t-attf-src="{{timeoff[1]['icon']}}"/></t><span t-esc="timeoff[1]['virtual_remaining_leaves']" class="o_timeoff_huge o_timeoff_purple font-weight-bold align-middle"/><br/>
+                                     <t class="o_timeoff_big o_timeoff_purple" t-if="timeoff[1]['request_unit'] == 'hour'"><span class="o_timeoff_purple">HOURS</span></t><t class="o_timeoff_big o_timeoff_purple" t-else=""><span class="o_timeoff_purple">DAYS</span></t> <span class="o_timeoff_purple">AVAILABLE </span>
+
+                                </div>
+                                <div class="col-4">
+                                     <t class="o_timeoff_big o_timeoff_purple"><span class="o_timeoff_purple">TOTAL</span></t> <span class="o_timeoff_purple">LEAVES </span><br/>
+                                     <t t-if="has_icon"><img height="30px" t-attf-src="{{timeoff[1]['icon']}}"/></t><span t-esc="timeoff[1]['pre_total_allowed_staff_leave']" class="o_timeoff_huge o_timeoff_purple font-weight-bold align-middle"/><br/>
+                                     <t class="o_timeoff_big o_timeoff_purple" t-if="timeoff[1]['request_unit'] == 'hour'"><span class="o_timeoff_purple">HOURS</span></t><t class="o_timeoff_big o_timeoff_purple" t-else=""><span class="o_timeoff_purple">DAYS</span></t> <span class="o_timeoff_purple">AVAILABLE </span>
+                                </div>
+                            </div>
+
+                        </t>
+
+                        <t t-else="">
+                            <t t-if="has_icon"><img height="30px" t-attf-src="{{timeoff[1]['icon']}}"/></t><span t-esc="timeoff[1]['virtual_remaining_leaves']" class="o_timeoff_huge o_timeoff_purple font-weight-bold align-middle"/><br/>
+                            <t class="o_timeoff_big o_timeoff_purple" t-if="timeoff[1]['request_unit'] == 'hour'"><span class="o_timeoff_purple">HOURS</span></t><t class="o_timeoff_big o_timeoff_purple" t-else=""><span class="o_timeoff_purple">DAYS</span></t> <span class="o_timeoff_purple">AVAILABLE </span>
+                        </t>
+
+                    </t>
+                    <t t-else="">
+                        <t t-if="has_icon"><img height="30px" t-attf-src="{{timeoff[1]['icon']}}"/></t><span t-esc="timeoff[1]['virtual_leaves_taken']" class="o_timeoff_huge o_timeoff_purple font-weight-bold align-middle"/><br/>
+                        <t t-if="timeoff[1]['request_unit'] == 'hour'"><span class="o_timeoff_purple">HOURS</span></t><t t-else=""><span class="o_timeoff_purple">DAYS</span></t> <span class="o_timeoff_purple">TAKEN</span>
+                    </t>
+                </div>
+
+            </t>
+
+        </t>
+
+
+</templates>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_visa_quota_availability_xlsx" model="ir.actions.report">
+        <field name="name">Visa Quota Availability Report</field>
+        <field name="model">visa.quota.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">visa_processing.visa_quota_availability_xlsx</field>
+        <field name="report_file">visa_processing.visa_quota_availability_xlsx</field>
+    </record>
+
+
+    <record id="action_visa_request_excel_report" model="ir.actions.report">
+        <field name="name">Visa Request Excel Report</field>
+        <field name="model">visa.request.excel.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">visa_processing.visa_request_excel_report</field>
+        <field name="report_file">visa_processing.visa_request_excel_report</field>
+    </record>
+
+</odoo>

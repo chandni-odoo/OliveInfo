@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_visa_request_application_tree" model="ir.ui.view">
+        <field name="name">visa.request.application.tree</field>
+        <field name="model">visa.request.application</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="recruitment_app_number"/>
+                <field name="employee_name"/>
+                <field name="job_position"/>
+                <field name="gender"/>
+                <field name="business_unit"/>
+                <field name="nationality"/>
+                <field name="passport_number"/>
+                <field name="passport_expiry"/>
+                <field name="visa_process_type"/>
+                <field name="non_qvc_qatar_first_entry_date" string="Non QVC Qatar First Entry Date"
+                    attrs="{'invisible': [('visa_process_type', '!=', 'non_qvc')]}"/>
+                <field name="qvc_qatar_first_entry_date" string="QVC Qatar First Entry Date"
+                    attrs="{'invisible': [('visa_process_type', '!=', 'qvc')]}"/>
+                <field name="days_left" 
+                    attrs="{'invisible': [('visa_process_type', 'not in', ['qvc', 'non_qvc'])]}"/>
+                <!-- <field name="days_left" 
+                    attrs="{'invisible': [('visa_process_type', '!=', 'non_qvc')]}"/> -->
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_visa_request_application_form" model="ir.ui.view">
+        <field name="name">visa.request.application.form</field>
+        <field name="model">visa.request.application</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" 
+                            string="Submit" 
+                            type="object" 
+                            class="btn-primary"
+                            states="new"/>
+
+                    <button name="action_pending" 
+                            string="Pending" 
+                            type="object" 
+                            class="btn-secondary"
+                            states="submit"
+                            groups="visa_processing.group_pro_team"/>
+                    
+                    <button name="action_process" 
+                            string="Processing" 
+                            type="object" 
+                            class="btn-warning"
+                            states="pending"
+                            groups="visa_processing.group_pro_team"/>
+
+                    <button name="action_complete" 
+                            string="Complete" 
+                            type="object" 
+                            class="btn-primary"
+                            states="process"
+                            groups="visa_processing.group_pro_team"/>
+
+                    <button name="action_reject" 
+                            string="Reject" 
+                            type="object" 
+                            class="btn-danger"
+                            states="pending,process"/>
+                    
+                    <button name="action_cancel" 
+                            string="Cancel" 
+                            type="object" 
+                            class="btn-secondary"
+                            states="new,submit,pending,process"/>
+                    
+                    <button name="action_draft" 
+                            string="Reset to New" 
+                            type="object" 
+                            class="btn-secondary"
+                            states="complete,reject,cancel"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="new,submit,pending,process,complete,reject,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="request_date"/>
+                            <field name="recruitment_app_number"/>
+                            <field name="employee_name"/>
+                            <field name="employee_number"/>
+                            <field name="job_position"/>
+                            <field name="gender"/>
+                        </group>
+                        <group>
+                            <field name="business_unit"/>
+                            <field name="nationality"/>
+                            <field name="passport_number"/>
+                            <field name="passport_expiry"/>
+                            <field name="qid_number"/>
+                            <field name="date_of_birth"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="visa_process_type"/>
+                            <field name="visa_applicable" attrs="{'invisible': [('visa_process_type', '!=', 'change_employer')]}"/>
+                            <field name="qvc_country_id" attrs="{'invisible': [('visa_process_type', '!=', 'qvc')]}"/>
+                            <field name="qvc_center_id" attrs="{'invisible': [('visa_process_type', '!=', 'qvc')]}"/>
+                        </group>
+                        <!-- <group attrs="{'invisible': [('visa_process_type', 'not in', ['qvc', 'non_qvc'])]}" string="Visa Details"> -->
+                        <group attrs="{'invisible': [('visa_process_type', 'not in', ['qvc', 'non_qvc']), ('visa_applicable', '!=', True)]}" string="Visa Details">
+                            <field name="vp_number_id" readonly="1" groups="!visa_processing.group_pro_team"/>
+                            <field name="visa_profession_id" widget="selection" readonly="1" groups="!visa_processing.group_pro_team"/>
+                            <field name="visa_number" readonly="1" groups="!visa_processing.group_pro_team"/>
+                            <field name="vp_number_id" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                            <field name="visa_profession_id" widget="selection" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                            <field name="visa_number" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <field name="document_line_ids">
+                                <tree editable="bottom">
+                                    <field name="document_type_id"/>
+                                    <field name="document_number"/>
+                                    <field name="valid_from"/>
+                                    <field name="valid_to"/>
+                                    <field name="issue_place"/>
+                                    <field name="status"/>
+                                    <field name="attachment" filename="document_number" widget="binary"/>
+                                    <!-- <field name="source_document_id" invisible="1"/> -->
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                        </page>
+                        
+                        <page string="Salary Components">
+                            <field name="salary_line_ids">
+                                <tree editable="bottom">
+                                    <field name="salary_component_id"/>
+                                    <field name="amount"/>
+                                    <field name="currency_id"/>
+                                    <field name="notes"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="salary_component_id"/>
+                                        <field name="amount"/>
+                                        <field name="currency_id"/>
+                                        <field name="notes"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    <!-- QVC Process Page -->
+                        <page string="QVC Process" attrs="{'invisible': [('visa_process_type', '!=', 'qvc')]}">
+                            <group>
+                                <group>
+                                    <field name="qvc_visa_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_visa_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="qvc_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="qvc_appointment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_appointment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                                <group>
+                                    <field name="qvc_visa_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_visa_issue_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_qatar_first_entry_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_qid_apply_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="qvc_visa_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="qvc_visa_issue_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="qvc_qatar_first_entry_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="qvc_qid_apply_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Non-QVC Process Page -->
+                        <page string="Non-QVC Process" attrs="{'invisible': [('visa_process_type', '!=', 'non_qvc')]}">
+                            <group>
+                                <group>
+                                    <field name="non_qvc_visa_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_visa_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_visa_issue_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_qatar_first_entry_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_medical_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_visa_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_visa_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_visa_issue_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_qatar_first_entry_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_medical_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                                <group>
+                                    <field name="non_qvc_medical_appointment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_fingerprint_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_fingerprint_appointment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_employment_contract" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_qid_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_medical_appointment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_fingerprint_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_fingerprint_appointment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_employment_contract" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="non_qvc_qid_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Change of Employer/Secondment Page -->
+                        <page string="Change of Employer/Secondment" attrs="{'invisible': [('visa_process_type', 'not in', ['change_employer', 'secondment'])]}">
+                            <group>
+                                <group>
+                                    <field name="change_employer_noc" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_company_documents" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_application_no" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_noc" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="change_employer_company_documents" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="change_employer_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="change_employer_application_no" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                                <group>
+                                    <field name="change_employer_application_status" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_employee_contract" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_transfer_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="change_employer_application_status" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="change_employer_employee_contract" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="change_employer_transfer_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Work Permit Page -->
+                        <page string="Work Permit" attrs="{'invisible': [('visa_process_type', '!=', 'work_permit')]}">
+                            <group>
+                                <group>
+                                    <field name="work_permit_photo" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_qid" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_sponsor_id" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_education_certificate_arabic" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_application_no" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_application_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_photo" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_qid" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_sponsor_id" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_education_certificate_arabic" aattrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_application_no" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_application_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                                <group>
+                                    <field name="work_permit_pcc" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_employee_contract" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_payment_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_validity_from" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_expiry_date" readonly="1" groups="!visa_processing.group_pro_team"/>
+                                    <field name="work_permit_pcc" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_employee_contract" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_payment_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_validity_from" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                    <field name="work_permit_expiry_date" attrs="{'readonly': [('state', 'not in', ['submit', 'pending', 'process'])]}" groups="visa_processing.group_pro_team"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_qvc_country_tree" model="ir.ui.view">
+        <field name="name">qvc.country.tree</field>
+        <field name="model">qvc.country</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_qvc_country_form" model="ir.ui.view">
+        <field name="name">qvc.country.form</field>
+        <field name="model">qvc.country</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_qvc_center_tree" model="ir.ui.view">
+        <field name="name">qvc.center.tree</field>
+        <field name="model">qvc.center</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="country_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_qvc_center_form" model="ir.ui.view">
+        <field name="name">qvc.center.form</field>
+        <field name="model">qvc.center</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="country_id"/>
+                        <field name="address"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_visa_request_application_search" model="ir.ui.view">
+        <field name="name">visa.request.application.search</field>
+        <field name="model">visa.request.application</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Reference"/>
+                <field name="recruitment_app_number"/>
+                <field name="state"/>
+                <filter string="All" name="all" domain="[]"/>
+                <filter string="Submitted" name="state_submit" 
+                    domain="[('state', 'in', ['submit'])]"/>
+                <group expand="0" string="Group By">
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- <record id="view_visa_non_qvc_pending_search" model="ir.ui.view">
+        <field name="name">visa.non.qvc.pending.search</field>
+        <field name="model">visa.request.application</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Reference"/>
+                <field name="recruitment_app_number"/>
+                <field name="non_qvc_qatar_first_entry_date"/>
+                <filter string="Non-QVC Pending" name="non_qvc_pending" 
+                    domain="[('visa_process_type', '=', 'non_qvc'), ('state', 'in', ['submit', 'pending', 'process'])]"/>
+                <filter string="Days Left &lt; 7" name="days_left_lt_7" 
+                    domain="[('days_left', '&lt;', 7), ('days_left', '&gt;', 0)]"/>
+                <filter string="Days Left &lt; 0" name="days_left_expired" 
+                    domain="[('days_left', '&lt;', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record> -->
+
+    <!-- <record id="action_visa_non_qvc_pending" model="ir.actions.act_window">
+        <field name="name">Non-QVC Pending Status</field>
+        <field name="res_model">visa.request.application</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_visa_request_application_tree"/>
+        <field name="search_view_id" ref="view_visa_non_qvc_pending_search"/>
+        <field name="context">{'search_default_non_qvc_pending': 1}</field>
+        <field name="domain">[('visa_process_type', '=', 'non_qvc'), ('state', 'in', ['submit', 'pending', 'process'])]</field>
+    </record> -->
+
+    <record id="view_visa_non_qvc_pending_search" model="ir.ui.view">
+        <field name="name">visa.qvc.non.qvc.pending.search</field>
+        <field name="model">visa.request.application</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Reference"/>
+                <field name="recruitment_app_number"/>
+                <field name="non_qvc_qatar_first_entry_date"/>
+                <field name="qvc_qatar_first_entry_date"/>
+                <filter string="QVC/Non-QVC Pending" name="qvc_non_qvc_pending" 
+                    domain="['|', ('visa_process_type', '=', 'non_qvc'), ('visa_process_type', '=', 'qvc'), ('state', 'in', ['submit', 'pending', 'process'])]"/>
+                <filter string="Days Left &lt; 7" name="days_left_lt_7" 
+                    domain="[('days_left', '&lt;', 7), ('days_left', '&gt;', 0)]"/>
+                <filter string="Days Left &lt; 0" name="days_left_expired" 
+                    domain="[('days_left', '&lt;', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by':'state'}"/>
+                    <filter string="Visa Process Type" name="group_by_visa_process_type" context="{'group_by':'visa_process_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_visa_non_qvc_pending" model="ir.actions.act_window">
+        <field name="name">QVC/Non-QVC Pending Status</field>
+        <field name="res_model">visa.request.application</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_visa_request_application_tree"/>
+        <field name="search_view_id" ref="view_visa_non_qvc_pending_search"/>
+        <field name="context">{'search_default_qvc_non_qvc_pending': 1}</field>
+        <field name="domain">['|', ('visa_process_type', '=', 'non_qvc'), ('visa_process_type', '=', 'qvc'), ('state', 'in', ['submit', 'pending', 'process'])]</field>
+    </record>
+
+    <record id="action_visa_request_applications" model="ir.actions.act_window">
+        <field name="name">Visa Request Applications</field>
+        <field name="res_model">visa.request.application</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_state_submit': 1}</field>
+        <field name="domain">[]</field>
+        <field name="search_view_id" ref="view_visa_request_application_search"/>
+    </record>
+
+    <record id="action_visa_request_new_applications" model="ir.actions.act_window">
+        <field name="name">Visa Request</field>
+        <field name="res_model">visa.request.application</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_qvc_country" model="ir.actions.act_window">
+        <field name="name">QVC Countries</field>
+        <field name="res_model">qvc.country</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_qvc_center" model="ir.actions.act_window">
+        <field name="name">QVC Centers</field>
+        <field name="res_model">qvc.center</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

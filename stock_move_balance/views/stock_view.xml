@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_stock_move" model="ir.ui.view">
+            <field name="name">stock.move.inherit.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_deadline']" position="after">
+                    <field name="opening_balance"/>
+                    <field name="closing_balance"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

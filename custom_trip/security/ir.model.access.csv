@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_trip_sheet,custom.trip.sheet,model_custom_trip_sheet,base.group_user,1,1,1,1
+access_model_skip_loader,skip.loader,model_skip_loader,base.group_user,1,1,1,1
+access_compactor_trip_sheet,compactor.trip.sheet,model_compactor_trip_sheet,base.group_user,1,1,1,1
+access_skip_no,skip.no,model_skip_no,base.group_user,1,1,1,1
+access_so_extra_charge,so_extra_charge,model_so_extra_charge,,1,1,1,1
+access_so_extra_charge_wizard,so_extra_charge_wizard,model_so_extra_charge_wizard,,1,1,1,1

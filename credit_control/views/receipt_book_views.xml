@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- TREE VIEW -->
+    <record id="view_receipt_book_tree" model="ir.ui.view">
+        <field name="name">receipt.book.tree</field>
+        <field name="model">receipt.book</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="start_number"/>
+                <field name="end_number"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_receipt_book_form" model="ir.ui.view">
+        <field name="name">receipt.book.form</field>
+        <field name="model">receipt.book</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+                    <button name="action_draft" string="Draft" type="object"
+                            states="active,closed"/>
+                    <button name="action_active" string="Active" type="object"
+                            states="draft"/>
+                    <button name="action_closed" string="Close" type="object"
+                            states="active"/>
+
+                    <button name="action_generate"
+                            string="Generate"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,closed"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group>
+                            <field name="start_number"/>
+                            <field name="end_number"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Receipt Details">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="receipt_no"/>
+                                    <field name="payment_voucher" readonly="1"/>
+                                    <field name="status"/>
+                                    <field name="remark"/>
+                                    <button name="action_open_payment"
+                                            type="object"
+                                            string="Payment"
+                                            attrs="{'invisible': [('payment_voucher', '=', False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_receipt_book" model="ir.actions.act_window">
+        <field name="name">Receipt Book</field>
+        <field name="res_model">receipt.book</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- MENU -->
+    <menuitem id="menu_receipt_book"
+              name="Receipt Book"
+              parent="account.menu_finance_receivables"
+              action="action_receipt_book"
+              sequence="26"
+              groups="credit_control.group_account_admin_group2"/>
+
+</odoo>

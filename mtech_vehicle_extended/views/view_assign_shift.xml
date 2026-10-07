@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="assign_shift_tree" model="ir.ui.view">
+        <field name="name">assign.shift.tree</field>
+        <field name="model">assign.shift</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="vehicle_id" />
+                <field name="shift_type_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+    <record id="assign_shift_form" model="ir.ui.view">
+        <field name="name">assign.shift.form</field>
+        <field name="model">assign.shift</field>
+        <field name="arch" type="xml">
+            <form string="Assign Shift">
+                <header>
+                    <button name="generate_operation_schedule" type="object" data-hotkey="shift+g" string="Generate" attrs="{'invisible': [('schedule_generated', '=', True)]}" class="oe_highlight" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="schedule_generated" invisible="1" />
+                            <field name="vehicle_id" />
+                            <field name="shift_type_id" />
+                        </group>
+                        <group>
+                            <field name="date_from" />
+                            <field name="date_to" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee Week Offs" name="emp_week_offs">
+                            <field name="emp_week_off" mode="tree">
+                                <tree string="Employee Week Offs Line" editable="bottom">
+                                    <field name="week_off_type" />
+                                    <field name="employee_id" />
+                                    <field name="week1" />
+                                    <field name="week2" />
+                                    <field name="week3" />
+                                    <field name="week4" />
+                                    <field name="week5" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_assign_shift" model="ir.actions.act_window">
+        <field name="name">Assign Shift</field>
+        <field name="res_model">assign.shift</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+</odoo>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- added server action menu in other earnings -->
+    <record id="action_confirm_states_list" model="ir.actions.server">
+        <field name="name">Confirm State</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_other_earnings"/>
+        <field name="binding_model_id" ref="model_other_earnings"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                if record.state == 'draft':
+                    record.action_confirm()
+                if record.state == 'under_approval':
+                    record.action_confirm()
+                if record.state == 'approve':
+                    record.action_confirm()
+        </field>
+    </record>
+
+    <record id="other_earnings_tree_view" model="ir.ui.view">
+        <field name="name">other.earnings.tree.view</field>
+        <field name="model">other.earnings</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="start_date"/>
+                <field name="applied_to"/>
+                <field name="payslip_input_type_id"/>
+                <field name="type"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="other_earnings_form_view" model="ir.ui.view">
+        <field name="name">other.earnings.form.view</field>
+        <field name="model">other.earnings</field>
+        <field name="arch" type="xml">
+            <form string="Other Earnings">
+                <header>
+                    <button name="compute_amount" type="object" string="Compute" class="oe_highlight"/>
+                    <button name="action_under_approval" type="object" string="Submit" class="oe_highlight"  states="draft"/>
+                    <button name="action_confirm" type="object" string="Confirm" states="approve" class="oe_highlight"/>
+                    <button name="action_approve" type="object" string="Approve" states="under_approval" class="oe_highlight"/>
+                    <button name="action_paid" type="object" string="Paid" states="confirm" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" states="draft,under_approval,approve,confirm,paid" string="Cancel"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                     <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="applied_to"/>
+                            <field name="company_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'company')]}"/>
+                            <field name="branch_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'branch')]}"/>
+                            <field name="department_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'department')]}"/>
+                            <field name="project_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'project')]}"/>
+                            <field name="task_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'task')]}"/>
+                        </group>
+                        <group> 
+                            <field name="payslip_input_type_id" required="1"/>
+                            <field name="type" required="1"/>
+                            <field name="amount"/>
+                        </group>
+                        <group colspan='6'>
+                             <field name="employee_ids" widget="many2many_tags" attrs="{'invisible': [('applied_to', '!=', 'emplopyee')]}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Other Earnings Line">
+                            <field name="earnings_ids">
+                                <tree editable="bottom">
+                                    <field name="employee_id" required="1"/>
+                                    <field name="date"/>
+                                    <field name="payslip_input_type_id"/>
+                                    <field name="type"/>
+                                    <field name="amount"/>
+                                    <field name="is_payslip_created"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>    
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_payslip_input_type_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.input.type.view</field>
+        <field name="model">hr.payslip.input.type</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_input_type_view_form"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="type"/>
+                <field name="account_debit" />
+                <field name="account_credit"/>
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                <field name="not_computed_in_net"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="other_earnings_line_tree_view" model="ir.ui.view">
+        <field name="name">other.earnings.line.tree.view</field>
+        <field name="model">other.earnings.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="earnings_line_id"/>
+                <field name="date" required="1"/>
+                <field name="payslip_input_type_id"/>
+                <field name="type"/>
+                <field name="amount"/>
+                <field name="is_payslip_created"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="other_earnings_line_view_form_inherit" model="ir.ui.view">
+        <field name="name">other.earnings.line.view</field>
+        <field name="model">other.earnings.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" required="1"/>
+                            <field name="earnings_line_id" required="1"/>
+                            <field name="date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="payslip_input_type_id" required="1"/>
+                            <field name="type" required="1"/>
+                            <field name="amount"/>
+                            <field name="is_payslip_created"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_other_earnings">
+        <field name="name">Other Earnings</field>
+        <field name="res_model">other.earnings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+       
+    <record model="ir.actions.act_window" id="action_view_of_other_earnings_lines">
+        <field name="name">Other Earning Lines</field>
+        <field name="res_model">other.earnings.line</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="view_id" ref="other_earnings_line_tree_view"/> -->
+    </record>
+
+    <record model="ir.actions.act_window" id="action_view_of_payroll_email">
+        <field name="name">Payroll Email</field>
+        <field name="res_model">mail.mail</field>
+        <field name="view_mode">tree,form</field>
+    </record>      
+
+    <menuitem
+        id="menu_for_other_earnings"
+        action="action_view_of_other_earnings"
+        name="Other Earnings"
+        sequence="100"
+        parent="hr_payroll.menu_hr_payroll_payslips"/>
+
+    <menuitem
+        id="menu_for_other_earning_lines"
+        action="action_view_of_other_earnings_lines"
+        name="Other Earning Lines"
+        sequence="101"
+        parent="hr_payroll.menu_hr_payroll_payslips"/>
+
+    <!-- added email menu in payroll settings -->
+    <menuitem
+        id="menu_for_payroll_email"
+        action="action_view_of_payroll_email"
+        name="Emails"
+        sequence="100"
+        parent="hr_work_entry_contract_enterprise.menu_hr_work_entry_configuration"/>
+        
+</odoo>

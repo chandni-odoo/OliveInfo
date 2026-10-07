@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="hr_employee_view_task_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.task.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">25</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']" position="after">
+                <page string="Task Details" name="task">
+                    <field name="task_ids">
+                        <tree editable="bottom">
+                            <field name="task_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="demobilize_date" readonly="1"/>
+                            <field name="total_hours" sum="Hours"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_form_equipment_type_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']//field[@name='account_id']" position="after">
+                <field name='equipment_type_id' optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="task_demobilize_wizard_form_view" model="ir.ui.view">
+        <field name="name">task.demobilize.wizard.from</field>
+        <field name="model">task.demobilize</field>
+        <field name="arch" type="xml">
+            <form string="Customer Approval">
+                <sheet>
+                    <group>
+                        <field name="date" widget="date"/>
+                        <field name="remarks"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Approve" name="action_approve" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="task_demobilize_action" model="ir.actions.act_window">
+        <field name="name">Task Demobilize</field>
+        <field name="res_model">task.demobilize</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="task_demobilize_wizard_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="after">
+                <h1 class="d-flex flex-row justify-content-between">
+                    <field name="seq_code"/>
+                </h1>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_assign_to_me']" position="after">
+                <button name="action_shift_allocation" type="object" string="Shift Allocation" class="oe_highlight" attrs="{'invisible': [('branch_for', '!=', 'hro')]}"/>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_assign_to_me']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_timer_start']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//field[@name='planned_date_begin']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='planned_date_end']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_recurring_tasks']" position="after">
+                <button class="oe_stat_button" name="action_open_attendance" type="object" icon="fa-clock-o">
+                    <div class="o_stat_info">
+                        <div>Attendance</div>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='timesheet_ids']/tree/field[@name='so_line']"
+                   position="after">
+                <field name="units_amounts"/>
+                <field name="is_trip_type_visit"/>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='timesheet_ids']" position="before">
+                <group>
+                    <div class="o_td_label">
+                        <label for="t_hours_spent" string="Total Hours Spent"/>
+                    </div>
+                    <field name="t_hours_spent"/>
+                </group>
+            </xpath>
+            <!--  <xpath expr="/form/sheet/notebook/page/field[@name='timesheet_ids']"  position="attributes">
+                <attribute name="invisible">[('branch_for', '=', 'es')]</attribute>
+            </xpath> -->
+            <field name="partner_id" position="after">
+                <field name="employee_ids" widget="many2many_tags" invisible="1"/>
+                <field name="resource_ids" widget="many2many_tags" readonly='1'
+                       attrs="{'invisible': [('branch_for', '=', 'es')]}"/>
+                <field name="skill_ids" widget="many2many_tags" readonly='1' invisible="1"/>
+                <field name="start_date" readonly="0"/>
+                <field name="end_date" readonly="0" attrs="{'invisible': [('duration', '!=', 'limited')]}"/>
+                <field name="std_hrs" attrs="{'invisible': [('branch_for', '=', 'es')]}"/>
+                <field name="employee_ids" widget="many2many_tags" invisible='1'/>
+                <field name="branch_id" invisible="1"/>
+                <field name="branch_for" invisible="1"/>
+                <field name="special_sale_line_id" invisible="1"/>
+                <field name="normal_sale_line_id" invisible="1"/>
+            </field>
+            <field name="parent_id" position="after">
+                <field name="branch_id"/>
+                <!-- <field name="user_id"/> -->
+                <field name="emp_id"/>
+                <field name="contact_name"/>
+                <field name="contact_no"/>
+                <field name="duration"/>
+                <field name="total_qty"/>
+                <field name="total_hours" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="total_amount"/>
+                <field name="vehicle_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="driver" domain="[('is_driver', '=', True)]"
+                       attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="helper" domain="[('is_helper', '=', True)]"
+                       attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="vehicle_type_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="waste_type_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="equipment_type_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="own_bin" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="customer_bin" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+            </field>
+            <field name="recurring_task" position="after">
+                <field name="no_of_prof" attrs="{'invisible': [('branch_for', '=', 'es')]}"/>
+                <!-- <field name="partner_location_id" domain="[('type', '=', 'other')]"/> -->
+                <field name="partner_location_id"/>
+                <field name="hazardous" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="no_of_trip" invisible="1"/>
+                <field name="weekday" invisible="1"/>
+                <field name="time" invisible="1"/>
+            </field>
+            <field name="sale_order_id" position="replace">
+                <field name="sale_order_id" groups="sales_team.group_sale_salesman" string="Sale Order No"/>
+                <field name="quantity"/>
+                <field name="unit_id"/>
+                <!-- <field name="frequency_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/> -->
+            </field>
+            <xpath expr="//notebook/page[@name='extra_info']" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+            </xpath>
+            <!--            <xpath expr="//notebook/page[@name='timesheets_tab']" position="attributes">-->
+            <!--                <attribute name="attrs">{autofocus="autofocus"}</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//notebook" position="inside">
+                <page name="overtime_lines" string="Overtime">
+                    <field name="overtime_lines_ids">
+                        <tree editable="bottom">
+                            <field name="employee_id"/>
+                            <field name="timesheet_id" invisible='1'/>
+                            <field name="ot_date"/>
+                            <field name="ot_hour"/>
+                            <field name="ot_type"/>
+                            <field name="invoiced" invisible='1'/>
+                        </tree>
+                    </field>
+                    <group name="note_group" col="6" class="mt-2 mt-md-0">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="normal_overtime">
+                            <field name="normal_overtime" colspan="2"/>
+                            <field name="special_overtime" colspan="2"/>
+                        </group>
+                        <div class="oe_clear"/>
+                    </group>
+                </page>
+                <page string="Shift Allocation">
+                    <field name="shift_allocation_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="shift_id"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Universal Public Holidays">
+                    <field name="public_holidays_ids" widget='one2many' readonly="1"
+                           context="{'default_holiday_task': True}"
+                           nolabel="1" class="oe_inline oe_no_button">
+                        <tree string="Public Holidays">
+                            <field name="name" string="Holiday Name"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="date_difference"/>
+
+                            <!-- <field name="calendar_id"/> -->
+                            <field name="special_holidays"/>
+                            <field name="holiday_task" invisible="1"/>
+                        </tree>
+                    </field>
+                    <!-- Footer to show the total count of public holidays -->
+                    <div class="oe_title">
+                        <h4>Total Public Holidays:
+                            <field name="public_holidays_count"/>
+                        </h4>
+                    </div>
+                </page>
+                <page string="Task Special Holidays">
+                    <field name="public_holidays_task" widget='one2many' nolabel="1" class="oe_inline oe_no_button">
+                        <tree string="Task Holidays" editable="bottom">
+                            <field name="task_id"/>
+                            <field name="name"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="days"/>
+                            <field name="remarks"/>
+
+                        </tree>
+                    </field>
+                    <!-- Footer to show the total count of public holidays -->
+                    <div class="oe_title">
+                        <h4>Task Special Public Holidays :
+                            <field name="task_holidays_count"/>
+                        </h4>
+                    </div>
+                </page>
+                <page name="add_replace" string="Add or Replace" autofocus="autofocus">
+                    <field name="resource_history_ids">
+                        <tree editable="bottom">
+                            <!-- <field name="employee_ids" widget = "many2many_tags" invisible='1'/> -->
+                            <field name="resource_change_type"/>
+                            <field name="employee_id" domain="[('id', 'in', parent.resource_ids)]"/>
+                            <field name="existing_resource_id" attrs="{'readonly':[('resource_change_type','=','add')]}"
+                                   domain="[('id', 'in', parent.resource_ids)]"/>
+                            <field name="date_start" required='1' widget="date"/>
+                            <field name="date_end" required='1' widget="date"/>
+                            <field name="demobilize_date" readonly="1"/>
+                            <field name="is_demobilize" readonly="1"/>
+                            <field name="remarks" readonly="1"/>
+                            <button name="%(project_extended.task_demobilize_action)d" string="Demobilize"
+                                    type="action"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="//notebook/page[@id='timesheets_tab']/group[4]/group" position="inside">
+                <span>
+                    <label class="font-weight-bold" for="remaining_amount" string="Remaining Amount"/>
+                </span>
+                <field name="remaining_amount" widget="timesheet_uom" nolabel="1"/>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="view_sale_order_form_inherit_skills" model="ir.ui.view">
+        <field name="name">sale.order.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+                <field name="skill_product_ids" widget="many2many_tags" invisible="1"/>
+                <field name="skill_ids" widget="many2many_tags" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_enterprise_view_task_project_task_form_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.project.enterprise</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project_enterprise.project_task_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='planned_date_begin']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_view_form_inherited_skills" model="ir.ui.view">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group/group[2]" position="inside">
+                <field name="skill_ids" widget="many2many_tags" attrs="{'invisible': [('branch_for', '=', 'es')]}"/>
+                <field name="branch_for" invisible="1"/>
+                <field name="waste_type_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="hazardous" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_view_form_inherited_skills" model="ir.ui.view">
+        <field name="name">product.product.form.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group/group[2]" position="inside">
+                <field name="skill_ids" widget="many2many_tags" attrs="{'invisible': [('branch_for', '=', 'es')]}"/>
+                <field name="branch_for" invisible="1"/>
+                <field name="waste_type_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+                <field name="hazardous" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_project_form_inherit" model="ir.ui.view">
+        <field name="name">project.project.form.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="total_qty"/>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="total_amount"/>
+                <field name="total_no_of_hour"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_employee_project_ext_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">25</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="coach_id" position="after">
+                <field name="task_id" readonly="1" invisible="1"/>
+                <field name="task_shift_ids" widget="many2many_tags"/>
+                <field name="tasks_shift_allocation_ids" widget="many2many_tags"/>
+                <field name="supervisor_ids" widget="many2many_tags"/>
+                <field name="customer_ids" widget="many2many_tags"/>
+                <field name="sale_order_ids" widget="many2many_tags"/>
+                <field name="employee_status_new" string="Attendance Status"/>
+            </field>
+            <!--             <xpath expr="//page[last()]" position="after">
+                            <page string="Task History">
+                                <field name="task_history_ids" readonly="1">
+                                    <tree editable="bottom">
+                                        <field name="employee_id" invisible="1"/>
+                                        <field name="task_id"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </xpath> -->
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="waste_type_tree_view">
+        <field name="name">waste.type.tree.view</field>
+        <field name="model">waste.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="hazardous"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="waste_type_form_view" model="ir.ui.view">
+        <field name="name">waste_type.form.view</field>
+        <field name="model">waste.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="hazardous"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_waste_type">
+        <field name="name">Waste Type</field>
+        <field name="res_model">waste.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_waste_type"
+              name="Waste Type"
+              action="action_view_of_waste_type"
+              parent="stock.menu_product_in_config_stock"
+              sequence="50"/>
+
+
+    <!-- attendance -->
+    <record id="hr_attendance_reconciliation_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.form.inherit.ideal</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Reconciliation Attendances" editable="bottom">
+                <!-- <field name="task_id"/> -->
+                <field name="employee_id"/>
+                <field name="task_id" readonly="1"/>
+                <field name="emp_id" readonly="1"/>
+                <field name="branch_id" readonly="1"/>
+                <!-- <field name="task_record_id" readonly="1"/> -->
+                <field name="sale_order_id" readonly="1"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="status"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="worked_hours" string="Work Hours" widget="float_time"/>
+                <field name="actual_hours" string="Actual Hours" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_ext_project_search" model="ir.ui.view">
+        <field name="name">hr.attendance.search</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Search Attendance">
+                <field name="task_id"/>
+                <field name="emp_id"/>
+                <field name="partner_id"/>
+                <field name="sale_order_id"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Task" name="task_record_id" domain="[]" context="{'group_by':'task_id'}"/>
+                    <filter string="Supervisor" name="emp_id" domain="[]" context="{'group_by':'emp_id'}"/>
+                    <filter string="Partner" name="partner_id" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Sale Order" name="sale_order_id" domain="[]"
+                            context="{'group_by':'sale_order_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_view_hr_attendance_reconciliation_report" model="ir.actions.act_window">
+        <field name="name">Timesheet Reconciliation</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_attendance_reconciliation_view_form_inherit"/>
+        <field name="search_view_id" ref="view_hr_attendance_ext_project_search"/>
+    </record>
+
+    <record id="view_hr_attendance_search_inherit_branch" model="ir.ui.view">
+        <field name="name">hr.attendance.search.inherit.branch</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='employee_id']" position="after">
+                <field name="branch_id"/>
+            </xpath>
+             <xpath expr="//filter[@name='groupby_check_out']" position="after">
+                <filter string="Branch"
+                        name="group_by_branch"
+                        context="{'group_by':'branch_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <menuitem
+            id="menu_hr_attendance_reconciliation" name="Timesheet Reconciliation"
+            action="action_view_hr_attendance_reconciliation_report"
+            parent="project.menu_main_pm" sequence="22"
+    />
+
+    <record id="view_hr_employee_ext_search" model="ir.ui.view">
+        <field name="name">hr.employee.search</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <search string="Search Employee">
+                <field name="name"/>
+                <field name="emp_no"/>
+                <field name="group_by_task_shift"/>
+                <field name="group_by_shift_allocation"/>
+                <field name="group_by_customer_ids"/>
+                <field name="group_by_supervisor_ids"/>
+                <field name="group_by_sale_order_ids"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="name" domain="[]" context="{'group_by':'name'}"/>
+                    <filter string="Task" name="group_by_task_shift" domain="[]"
+                            context="{'group_by':'group_by_task_shift'}"/>
+                    <filter string="Task Shift" name="group_by_shift_allocation" domain="[]"
+                            context="{'group_by':'group_by_shift_allocation'}"/>
+                    <filter string="Sale Order" name="group_by_sale_order_ids" domain="[]"
+                            context="{'group_by':'group_by_sale_order_ids'}"/>
+                    <filter string="Partner" name="group_by_customer_ids" domain="[]"
+                            context="{'group_by':'group_by_customer_ids'}"/>
+                    <filter string="Supervisor" name="group_by_supervisor_ids" domain="[]"
+                            context="{'group_by':'group_by_supervisor_ids'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hremployee_task_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.task</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="emp_no" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <!-- <field name="branch_id"/> -->
+                <!-- <field name="task_record_name"/> -->
+                <field name="task_shift_ids" widget="many2many_tags"/>
+                <field name="tasks_shift_allocation_ids" widget="many2many_tags"/>
+                <field name="sale_order_ids" widget="many2many_tags"/>
+                <field name="customer_ids" widget="many2many_tags"/>
+                <field name="supervisor_ids" widget="many2many_tags"/>
+                <!-- <field name="partner_id" readonly="1"/> -->
+                <!-- <field name="emp_id" readonly="1"/> -->
+                <!-- <field name="sale_order_id" readonly="1"/> -->
+                <field name="hr_employee_attendance" readonly="1"/>
+                <field name="company_id" readonly="1"/>
+                <field name="department_id" readonly="1" invisible="1"/>
+                <field name="job_id" readonly="1"/>
+                <field name="parent_id" readonly="1"/>
+                <field name="is_resource" invisible="1"/>
+                <field name="is_week_off_done"/>
+                <field name="employee_status_new" string="Attendance Status"/>
+                <button string="Week Off" name="create_week_off" type="object"
+                        attrs="{'invisible': [('is_week_off_done', '=', True)]}" class="btn-primary"/>
+                <button string="Reported" name="action_create_attendance" type="object"
+                        attrs="{'invisible': [('is_resource', '=', True)]}" class="btn-primary"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_view_emp_task_report" model="ir.actions.act_window">
+        <field name="name">Employee Task Report</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('emp_status', '=', 'active'),('billable','=',True)]</field>
+        <field name="view_id" ref="hremployee_task_view_form_inherit"/>
+        <field name="search_view_id" ref="view_hr_employee_ext_search"/>
+    </record>
+
+    <menuitem
+            id="menu_emp_task" name="Employee Task Report"
+            action="action_view_emp_task_report"
+            parent="project.menu_main_pm" sequence="20"
+    />
+
+    <record id="hremployee_ideal_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.ideal</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="emp_no"/>
+                <field name="name"/>
+                <field name="task_record_id" invisible="1"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="parent_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_view_emp_ideal_report" model="ir.actions.act_window">
+        <field name="name">Employee Idle Report</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('task_record_id','=',False), ('billable','=',True)]</field>
+        <field name="view_id" ref="hremployee_ideal_view_form_inherit"/>
+        <!-- <field name="search_view_id" ref="view_hr_employee_ext_search"/> -->
+    </record>
+
+    <menuitem
+            id="menu_ideal_task" name="Employee Idle Report"
+            action="action_view_emp_ideal_report"
+            parent="project.menu_main_pm" sequence="22"
+    />
+
+    <record id="view_task_calendar_leaves_form" model="ir.ui.view">
+        <field name="name">task.calendar.leaves.form</field>
+        <field name="model">task.calendar.leaves</field>
+        <field name="arch" type="xml">
+            <form string="Task Calendar Leaves">
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Holiday name"/>
+                        <field name="task_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="remarks"/>
+                        <field name="days" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_task_calendar_leaves" model="ir.actions.act_window">
+        <field name="name">Task Calendar Leaves</field>
+        <field name="res_model">task.calendar.leaves</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_task_calendar_leaves_form"/>
+    </record>
+
+    <menuitem
+            id="menu_task_calender_leaves" name="Employee Task Calendar Leaves"
+            action="action_task_calendar_leaves"
+            parent="hr_holidays.menu_hr_holidays_root"
+            sequence="4"
+    />
+
+</odoo>

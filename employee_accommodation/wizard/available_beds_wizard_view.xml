@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_available_beds_wizard_form" model="ir.ui.view">
+        <field name="name">Available Beds Report Wizard</field>
+        <field name="model">available.beds.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Available Beds Report">
+                <group>
+                    <field name="camp_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object" string="Print Report" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="available_beds_wizard_action" model="ir.actions.act_window">
+        <field name="name">Bed Availability Report</field>
+        <field name="res_model">available.beds.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_available_beds_report"
+              name="Bed Availability Report"
+              parent="menu_reports_root"
+              action="available_beds_wizard_action"
+              sequence="2"/>
+</odoo>

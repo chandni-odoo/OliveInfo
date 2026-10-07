@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_fleet_inherit" model="ir.ui.view">
+            <field name="name">fleet.vehicle.inherit.form</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='return_action_to_open']" position="after">
+                    <button class="oe_stat_button" icon="fa-files-o" name="open_vehicle_handover" type="object">
+                        <field name="vehicle_handover_count" string="Handover" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" icon="fa-files-o" name="open_vehicle_maintance" type="object">
+                        <field name="vehicle_maintance_count" string="Maintance" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" icon="fa-history" name="open_vehicle_tyres" type="object">
+                        <field name="tyres_count" string="Tyres" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" icon="fa-flask" name="open_vehicle_fuel_logs" type="object">
+                        <field name="average_mileage" string="Km/ltr" widget="statinfo"/>
+                    </button>
+                </xpath>
+                <field name="driver_id" position="after">
+                    <field name="ownership" widget="radio" options="{'horizontal':true}"/>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="on_services"/>
+                </field>
+                <field name="model_year" position="after">
+                    <field name="ntsa_start_date"/>
+                    <field name="ntsa_end_date"/>
+                    <field name="speed_governor_start_date"/>
+                    <field name="speed_governor_end_date"/>
+                </field>
+                <xpath expr="//form/sheet/group/group[2]" position="after">
+                    <group string="Insurance Details">
+                        <field name="insurance_no"/>
+                        <field name="insurance_company"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                </xpath>
+                <!-- <xpath expr="//field[@name='next_assignation_date']" position="after">
+                    <field name="pro_category_ids" domain="[('detailed_type', '=', 'service')]" widget="many2many_tags"/>
+                </xpath> -->
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_log_contract_inherit" model="ir.ui.view">
+            <field name="name">fleet.vehicle.log.contract.form</field>
+            <field name="model">fleet.vehicle.log.contract</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>
+            <field name="arch" type="xml">
+                <field name="insurer_id" position="after">
+                    <field name="insurer_mobile" />
+                </field>
+                <field name="purchaser_id" position="after">
+                    <field name="purchaser_mobile" />
+                </field>
+                <xpath expr="//div[@class='o_row']" position="after">
+                    <field name="transport_rate" widget="monetary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

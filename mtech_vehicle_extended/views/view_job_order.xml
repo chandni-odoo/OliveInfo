@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_project_task_tree_mtech" model="ir.ui.view">
+        <field name="name">project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <tree string="Job Orders" 
+                decoration-danger="job_stage_category == 'danger'"
+                decoration-success="job_stage_category == 'success'"
+                decoration-warning="job_stage_category == 'warning'"
+                decoration-primary="job_stage_category == 'primary'">
+                <field name="name" />
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="frequency_id" />
+                <field name="sale_order_id" />
+                <field name="partner_id" />
+                <field name="company_id" />
+                <field name="equipment_type_id" />
+                <field name="vehicle_type_id" />
+                <field name="waste_type_id" />
+                <field name="jobstage_id" />
+                <field name="job_stage_category" invisible="1"/>
+                <field name="is_mtech_view" invisible="1" />
+                <field name="branch_for" invisible="1" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_project_task_job_order" model="ir.actions.act_window">
+        <field name="name">Job Orders</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_project_task_tree_mtech" />
+        <field name="context">{'default_is_mtech_view': True}</field>
+        <field name="domain">[('branch_for','=','es'), ('is_mtech_view','=',True)]</field>
+    </record>
+</odoo>

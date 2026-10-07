@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Client Action to launch the dashboard -->
+    <record id="action_operation_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">operation_dashboard</field>
+    </record>
+
+    <!-- Attach the client action to a menu item -->
+    <!-- <menuitem id="menu_operation_dashboard_action" 
+              name="Operation Dashboard" 
+              parent="menu_operation_schedule" 
+              action="action_operation_dashboard" 
+              sequence="1"/> -->
+</odoo>

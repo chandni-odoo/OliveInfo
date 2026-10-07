@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_payment_voucher" model="report.paperformat">
+        <field name="name">Payment Voucher A4</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+    <!-- Report Action -->
+    <record id="action_report_payment_voucher" model="ir.actions.report">
+        <field name="name">Payment Voucher</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll_report.report_payment_voucher_document</field>
+        <field name="report_file">hr_payroll_report.report_payment_voucher_document</field>
+        <field name="binding_model_id" ref="account.model_account_payment"/>
+        <field name="paperformat_id" ref="hr_payroll_report.paperformat_payment_voucher"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="external_layout_payment_voucher">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div class="header">
+           <div>
+                <div style="width:77%;float:left;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-height:70px;"/>
+                </div>
+                <div style="width:23%;float:right">
+                    <img t-if="company.top_right" t-att-src="image_data_uri(company.top_right)" alt="Logo" style="max-height:70px;"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0"/>
+        </div>
+        
+        <div class="row zero_min_height">
+            <div class="col-12">
+                <div style="border-bottom: 1px solid black;"/>
+            </div>
+        </div>
+        
+        <!-- Footer Section -->
+        <div class="footer o_standard_footer">
+            <div class="row" style="margin-top: 2px;">
+
+                <div class="col-4 text-center">
+                    <div style="margin-top: 30px; border-top: 1px solid black; width: 80%; margin-left: auto; margin-right: auto;"></div>
+                    <strong style="display: block; margin-top: 5px;">Prepared By</strong>
+                </div>
+
+                <div class="col-4 text-center">
+                    <div style="margin-top: 30px; border-top: 1px solid black; width: 80%; margin-left: auto; margin-right: auto;"></div>
+                    <strong style="display: block; margin-top: 5px;">Checked By</strong>
+                </div>
+
+                <div class="col-4 text-center">
+                    <div style="margin-top: 30px; border-top: 1px solid black; width: 80%; margin-left: auto; margin-right: auto;"></div>
+                    <strong style="display: block; margin-top: 5px;">Approved By</strong>
+                </div>
+
+            </div>
+        </div>
+    </template>
+</odoo>

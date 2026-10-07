@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_credit_request_form" model="ir.ui.view">
+     <field name="name">credit.request.form</field>
+     <field name="model">credit.request</field>
+     <field name="arch" type="xml">
+        <form string="Credit Request">
+            <header>
+                <field name="state" widget="statusbar" clickable="1"/>
+                <button name="action_submit" string="Submit" type="object" class="oe_highlight" 
+                    attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="action_approve" string="Approve" type="object" class="oe_highlight" 
+                    attrs="{'invisible': [('state', '!=', 'under_review')]}"/>
+                <button name="action_reject" string="Reject" type="object" 
+                    attrs="{'invisible': [('state', '!=', 'under_review')]}"/>
+            </header>
+                <sheet>
+                    <group>
+                        <group string="Customer Information">
+                            <field name="partner_id"/>
+                            <field name="customer_code"/>
+                            <field name="branch_id"/>
+                            <field name="customer_type"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                            <field name="dealing_since"/>
+                            <field name="branch_region"/>
+                            <field name="salesperson_id"/>
+                            <field name="collection_manager_id"/>
+                        </group>
+                        <group string="Business History and Performance">
+                            <field name="total_business_amount"/>
+                            <field name="avg_monthly_business"/>
+                            <field name="last_payment_date"/>
+                            <field name="payment_term_id"/>
+                            <field name="grade_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Credit Request Details">
+                            <field name="requested_credit_limit"/>
+                            <field name="current_credit_limit"/>
+                            <field name="requested_payment_term_id"/>
+                            <field name="reason"/>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                            <field name="requested_by"/>
+                        </group>
+                        <group string="Approval">
+                            <field name="approved_credit_limit"/>
+                            <field name="approved_payment_term_id"/>
+                            <field name="approval_date"/>
+                            <field name="approval_remarks"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval History">
+                            <field name="approval_history_ids" readonly="1">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="user_id"/>
+                                    <field name="status"/>
+                                    <field name="date_done"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids"/>
+            </div>
+       </form>
+     </field>
+   </record>
+
+
+   <record id="view_credit_request_tree" model="ir.ui.view">
+     <field name="name">credit.request.tree</field>
+     <field name="model">credit.request</field>
+     <field name="arch" type="xml">
+        <tree>
+            <field name="partner_id"/>
+            <field name="customer_code"/>
+            <field name="branch_id"/>
+            <field name="customer_type"/>
+            <field name="salesperson_id"/>
+             <field name="collection_manager_id"/>
+             <field name="requested_by"/>
+             <field name="approval_date"/>
+            <field name="requested_credit_limit"/>
+            <field name="approved_credit_limit"/>
+            <field name="state"/>
+       </tree>
+     </field>
+   </record>
+
+   <record id="view_credit_branch_approvers_tree" model="ir.ui.view">
+            <field name="name">credit.branch.approvers.tree</field>
+            <field name="model">credit.branch.approvers</field>
+            <field name="arch" type="xml">
+                <tree string="Credit Branch Approvers">
+                    <field name="branch_id"/>
+                    <!-- <field name="user_ids" widget="many2many_tags"/> -->
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_credit_branch_approvers_form" model="ir.ui.view">
+            <field name="name">credit.branch.approvers.form</field>
+            <field name="model">credit.branch.approvers</field>
+            <field name="arch" type="xml">
+                <!-- <form string="Credit Branch Approvers">
+                    <sheet>
+                        <group>
+                            <field name="branch_id"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form> -->
+                <form string="Credit Branch Approvers">
+                    <sheet>
+                        <group>
+                            <field name="branch_id"/>
+                        </group>
+                        <field name="approver_line_ids" mode="tree,form">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="user_id" required="1"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="sequence"/>
+                                    <field name="user_id"/>
+                                </group>
+                            </form>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+   <record id="action_credit_request" model="ir.actions.act_window">
+     <field name="name">Credit Requests</field>
+     <field name="res_model">credit.request</field>
+     <field name="view_mode">tree,form</field>
+   </record>
+
+   <record id="action_credit_branch_approvers" model="ir.actions.act_window">
+        <field name="name">Credit Branch Approvers</field>
+        <field name="res_model">credit.branch.approvers</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem id="menu_credit_branch_approvers" 
+            name="Branch Approvers" 
+            parent="sale.sale_order_menu" 
+            action="action_credit_branch_approvers"
+            sequence="18"/>
+
+   <menuitem id="menu_credit_request" 
+            name="Credit Requests" 
+            parent="sale.sale_order_menu" 
+            action="action_credit_request" 
+            sequence="15"/>
+</odoo>

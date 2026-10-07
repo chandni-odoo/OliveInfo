@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_employee_form_inherit_extend" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <!-- <page string="Trade Task History" name="trade_history">
+                 	<field name="trade_ids" readonly="1" nolabel="1">
+	                    <tree>
+		                     <field name="task_id"/>
+		                     <field name="employee_id"/>
+		                     <field name="sale_order_id"/>
+		                     <field name="date"/>
+		                     <field name="status"/>
+	                    </tree>
+              		</field>
+            	</page> -->
+                <page string="Trade Task History" name="trade_history">
+                    <field name="trade_rec_ids" nolabel="1">
+                        <tree>
+                            <field name="task_id"/>
+                            <field name="employee_id"/>
+                            <field name="sale_order_id"/>
+                            <field name="date"/>
+                            <field name="status"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_contract_type_tree" model="ir.ui.view">
+        <field name="name">tyre.brand.tree</field>
+        <field name="model">tyre.brand</field>
+        <field name="arch" type="xml">
+            <tree string="Tyre brand">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="mobile_device_maste_from" model="ir.ui.view">
+        <field name="name">tyre.brand.from</field>
+        <field name="model">tyre.brand</field>
+        <field name="arch" type="xml">
+            <form string="Tyre Brand">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Tyre Brand" required="1"/>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tyre_brand_action" model="ir.actions.act_window">
+        <field name="name">Tyre Brand</field>
+        <field name="res_model">tyre.brand</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create tyre brand
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="hr_contract_type_menu"
+        parent="fleet.fleet_vehicles" 
+        action="tyre_brand_action"
+        sequence="29"/>
+    
+    <record id="vehicle_details_form" model="ir.ui.view">
+        <field name="name">vehicle.tyre.detail.form</field>
+        <field name="model">vehicle.tyre.detail</field>
+        <field name="arch" type="xml">
+            <form string="Tyres">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="lock"/>
+                    <button name="action_lock" states="open" type="object" string="Lock" default_focus="1" class="btn-primary"  confirm="This will Lock the record.No further changes can be make.Are you sure ?."/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tyre_no" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                            <field name="tyre_type" options='{"no_open": True, "no_create": True}'/>
+                            <field name="purchase_date" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                        </group>
+                        <group>
+                            <field name="vehicle_id" invisible="1" />
+                            <field name="position" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                            <field name="current_user_id" attrs="{'readonly': [('state','!=','open')]}"/>
+                        </group>
+                    </group>
+                    <!-- <group string="Retreading"> -->
+                        <field name="tyre_ids">
+                            <tree editable="bottom">
+                                <field name="retreading"/>
+                                <field name="date"/>
+                                <field name="cost" sum="Total"/>
+                                <field  name="doc" widget="download_link" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    <!-- </group> -->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="vehicle_tyre_detail_tree" model="ir.ui.view">
+        <field name="name">vehicle.tyre.detail.tree</field>
+        <field name="model">vehicle.tyre.detail</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state=='open'" decoration-success="state=='lock'" >
+                <field name="name"/>
+                <field name="tyre_no"/>
+                <field name="purchase_date"/>
+                <field name="position"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="vehicle_tyre_detail_search" model="ir.ui.view">
+        <field name="name">vehicle.tyre.detail.search</field>
+        <field name="model">vehicle.tyre.detail</field>
+        <field name="arch" type="xml">
+            <search >
+                <field name="name"/>
+                <field name="tyre_no"/>
+                <group expand="0" string="Group By">
+                    <filter string="Position" name="position" context="{'group_by': 'position'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="fleet_vehicle_tyre_action" model="ir.actions.act_window">
+        <field name="name">Vehicles</field>
+        <field name="res_model">vehicle.tyre.detail</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="vehicle_tyre_detail_tree"/>
+    </record>
+    <menuitem action="fleet_vehicle_tyre_action" id="fleet_vehicle_tyre_menu" name="Tyres" parent="fleet.fleet_vehicles" sequence="30" groups="fleet.fleet_group_manager"/>
+</odoo>

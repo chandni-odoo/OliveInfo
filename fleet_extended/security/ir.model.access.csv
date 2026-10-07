@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fleet_employee_allocation,fleet.employee.allocation,model_fleet_employee_allocation,base.group_user,1,1,1,1
+access_fleet_employee_unallocation,fleet.employee.unallocation,model_fleet_employee_unallocation,base.group_user,1,1,1,1
+access_employee_allocation_report,employee.allocation.report.access,model_employee_allocation_report,base.group_user,1,1,1,1
+access_fleet_document_line,fleet.document.line,model_fleet_document_line,base.group_user,1,1,1,1

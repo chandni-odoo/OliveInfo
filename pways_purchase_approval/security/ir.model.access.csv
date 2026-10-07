@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+pways_purchase_approval.access_purchase_approval,access_purchase_approval,pways_purchase_approval.model_purchase_approval,base.group_user,1,1,1,1
+pways_purchase_approval.access_purchase_approval_lines,access_purchase_approval_lines,pways_purchase_approval.model_purchase_approval_lines,base.group_user,1,1,1,1
+pways_purchase_approval.access_approval_history,access_approval_history,pways_purchase_approval.model_approval_history,base.group_user,1,1,1,1
+pways_purchase_approval.access_reject_reason_wizard,access_reject_reason_wizard,pways_purchase_approval.model_reject_reason_wizard,base.group_user,1,1,1,1

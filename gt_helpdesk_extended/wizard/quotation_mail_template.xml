@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quotation_mail_template_view" model="ir.ui.view">
+        <field name="name">quotation.mail.template.view</field>
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='subject']" position="after">
+                <field name="corrective_action" attrs="{'invisible': [('model', '!=', 'helpdesk.ticket')]}" />
+                <field name="preventive_action" attrs="{'invisible': [('model', '!=', 'helpdesk.ticket')]}" />
+                <field name="resolution_action" attrs="{'invisible': [('model', '!=', 'helpdesk.ticket')]}" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

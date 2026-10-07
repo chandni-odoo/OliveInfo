@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="supplier_onboarding_request_tree_view" model="ir.ui.view">
+        <field name="name">Supplier Onboarding Request</field>
+        <field name="model">supplier.onboarding.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="supplier_onboarding_request_view_form" model="ir.ui.view">
+        <field name="name">Supplier Onboarding Request</field>
+        <field name="model">supplier.onboarding.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Approve" states="draft" class="oe_highlight" name="button_approve" type="object"/>
+                    <button string="Register" states="verification" class="oe_highlight" name="create_supplier" type="object" attrs="{'invisible':[('state', '!=', 'verification')]}"/>
+                    <button string="Cancel" states="draft,verification" class="oe_highlight" name="button_cancel" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verification,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Contact Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="customer_id"/>
+                            <field name="branch_id"/>
+                            <field name="supplier_payment_term"/>
+                        </group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="website"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Contacts &amp; Addresses" name="contact_addresses" autofocus="autofocus">
+                            <field name="child_ids" mode="kanban" context="{'default_parent_id': active_id,'default_type': 'other'}">
+                                <kanban>
+                                    <field name="id"/>
+                                    <field name="color"/>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="type"/>
+                                    <field name="email"/>
+                                    <field name="parent_id"/>
+                                    <field name="is_company"/>
+                                    <field name="function"/>
+                                    <field name="phone"/>
+                                    <field name="street"/>
+                                    <field name="street2"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="mobile"/>
+                                    <field name="state_id"/>
+                                    <field name="image_128"/>
+                                    <field name="avatar_128"/>
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <field name="comment"/>
+                                    <field name="display_name"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '') + ' oe_kanban_global_click'">
+                                                <div class="o_kanban_image">
+                                                    <img alt="Contact image" t-att-src="kanban_image('res.partner', 'avatar_128', record.id.raw_value)"/>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                    <div t-if="record.function.raw_value"><field name="function"/></div>
+                                                    <div t-if="record.email.raw_value"><field name="email" widget="email"/></div>
+                                                    <div t-if="record.type.raw_value != 'contact'">
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <t t-esc="record.phone.value"/></div>
+                                                    <div t-if="record.mobile.raw_value">Mobile: <t t-esc="record.mobile.value"/></div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Contact / Address">
+                                    <sheet>
+                                        <!-- parent_id and type fields needed in attrs in base_address_city module which overwrites
+                                        _fields_view_get() of partner. It would be better to put those fields there but the web client
+                                        dosen't support when a field is displayed several times in the same view.-->
+                                        <field name="type" required="1" widget="radio" options="{'horizontal': true}"/>
+                                        <field name="parent_id" invisible="1"/>
+                                        <hr/>
+                                        <group>
+                                            <group>
+                                                <field name="name" string="Contact Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                                                <field name="title" options="{'no_open': True}" placeholder="e.g. Mr."
+                                                    attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                                                <field name="function" placeholder="e.g. Sales Director"
+                                                    attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                                                <label for="street" string="Address" attrs="{'invisible': [('type','=', 'contact')]}"/>
+                                                <div attrs="{'invisible': [('type','=', 'contact')]}">
+                                                    <div class="o_address_format" name="div_address">
+                                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                                        <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}" context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                                        <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                                    </div>
+                                                </div>
+                                            </group>
+                                            <group>
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                                <field name="mobile" widget="phone"/>
+                                                <field name="company_id" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="comment" placeholder="Internal notes..."/>
+                                        </group>
+                                        <field name="lang" invisible="True"/>
+                                        <field name="user_id" invisible="True"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Supplier Master">
+                            <group>
+                                <group>
+                                    <field name="address_no"/>
+                                    <field name="spe_payee_id"/>
+                                    <field name="hold_payment"/>
+                                    <field name="hold_reason_id"/>
+                                </group>
+                                <group>
+                                    <field name="currency_id"/>
+                                    <field name="payment_instrument"/>
+                                    <field name="credit_facility"/>
+                                    <field name="parent"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Bank Details" name="bank">
+                            <field name="bank_ids">
+                                <tree editable="bottom">
+                                    <field name="bank_id"/>
+                                    <field name="branch_id"/>
+                                    <field name="account_no"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Document">
+                            <group>
+                                <group>
+                                    <field name="computer_card"/>
+                                    <field name="trade_license"/>
+                                    <field name="tax_card"/>
+                                    <field name="sponsor_id"/>
+                                    <field name="cr"/>
+                                    <field name="qid"/>
+                                    <field name="passport"/>
+                                    <field name="noc_sponsor"/>   
+                                    
+                                </group>
+                                <group>
+                                    <field name="cc_validity"/>
+                                    <field name="tl_validity"/>
+                                    <field name="tc_validity"/>
+                                    <field name="sid_validity"/>
+                                    <field name="cr_validity"/>
+                                    <field name="qid_validity"/>
+                                    <field name="passport_validity"/> 
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents" name="document">
+                            <field name="document_line_ids">
+                                <tree editable="bottom">
+                                    <field name="document_line_id"/>
+                                    <field name="document_number"/>
+                                    <field name="valid_from"/>
+                                    <field name="valid_to"/>
+                                    <field name="status"/>
+                                    <field name="receipt_no"/>
+                                    <field name="receipt_date"/>
+                                    <field name="remarks"/>
+                                    <field name="attachment" widget="binary"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Supplier Onboarding" name="supplier_onboarding">
+                            <group>
+                                <group>
+                                    <field name="designation_id"/>
+                                    <field name="marital_status"/>
+                                    <field name="hobbies"/>
+                                    <field name="religion_id"/>
+                                    <field name="location"/>
+                                </group>
+                                <group>
+                                    <field name="department_id"/>
+                                    <field name="support_level"/>
+                                    <field name="anniversary_date"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="type_good_service"/>
+                                    <field name="justification"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_supplier_onboarding_request" model="ir.actions.act_window">
+        <field name="name">Supplier Onboarding Request</field>
+        <field name="res_model">supplier.onboarding.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_supplier_onboarding_request"
+        name="Supplier Onboarding Request"
+        action="action_supplier_onboarding_request"
+        parent="purchase.menu_procurement_management"
+        sequence="20"/>
+</odoo>

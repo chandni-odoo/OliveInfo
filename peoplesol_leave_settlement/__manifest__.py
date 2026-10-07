@@ -1,0 +1,21 @@
+{
+    'name': "Leave Settlement",
+    'summary': """ Leave Settlement""",
+    'description': """ Leave Settlement """,
+    'version': '15.0.0',
+    'author':'Preciseways',
+    'website': "http://www.preciseways.com",
+    'images': [],
+    'depends': ['base', 'hr_holidays', 'hr_payroll_extended','account_extended', 'hr_loan_management', 'hr_resignation_settlement'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/leave_sattlement_seq.xml',
+        'views/leave_settlement.xml',
+        'views/hr_loan_view.xml',
+        'report/report_action.xml',
+        'report/leave_sattelment_template.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

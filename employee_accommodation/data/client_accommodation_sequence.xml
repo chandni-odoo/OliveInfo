@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_client_accommodation" model="ir.sequence">
+        <field name="name">Client Accommodation</field>
+        <field name="code">client.accommodation</field>
+        <field name="prefix">RENT-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_customer_checkin" model="ir.sequence">
+        <field name="name">Customer Checkin</field>
+        <field name="code">customer.checkin</field>
+        <field name="prefix">CSTMR-Ck-In-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_customer_checkout" model="ir.sequence">
+        <field name="name">Customer CheckOut</field>
+        <field name="code">customer.checkout</field>
+        <field name="prefix">CSTMR-CK-OUT-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_customer_checklist" model="ir.sequence">
+        <field name="name">Customer Checklist</field>
+        <field name="code">customer.checklist</field>
+        <field name="prefix">CSTMR-CK-LIST-</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

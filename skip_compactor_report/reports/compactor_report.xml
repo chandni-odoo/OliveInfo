@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_compactor_vehicle_report" model="ir.actions.report">
+        <field name="name">Compactor Vehicle Report</field>
+        <field name="model">compactor.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">skip_compactor_report.compactor_report_xlsx</field>
+        <field name="report_file">skip_compactor_report.compactor_report_xlsx</field>
+        <field name="binding_model_id" ref="model_compactor_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

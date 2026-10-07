@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_landing_cost_form" model="ir.ui.view">
+        <field name="name">landing.cost.form</field>
+        <field name="model">landing.cost</field>
+        <field name="arch" type="xml">
+            <form string="Landing Cost">
+                <sheet>
+                    <group>
+                        <field name="sale_line_id" readonly="1"/>
+                    </group>
+
+                    <field name="line_ids">
+                        <tree editable="bottom">
+                            <field name="product_id"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>
+
+                    <group>
+                        <field name="total_amount" readonly="1"/>
+                        <field name="rate_per_qty" readonly="1"/>
+                    </group>
+
+                    <footer>
+                        <button name="action_apply"
+                                type="object"
+                                string="Apply"
+                                class="btn-primary"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_landing_cost" model="ir.actions.act_window">
+        <field name="name">Landing Cost</field>
+        <field name="res_model">landing.cost</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order_line"/>
+    </record>
+</odoo>

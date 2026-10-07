@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <template id="portal_my_home_employee_tasks" name="Employee Tasks" 
+              inherit_id="portal.portal_my_home" priority="3">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Tasks</t>
+                <t t-set="url" t-value="'/my/employee-tasks'"/>
+            </t>
+        </xpath>
+    </template>
+    
+    <template id="employee_tasks_template" name="Employee Tasks">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>My Tasks</h1>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sales order/Job/Position</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Demobilize Date</th>
+                                    <th>Customer</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="task_history" t-as="history">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="(history.task_id.seq_code or '') + ' - ' + (history.task_id.name or 'N/A')"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="history.date_start and history.date_start.strftime('%d/%m/%Y %H:%M') or 'N/A'"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="history.date_end and history.date_end.strftime('%d/%m/%Y %H:%M') or 'N/A'"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="history.demobilize_date and history.demobilize_date.strftime('%d/%m/%Y %H:%M') or 'N/A'"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="history.customer_id.name or history.name or 'N/A'"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="history.partner_location_id.name or 'N/A'"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <template id="employee_tasks_not_found" name="Employee Tasks Not Found">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>No Tasks Found</h1>
+                        <p>We could not find any tasks associated with your employee profile.</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

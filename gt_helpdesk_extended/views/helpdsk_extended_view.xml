@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- HELPDESK.TICKET -->
+        <record id="helpdesk_tickets_view_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="ticket_date"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="helpdesk_extended_view" model="ir.ui.view">
+            <field name="name">helpdesk.extended.view</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+            <field name="arch" type="xml">
+                <header> 
+                    <xpath expr="//field[@name='user_id']" position="after">
+                        <field name="branch_id"/>
+                    </xpath>
+                </header>
+                <xpath expr="//field[@name='partner_id']" position="before">
+                        <field name="ticket_date"/>
+                    </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="branch_id"/>
+                    <!--                    <field name="sla_escalation_date"/>-->
+                    <field name="done_stage_boolean" invisible="1"/>
+                    <field name="new_stage" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button string="Send Mail" name="send_mail_to_customers" type="object" class="btn-primary"
+                            attrs="{'invisible': [('done_stage_boolean', '!=', True)]}"/>
+                    <button string="Re-Assign Ticket" name="assign_or_reassign" type="object" class="btn-primary"
+                            attrs="{'invisible': ['|',('done_stage_boolean', '=', True),('new_stage', '=', True)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='branch_id']" position="after">
+                    <field name="employee_complaints"/>
+                    <field name="hse_complaints"/>
+                    <field name="it_support"/>
+                    <field name="waste_management"/>
+                </xpath>
+                <xpath expr="//field[@name='description']" position="after">
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page name="corrective_action" string="Corrective Action"
+                              attrs="{'invisible': [('new_stage', '=', True)]}">
+                            <field name="corrective_action"/>
+                        </page>
+                        <page name="preventive_action" string="Preventive Action"
+                              attrs="{'invisible': [('new_stage', '=', True)]}">
+                            <field name="preventive_action"/>
+                        </page>
+                        <page name="resolution_action" string="Resolution Action"
+                              attrs="{'invisible': [('new_stage', '=', True)]}">
+                            <field name="resolution_action"/>
+                        </page>
+                    </notebook>
+                </xpath>
+
+                <xpath expr="//field[@name='description']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='emp_id']" position="replace">
+                    <field name="emp_id"
+                           attrs="{'invisible': [('employee_complaints', '=',True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='email_cc']" position="replace">
+                    <field name="email_cc" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='equipment_id']" position="replace">
+                    <field name="equipment_id"
+                           attrs="{'invisible': [('it_support', '!=',True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['&amp;',('waste_management', '!=',True),('employee_complaints', '!=',True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_name']" position="replace">
+                    <field name="partner_name"/>
+                </xpath>
+                <xpath expr="//field[@name='project_id']" position="replace">
+                    <field name="project_id"
+                           attrs="{'invisible': ['&amp;',('waste_management', '!=',True),('employee_complaints', '!=',True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='task_name']" position="replace">
+                    <field name="task_name"
+                           attrs="{'invisible': ['&amp;',('waste_management', '!=',True),('employee_complaints', '!=',True)]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="helpdesk_ticket_type_view_tree_extended" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.type.extended</field>
+            <field name="model">helpdesk.ticket.type</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_type_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="manager_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="helpdesk_ticket_sub_type_view" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.sub.type.view</field>
+            <field name="model">helpdesk.ticket.sub.type</field>
+            <field name="inherit_id" ref="helpdesk_extended.helpdesk_sub_menu_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ticket_type_id']" position="after">
+                    <field name="description"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="helpdesk_tickets_view_search_view" model="ir.ui.view">
+            <field name="name">helpdesk_tickets_view_search.view</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/filter[@name='my_ticket']" position="replace">
+                    <filter string="My Tickets" domain="['|', ('user_id','=',uid), ('create_uid','=',uid)]"
+                            name="my_ticket"/>
+
+                </xpath>
+            </field>
+        </record>
+
+        <record id="helpdesk.helpdesk_ticket_action_main_my" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,kanban,form,activity</field>
+        <field name="search_view_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+        <field name="domain">['|', ('user_id', '=', uid), ('create_uid', '=', uid)]</field>
+        <field name="context">{'search_default_my_ticket': True, 'search_default_is_open': True, 'default_user_id': uid}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tickets found. Let's create one!
+                </p><p>To get things done, use activities and statuses on tickets. <br/>
+                Chat in real-time or by email to collaborate efficiently.
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+</odoo>

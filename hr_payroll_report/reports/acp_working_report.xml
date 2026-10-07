@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="acp_working_report_xlsx" model="ir.actions.report">
+        <field name="name">ACP Working Report</field>
+        <field name="model">acp.working.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.acp_working_report_xlsx</field>
+        <field name="report_file">acp_working_report</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

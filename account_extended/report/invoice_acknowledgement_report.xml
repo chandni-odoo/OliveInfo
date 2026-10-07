@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_layout_template_acknowledgement">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div class="header">
+            <div>
+                <div style="width:77%;float:left;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-height:70px;"/>
+                </div>
+                <div style="width:23%;float:right">
+                    <img t-if="company.top_right" t-att-src="image_data_uri(company.top_right)" alt="Logo" style="max-height:70px;"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0"/>
+        </div>
+        <div class="row zero_min_height">
+            <div class="col-12">
+                <div style="border-bottom: 1px solid black;"/>
+            </div>
+        </div>
+            <!-- <div class="footer o_standard_footer">
+            <div class="row" style="margin-bottom:-25px !important;">
+                <div class="col-12 text-center">
+                    <b>Note : This is a computer generated Invoice and does not require any signature</b>
+                    <img src="/account_extended/static/src/img/img1.jpeg" class="illustration_border" />
+                </div>
+            </div>
+        </div> -->
+        <div class="footer o_standard_footer">
+            <div class="row">
+                <div class="col-12">
+
+                    <!-- Received By Section -->
+                    <table style="width:100%; font-size:14px; margin-bottom:8px; border-collapse:collapse;">
+                        <tr>
+                            <td style="width:15%;"><strong>Received By:</strong></td>
+                            <td style="width:85%;"></td>
+                        </tr>
+                    </table>
+
+                    <!-- Name | Date | Mob | Signature Section -->
+                    <table style="width:100%; font-size:14px; border-collapse:collapse; margin-bottom:15px;">
+                        <tr>
+                            <td style="width:12%;"><strong>Name:</strong></td>
+                            <td style="width:18%;"></td>
+
+                            <td style="width:10%; padding-left:10px;"><strong>Date:</strong></td>
+                            <td style="width:15%;"></td>
+
+                            <td style="width:10%; padding-left:10px;"><strong>Mob:</strong></td>
+                            <td style="width:15%;"></td>
+
+                            <td style="width:20%; text-align:center; padding-left:10px;">
+                                <strong>Signature &amp; Stamp</strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Footer Image -->
+                    <div style="text-align:center; margin-top:5px; line-height:0;">
+                        <img src="/account_extended/static/src/img/img1.jpeg" 
+                            class="illustration_border" 
+                            style="max-width:100%; height:auto;"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <template id="report_invoice_acknowledgement">
+        <t t-call="web.html_container">
+            <t t-call="account_extended.external_layout_template_acknowledgement">
+
+                <!-- Group invoices by customer -->
+                <t t-set="partners" t-value="docs.mapped('partner_id')"/>
+
+                <!-- Customer-wise pages -->
+                <t t-foreach="partners" t-as="partner" t-key="partner.id">
+                    <!-- Add page break except for first customer -->
+                    <t t-if="partner_index != 0">
+                        <div style="page-break-before: always;"></div>
+                    </t>
+                    
+                    <div class="page">
+
+                        <h3 style="text-align:center;">
+                            INVOICE ACKNOWLEDGEMENT COPY
+                        </h3>
+                        <br/>
+
+                        <!-- Customer Details -->
+                        <div>
+                            <strong>Customer Code:</strong>
+                            <span t-esc="partner.address_no"/>
+                            <br/>
+
+                            <strong>
+                                <span t-esc="partner.name"/>
+                            </strong>
+                            <br/>
+
+                            <span t-esc="partner.street"/>
+                            <t t-if="partner.city">, <span t-esc="partner.city"/></t>
+                            <t t-if="partner.country_id">, <span t-esc="partner.country_id.name"/></t>
+                            <br/>
+
+                            <span>P.O. Box:</span>
+                            <span t-esc="partner.zip"/>
+                            <br/>
+
+                            <span>Tel.No:</span>
+                            <span t-esc="partner.phone"/>
+                        </div>
+
+                        <br/>
+                        <hr/>
+
+                        <!-- Invoice Table -->
+                        <table style="width:100%; border-collapse:collapse;" border="1">
+                            <thead>
+                                <tr style="background-color:#f2f2f2;">
+                                    <th style="padding:8px; text-align:center;">
+                                        Invoice No
+                                    </th>
+                                    <th style="padding:8px; text-align:center;">
+                                        Invoice Date
+                                    </th>
+                                    <th style="padding:8px; text-align:right;">
+                                        Invoice Amount
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!-- Invoices of current customer -->
+                                <t t-set="partner_invoices"
+                                t-value="docs.filtered(lambda m: m.partner_id.id == partner.id)"/>
+
+                                <t t-set="total_amount" t-value="0"/>
+
+                                <t t-foreach="partner_invoices" t-as="o">
+                                    <t t-set="total_amount" t-value="total_amount + o.amount_total"/>
+
+                                    <tr>
+                                        <td style="padding:8px; text-align:center;">
+                                            <span t-esc="o.name"/>
+                                        </td>
+
+                                        <td style="padding:8px; text-align:center;">
+                                            <span t-esc="o.invoice_date"
+                                                t-options='{"widget":"date","format":"dd/MM/yyyy"}'/>
+                                        </td>
+
+                                        <td style="padding:8px; text-align:right;">
+                                            <span t-esc="o.amount_total"
+                                                t-options='{"widget":"float","precision":2}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                        <hr/>
+                    </div>
+                </t>
+
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_invoice_custom" model="report.paperformat">
+        <field name="name">Invoice Custom Format</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">65</field>  
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_invoice_acknowledgement" model="ir.actions.report">
+        <field name="name">Invoice Acknowledgement Copy</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_extended.report_invoice_acknowledgement</field>
+        <field name="report_file">account_extended.report_invoice_acknowledgement</field>
+        <field name="print_report_name">'Invoice - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_invoice_custom"/>
+    </record>
+</odoo>        

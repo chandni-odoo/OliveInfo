@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payroll_summary_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="oe_structure"/>
+                <div class="page">
+                        <t t-foreach="data" t-as="d">
+                            <div style="margin-top:10px;"><center><h3><b>Payroll Summary</b></h3></center></div>
+                            <div class="row">
+                                <div class="col-4" style="width:30%; margin-bottom: 30px;">
+                                    <span><b>Company :</b></span>
+                                    <span><t t-esc="company.name"/></span><br/>
+                                    <span><b>Payroll Batch :</b></span>
+                                    <span><t t-esc="d.get('batch_id') and d['batch_id'].payroll_batch"/></span>
+                                </div><div class="col-4"/>
+                                <div class="col-4" style="width:30%; margin-left: -30px">
+                                    <br/>
+                                    <span><b>Pay Period Ending Date :</b></span>
+                                    <span><t t-esc="d.get('date') and d['date']" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span><br/>`
+                                </div>
+                            </div>
+                            <center><table class="table table-sm table-bordered " style="width:100%; text-align:center;">
+                                <thead style="border-color: black; ">
+                                    <tr>
+                                        <th style="border-color: black; text-align:left;">Branch</th>
+                                        <th style="border-color: black;">No. of people</th>
+                                        <th style="border-color: black;">Basic</th>
+                                        <th style="border-color: black;">Allowance</th>
+                                        <th style="border-color: black;">Overtime</th>
+                                        <th style="border-color: black;">Others</th>
+                                        <th style="border-color: black;">Total</th>
+                                        <th style="border-color: black;">Loan</th>
+                                        <th style="border-color: black;">Costs</th>
+                                        <th style="border-color: black;">Deduction</th>
+                                        <th style="border-color: black;">Total</th>
+                                        <th style="border-color: black;">BF/CF</th>
+                                        <th style="border-color: black;">Actual Pay</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="d['lines']" t-as="rec">
+                                        <td style="border-color: black; text-align:left;">
+                                            <span><t t-esc="rec.get('branch_id') and rec['branch_id'].name"/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('employee_id') and rec['employee_id']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('basic') and rec['basic']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                         <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('allowance') and rec['allowance']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('overtime') and rec['overtime']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('other') and rec['other']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;"><span><t t-esc="rec.get('total_with_allowance') and rec['total_with_allowance']" t-options='{"widget" : "float", "precision":2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('loan') and rec['loan']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('cost') and rec['cost']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('deduction') and abs(rec['deduction'])" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('total_with_deduction') and abs(round(rec['total_with_deduction'],2))" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                        <td style="border-color: black;"><span/></td>
+                                        <td style="border-color: black;">
+                                            <span><t t-esc="rec.get('branch_total') and rec['branch_total']" t-options='{"widget": "float", "precision": 2}'/></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <th style="border-color: black; text-align:left;">Amount</th>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_employee') and d['total_employee']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_basic') and d['total_basic']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_allowance') and d['total_allowance']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_overtime') and d['total_overtime']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_others') and d['total_others']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_with_allowance') and d['total_with_allowance']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_loan') and d['total_loan']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_cost') and d['total_cost']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_deduction') and abs(d['total_deduction'])" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_with_deduction') and abs(d['total_with_deduction'])" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b></b></span>
+                                        </td>
+                                        <td style="border-color: black;">
+                                            <span><b><t t-esc="d.get('total_with_branch') and d['total_with_branch']" t-options='{"widget": "float", "precision": 2}'/></b></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

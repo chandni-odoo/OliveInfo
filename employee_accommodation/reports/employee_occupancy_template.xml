@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="occupancy_report_action" model="ir.actions.report">
+            <field name="name">Occupancy Report</field>
+            <field name="model">occupancy.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">employee_accommodation.occupancy_report_template</field>
+            <field name="report_file">employee_accommodation.occupancy_report_template</field>
+            <field name="print_report_name">'Occupancy Report.pdf'</field>
+            <field name="binding_model_id" ref="employee_accommodation.model_accommodation_check_in"/>
+            <field name="paperformat_id" ref="employee_accommodation.paperformat_employee_accommodation"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+
+    <template id="occupancy_report_template">
+        <t t-call="web.html_container">
+            <div class="article o_report_layout_standard">
+                <div class="row mt-0" style="margin-top: 0 !important; padding-top: 0 !important;">
+                    <div class="col-6">
+                        <img t-if="company.logo" 
+                            t-att-src="image_data_uri(company.logo)" 
+                            style="max-height: 100px; max-width: 200px;"/>
+                    </div>
+                    <div class="col-6 text-right">
+                        <img t-if="company.top_right" 
+                            t-att-src="image_data_uri(company.top_right)" 
+                            style="max-height: 100px; max-width: 200px;"/>
+                    </div>
+                </div>
+                <div class="page" style="margin-top: 10px;">
+                    <h1 style="color: #007BFF;">Occupancy List</h1>
+                    <p><strong>To:</strong> <t t-esc="to_date"/></p>
+
+                    <t t-foreach="camps_data" t-as="camp_data">
+                        <h2 style="color: #2c3e50;">Camp: <t t-esc="camp_data['camp_name']"/></h2>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Allocation ID</th>
+                                    <th>Employee</th>
+                                    <th>Nationality</th>
+                                    <th>Phone Number</th>
+                                    <th>Branch</th>
+                                    <th>Religion</th>
+                                    <th>Designation</th>
+                                    <th>Date of Join</th>
+                                    <th>Company</th>
+                                    <th>Vendor</th>
+                                    <th>Floor</th>
+                                    <th>Room</th>
+                                    <th>Bed</th>
+                                    <th>Check-In Date</th>
+                                    <th>Facilities Assigned</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="camp_data['docs']" t-as="doc">
+                                    <td><span t-field="doc.allocation_id"/></td>
+                                    <td><span t-field="doc.employee_id.name"/></td>
+                                    <td><span t-field="doc.nationality.name"/></td>
+                                    <td><span t-field="doc.contact"/></td>
+                                    <td><span t-field="doc.business_unit.name"/></td>
+                                    <td><span t-field="doc.religion.name"/></td>
+                                    <td><t t-esc="doc.designation or ''"/></td>
+                                    <td><span t-field="doc.date_of_join"/></td>
+                                    <td><span t-field="doc.company.name"/></td>
+                                    <td><span t-field="doc.vendor_id.name"/></td>
+                                    <td><span t-field="doc.floor_id.name"/></td>
+                                    <td><span t-field="doc.room_id.name"/></td>
+                                    <td><span t-field="doc.bed_id.name"/></td>
+                                    <td><span t-field="doc.check_in_date"/></td>
+                                    <td>
+                                        <t t-foreach="doc.facilities" t-as="facility">
+                                            <span t-field="facility.name"/><br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr style="font-weight: bold; background-color: #ecf0f1;">
+                                    <td colspan="14" style="text-align: right;"><strong>Total Occupied Beds:</strong></td>
+                                    <td><t t-esc="camp_data['total_occupied_beds']"/></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/><br/> 
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

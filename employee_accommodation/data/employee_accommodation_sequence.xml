@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_employee_accommodation" model="ir.sequence">
+        <field name="name">Check-In</field>
+        <field name="code">accommodation.check.in</field>
+        <field name="prefix">CK-IN-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_employee_checkout" model="ir.sequence">
+        <field name="name">Check-Out</field>
+        <field name="code">accommodation.check.out</field>
+        <field name="prefix">CK-OUT-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_employee_clearance" model="ir.sequence">
+        <field name="name">Check-List</field>
+        <field name="code">accommodation.check.list</field>
+        <field name="prefix">CL-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_facility_items" model="ir.sequence">
+        <field name="name">Facility</field>
+        <field name="code">accommodation.facility</field>
+        <field name="prefix">FI-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_employee_transfer" model="ir.sequence">
+        <field name="name">Employee Transfer Sequence</field>
+        <field name="code">employee.transfer</field>
+        <field name="prefix">TRAN-</field>
+        <field name="padding">4</field>
+    </record>
+    
+</odoo>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add group and access rights -->
+    <record id="group_offer_approval" model="res.groups">
+        <field name="name">Offer Approval</field>
+    </record>
+</odoo>

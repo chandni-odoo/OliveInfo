@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MAIN MENU -->
+
+    <menuitem
+        id="menu_tender_root"
+        name="Tender"
+        sequence="35"
+        web_icon="tender_management,static/description/icon.png"
+        groups="tender_management.group_tender_user"
+    />
+
+    <!-- TENDER MENU -->
+
+    <menuitem
+        id="menu_tender_management"
+        name="Tender List"
+        parent="menu_tender_root"
+        action="action_tender_management"
+        groups="tender_management.group_tender_user"
+        sequence="5"
+    />
+
+    <!-- CONFIGURATION -->
+
+    <menuitem
+        id="menu_tender_configuration"
+        name="Configuration"
+        parent="menu_tender_root"
+        sequence="100"
+    />
+
+    <menuitem
+        id="menu_tender_working_status"
+        name="Tender Working Status"
+        parent="menu_tender_configuration"
+        action="action_tender_working_status"
+        sequence="1"
+    />
+
+    <menuitem
+        id="menu_tender_bid_approver_group"
+        name="Bid Approver Group"
+        parent="menu_tender_configuration"
+        action="action_tender_bid_approver_group"
+        sequence="2"/>
+
+    <menuitem
+        id="menu_tender_tracking_report"
+        name="Tender Tracking Report"
+        parent="menu_tender_configuration"
+        action="action_tender_tracking_report_wizard"
+        sequence="3"
+    />
+
+</odoo>

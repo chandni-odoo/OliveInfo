@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_change_scheduled_date_form" model="ir.ui.view">
+        <field name="name">change.scheduled.date.form</field>
+        <field name="model">change.scheduled.date.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Change Scheduled Date">
+                <sheet>
+                    <group>
+                        <field name="old_scheduled_date" />
+                        <field name="new_scheduled_date" />
+                    </group>
+                    <footer>
+                        <button name="action_confirm" type="object" string="Confirm" class="btn-primary" data-hotkey="y" />
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_change_scheduled_date" model="ir.actions.act_window">
+        <field name="name">Change Scheduled Date</field>
+        <field name="res_model">change.scheduled.date.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

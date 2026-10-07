@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_payroll_register_employee">
+            <t t-call="web.html_container">
+                <t t-foreach="lines" t-as="rec">
+                    <t t-call="hr_payroll_extended.external_layout_template">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="container">
+                                <div>
+                                    <div class="text-center"> 
+                                        <span style="font-size:30px;">Payroll Register</span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>Company: </span>
+                                        <span t-esc="company.name"/><br/>
+                                        <span>Date: </span>
+                                        <span t-esc="rec['date_from']"/><br/>
+                                        <span>Payroll Batch: </span>
+                                        <span t-esc= "', ' .join(batch for batch in rec['batch_name'])"/><br/>
+                                        <span>Branch/BU: </span>
+                                        <span t-esc= "', ' .join(branch for branch in rec['branch_name'])"/><br/>
+                                    </div>
+                                    <div class="col-6">
+                                        <br/>
+                                        <span>Pay Period Ending Date:</span>
+                                        <span t-esc="rec['date_to']"/><br/>
+                                    </div>
+                                </div>
+                                <div class="row zero_min_height">
+                                    <div class="col-12">
+                                        <div style="border-bottom: 1px solid black;"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <table class="table table-sm table-bordered">
+                                    <t t-set="bank_ids" t-value="rec['employee_id'].bank_ids"/>
+                                    <thead>
+                                        <tr style="padding:0px;">
+                                            <th><strong>Employee Code</strong></th>
+                                            <th><strong>Name</strong></th>
+                                            <th><strong>Category/Structure</strong></th>
+                                            <th><strong>Position</strong></th>
+                                            <th><strong>Branch</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span t-esc="rec['employee_id'].emp_no"/></td>
+                                            <td><span t-esc="rec['employee_id'].name"/></td>
+                                            <td><span t-esc="rec['employee_id'].emplopyee_category_id.name"/></td>
+                                            <td><span t-esc="rec['employee_id'].job_id.name"/></td>
+                                            <td><span t-esc="rec['employee_id'].branch_id.name"/></td>
+                                        </tr>
+                                    </tbody>
+                                    <br/>
+                                    <thead>
+                                        <tr style="padding:0px;">
+                                            <th><strong>Date Pay Start</strong></th>
+                                            <th><strong>Original Hire</strong></th>
+                                            <th><strong>Employee Status</strong></th>
+                                            <th><strong>Bank</strong></th>
+                                            <th><strong>Bank Account</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span t-esc="rec['employee_id'].confirmation_date"/></td>
+                                            <td><span t-esc="rec['employee_id'].original_hire_date"/></td>
+                                            <td><span t-esc="rec['employee_id'].emp_status"/></td>
+                                            <td><span t-if="bank_ids" t-esc="bank_ids[0].bank_id.name"/></td>
+                                            <td><span t-if="bank_ids" t-esc="bank_ids[0].acc_number"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row zero_min_height">
+                                    <div class="col-12">
+                                        <div style="border-bottom: 1px solid black;"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row" style="font-size: 15px;">
+                                    <div class="col-6">
+                                        <table class="table table-sm table-bordered">
+                                            <thead>
+                                                <th colspan="3" style="text-align: center;"><b>EARNINGS</b></th>
+                                            </thead>
+                                        <tbody style='border: 1px solid black;'>
+                                            <tr>
+                                                <th class="text-left">
+                                                    <span>Description</span> 
+                                                </th>
+                                                <th class="text-right">Curr. Amount
+                                                </th>
+                                                <th class="text-right">YID Amount
+                                                </th>
+                                            </tr>
+                                            <t t-set="total_earning" t-value="0"/>
+                                            <t t-set="earning" t-value="0"/>
+                                            <tr t-foreach="rec['allowance_lines']" t-as="l">
+                                                <t t-set="total_earning" t-value="total_earning + abs(l['yid_amount'])"/>
+                                                <t t-set="earning" t-value="earning + abs(l['cur_amount'])"/>
+                                                <td>
+                                                    <span t-esc="l['name']"/>
+                                                </td>
+                                                <td style='text-align:right;'>
+                                                    <span t-esc="l['cur_amount']" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                                <td style='text-align:right;'>
+                                                    <span t-esc="abs(l['yid_amount'])" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span style="font-weight:600;font-size: 15px;">TOTAL EARNINGS</span>
+                                                </td>
+                                                <td style="text-align: right;font-weight:600;">
+                                                    <t t-esc="round(earning,2)" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                                <td style="text-align: right;font-weight:600;">
+                                                    <t t-esc="round(total_earning,2)" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                                <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <th colspan="3" style="text-align: center;"><b>DEDUCTIONS</b></th>
+                                    </thead>
+                                    <tbody style='border: 1px solid black;'>
+                                        <tr>
+                                            <th class="text-left"><span>Description</span></th>
+                                            <th style="text-align: right;">Curr. Amount</th>
+                                            <th style="text-align: right;">YID amount</th>
+                                        </tr>
+                                        <t t-set="total_deduction" t-value="0"/>
+                                        <t t-set="deduction" t-value="0"/>
+                                        <t t-foreach="rec['deduction_lines']" t-as="l">
+                                            <t t-set="total_deduction" t-value="total_deduction + abs(l['yid_amount'])"/>
+                                            <t t-set="deduction" t-value="deduction + abs(l['cur_amount'])"/>
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="l['name']"/>
+                                                </td>
+                                                <td style='text-align:right;'>
+                                                    <span t-esc="abs(l['cur_amount'])" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                                <td style='text-align:right;'>
+                                                    <span t-esc="abs(l['yid_amount'])" t-options='{"widget": "float", "precision": 2}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <th>
+                                                <span style="font-weight:600;font-size: 15px;">TOTAL DEDUCTIONS</span>
+                                            </th>
+                                            <td style="text-align: right;font-weight:600;">
+                                                <t t-esc="round(deduction)" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                            <td style="text-align: right;font-weight:600;">
+                                                <t t-esc="round(total_deduction)" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <th style="text-align: center;">
+                                            <span>Total Gross: </span>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>Curr: </span>
+                                            <span style="padding-left: 10px;" t-esc="sum(rec['line_id'].filtered(lambda x: x.category_id.code == 'GROSS').mapped('total'))" t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>YID: </span>
+                                            <span style="padding-left: 10px;" t-esc="sum(rec['line_ids'].filtered(lambda x: x.category_id.code == 'GROSS').mapped('total'))" t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>Total Deduction: </span>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>Curr: </span>
+                                            <span style="padding-left: 10px;" t-esc="round(deduction, 2)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>YID: </span>
+                                            <span style="padding-left: 10px;" t-esc="round(total_deduction, 2)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center;">
+                                            <span>Net Pay: </span>
+                                            <span style="padding-left: 10px;" t-esc="round((total_earning-total_deduction), 2)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                    </thead>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

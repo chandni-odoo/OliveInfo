@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Compactor Report Wizard Form View -->
+        <record id="view_compactor_report_wizard_form" model="ir.ui.view">
+            <field name="name">compactor.report.wizard.form</field>
+            <field name="model">compactor.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Compactor Vehicle Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="scheduled_date"/>
+                                <field name="vehicle_id"/>
+                            </group>
+                            <group>
+                                <field name="vehicle_type_id"/>
+                                <field name="shift_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_generate_excel_report" string="Generate Excel Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Compactor Report Wizard Action -->
+        <record id="action_compactor_report_wizard" model="ir.actions.act_window">
+            <field name="name">Compactor Vehicle Report</field>
+            <field name="res_model">compactor.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_compactor_report_wizard_form"/>
+        </record>
+
+        <menuitem id="menu_trip_report_root"
+            name="Reports"
+            parent="mtech_vehicle_extended.menu_operation_schedule"
+            sequence="7" />
+
+        <menuitem id="menu_compactor_vehicle_report"
+                  name="Compactor Vehicle Report"
+                  parent="menu_trip_report_root"
+                  action="action_compactor_report_wizard"
+                  sequence="2"/>
+
+    </data>
+</odoo>

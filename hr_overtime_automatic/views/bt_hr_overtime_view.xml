@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Overtime"
+                  id="overtime_management_main_menu"
+                  web_icon="hr_overtime_automatic,static/description/icon.png"
+                  sequence="10"/>
+
+        <menuitem
+                id="overtime_managment_main_submenu"
+                parent="overtime_management_main_menu"
+                sequence="1"
+                name="Overtime"/>
+
+        <record id="bt_overtime_management_tree" model="ir.ui.view">
+            <field name="name">bt.hr.overtime.tree</field>
+            <field name="model">bt.hr.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime">
+                    <field name="employee_id"/>
+                    <field name="manager_id"/>
+                    <field name="start_date"/>
+                    <field name="overtime_hours" widget="float_time"/>
+                    <field name="ot_type_id"/>
+                    <field name="is_payslip_create"/>
+                    <field name='state'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="bt_overtime_management_search" model="ir.ui.view">
+            <field name="name">bt.hr.overtime.search</field>
+            <field name="model">bt.hr.overtime</field>
+            <field name="arch" type="xml">
+                <search string="Overtime">
+                    <field name="employee_id"/>
+                    <field name="manager_id"/>
+                    <field name="start_date"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter string="Employee" name="employee_id" context="{'group_by':'employee_id'}"/>
+                        <filter string="Manager" name="manager_id" context="{'group_by':'manager_id'}"/>
+                        <filter string="Date" name="start_date" context="{'group_by':'start_date'}"/>
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="bt_overtime_management_form" model="ir.ui.view">
+            <field name="name">bt.hr.overtime.form</field>
+            <field name="model">bt.hr.overtime</field>
+            <field name="arch" type="xml">
+                <form string="Overtime">
+                    <header>
+                        <button name="action_submit" type="object" string="Submit" groups="base.group_user"
+                                attrs="{'invisible':[('state', '!=', 'draft')]}"/>
+                        <button name="action_cancel" type="object" string="Cancel"
+                                groups="base.group_user,hr.group_hr_manager"
+                                attrs="{'invisible':[('state', '!=', 'confirm')]}"/>
+                        <button name="action_approve" type="object" string="Approve" groups="hr.group_hr_manager"
+                                attrs="{'invisible':[('state', '!=', 'confirm')]}"/>
+                        <button name="action_refuse" type="object" string="Refuse" groups="hr.group_hr_manager"
+                                attrs="{'invisible':[('state', '!=', 'confirm')]}"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,refuse,validate,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_attendance" type="object"
+                                    class="oe_stat_button" icon="fa-user" string="Attendance">
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" required="True" readonly="1"/>
+                                <field name="manager_id" readonly="1"/>
+                                <field name="ot_type_id"/>
+                                <field name="is_payslip_create"/>
+                            </group>
+                            <group>
+                                <field name="start_date" readonly="1"/>
+                                <field name="overtime_hours" readonly="1" widget="float_time"/>
+                                <field name="work_hours" widget="float_time" readonly="1"/>
+                                <field name="is_ramadan"/>
+                                <field name="attendance_id" invisible="1"/>
+                                <field name="rate" invisible="1"/>
+                            </group>
+                            <field name="attendance_ids">
+                                <tree>
+                                    <field name="check_in"/>
+                                    <field name="check_out"/>
+                                    <field name="worked_hours" sum="Total Hours" widget="float_time"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="bt_run_overtime_management" model="ir.ui.view">
+            <field name="name">run.cron.overtime.form</field>
+            <field name="model">run.overtime.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Overtime">
+                    <sheet>
+                        <group>
+                            <span>Click on the Run Overtime button to start Scheduler.</span>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="run_overtime_scheduler" string="Run Overtime" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_bt_overtime_management" model="ir.actions.act_window">
+            <field name="name">Overtime</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bt.hr.overtime</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bt_overtime_management_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Overtime Request
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bt_run_overtime_management" model="ir.actions.act_window">
+            <field name="name">Run Overtime</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">run.overtime.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bt_run_overtime_management"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem action="action_bt_overtime_management" name="Overtime Records"
+                  id="menu_action_bt_overtime_management" parent="overtime_managment_main_submenu"
+                  sequence="1"/>
+
+        <menuitem action="action_bt_run_overtime_management" name="Run Overtime"
+                  id="menu_action_bt_run_overtime_management" parent="overtime_managment_main_submenu"
+                  sequence="2"/>
+
+        <!--  Inherits HR Contract View-->
+        <record id="hr_contract_view_form2" model="ir.ui.view">
+            <field name="name">hr.contract.form2</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='resource_calendar_id']" position="before">
+                        <field name="work_hours" required="1" invisible="1"
+                               attrs="{'readonly': [('has_payslip', '=', True)]}"/>
+                        <field name="type_of_contract" attrs="{'readonly': [('has_payslip', '=', True)]}"/>
+                        <field name="normal_days_rate"
+                               attrs="{'invisible': [('type_of_contract', '!=', 'normal_days')]}"/>
+                        <field name="weekday_days_rate"
+                               attrs="{'invisible': [('type_of_contract', '!=', 'weekday_days')]}"/>
+                        <field name="holidays_rate" attrs="{'invisible': [('type_of_contract', '!=', 'holidays')]}"/>
+                        <field name="special_holidays"
+                               attrs="{'invisible': [('type_of_contract', '!=', 'special_holidays')]}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!-- Inherits HR Attendance View -->
+        <record id="action_view_company_compnay" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page string="Overtime Configuration">
+                        <group>
+                            <field name="min_overtime"/>
+                            <field name="max_overtime"/>
+                            <field name="types"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_attendance_view_form2" model="ir.ui.view">
+            <field name="name">hr.attendance.form2</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='check_out']" position="after">
+                        <field name="overtime_created"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

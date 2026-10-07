@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_facility_tree" model="ir.ui.view">
+        <field name="name">accommodation.facility.tree</field>
+        <field name="model">accommodation.facility</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence_id" readonly="1"/>
+                <field name="name"/>
+                <field name="facility_code"/>
+                <field name="facility_type"/>
+                <field name="camp_id"/>
+                <field name="floor_id"/>
+                <field name="room_id"/>
+                <field name="usage"/>
+                <field name="employee_id" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                <field name="check_in_time" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                <field name="check_in_id" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                <field name="status"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_facility_form" model="ir.ui.view">
+        <field name="name">accommodation.facility.form</field>
+        <field name="model">accommodation.facility</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="available,in_use,retired"/>
+                    <button name="action_set_available" string="Set Available" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'available')]}"/>
+                    <button name="action_set_in_use" string="Set In Use" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'in_use')]}"/>
+                    <button name="action_set_retired" string="Set Retired" type="object" attrs="{'invisible': [('state', '=', 'retired')]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence_id" readonly="1"/>
+                            <field name="name"/>
+                            <field name="facility_code"/>
+                            <field name="facility_type"/>
+                            <field name="usage"/>
+                        </group>
+                        <group>
+                            <field name="camp_id" 
+                            attrs="{'required': [('facility_type', 'in', ['camp', 'floor', 'room'])]}"/>
+                            <field name="floor_id" 
+                                attrs="{'invisible': [('facility_type', '=', 'camp')],
+                                        'required': [('facility_type', 'in', ['floor', 'room'])]}"/>
+                            <field name="room_id" 
+                                attrs="{'invisible': [('facility_type', '=', 'camp')],
+                                        'required': [('facility_type', '=', 'room')]}"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="remarks"/>
+                            <field name="employee_id" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                            <field name="check_in_time" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                            <field name="check_in_id" attrs="{'invisible': [('usage', '!=', 'employee')]}"/>
+                            <field name="customer_id" attrs="{'invisible': [('usage', '!=', 'customer')]}"/>
+                            <field name="employee_name" attrs="{'invisible': [('usage', '!=', 'customer')]}"/>
+                            <field name="customer_check_in_id" attrs="{'invisible': [('usage', '!=', 'customer')]}"/>
+                        </group>
+                    </group>    
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="facility_action" model="ir.actions.act_window">
+        <field name="name">Facilities</field>
+        <field name="res_model">accommodation.facility</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

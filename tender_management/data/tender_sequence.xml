@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_tender_management" model="ir.sequence">
+        <field name="name">Tender Sequence</field>
+        <field name="code">tender.management.seq</field>
+        <field name="prefix">TEN/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

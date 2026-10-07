@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_escalation_opening_ticket" model="mail.template">
+            <field name="name">Escalation Manager</field>
+            <field name="model_id" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>
+            <field name="subject">Urgent: SLA Breach -{{ object.display_name }}</field>
+                        <field name="email_from">{{ (object.user_id.login) }}</field>
+                        <field name="email_to">{{ object.ticket_type_id.manager_id.login }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear
+                        <span t-esc="object.emp_id.name"/>
+                    </p>
+                    <p>
+                        The SLA for Case Ticket<t t-out="object.display_name"/>has been breached. [stage] time of [SLA
+                        Hours] has been
+                        exceeded.
+                    </p>
+                    <p>Your immediate attention is requested.</p>
+                    <p>Thank you.</p>
+                    <p>System-generated automated message</p>
+                </div>
+            </field>
+            <!--            <field name="report_template" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>-->
+            <field name="report_name">{{ (object.name or '') }}</field>
+            <field name="lang">{{ object.emp_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="escalation_manager_email_cron" model="ir.cron">
+            <field name="name">Check Escalation Manager Mail </field>
+            <field name="model_id" ref="model_helpdesk_sla"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+<!--            <field name="user_id" ref="base.user_admin"/>-->
+            <field name="code">model.test_cron_mail()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>

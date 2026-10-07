@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tender_management,tender.management,model_tender_management,base.group_user,1,1,1,1
+access_tender_working_status,tender.working.status,model_tender_working_status,base.group_user,1,1,1,1
+access_tender_document_line,tender.document.line,model_tender_document_line,base.group_user,1,1,1,1
+access_working_file_line,working.file.line,model_working_file_line,base.group_user,1,1,1,1
+access_tender_bulletin_line,tender.bulletin.line,model_tender_bulletin_line,base.group_user,1,1,1,1
+access_submitted_document_line,submitted.document.line,model_submitted_document_line,base.group_user,1,1,1,1
+access_post_tender_line,post.tender.line,model_post_tender_line,base.group_user,1,1,1,1
+access_signed_contract_line,signed.contract.line,model_signed_contract_line,base.group_user,1,1,1,1
+access_tender_poc_line,tender.poc.line,model_tender_poc_line,base.group_user,1,1,1,1
+access_tender_approval_history,tender.approval.history,model_tender_approval_history,base.group_user,1,1,1,1
+access_tender_bid_approver_group,tender.bid.approver.group,model_tender_bid_approver_group,base.group_user,1,1,1,1
+access_tender_bid_approver_line,tender.bid.approver.line,model_tender_bid_approver_line,base.group_user,1,1,1,1
+access_tender_invoice,tender.invoice,model_tender_invoice,base.group_user,1,1,1,1
+access_tender_invoice_line,tender.invoice.line,model_tender_invoice_line,base.group_user,1,1,1,1
+access_tender_tracking_report_wizard,tender.tracking.report.wizard,model_tender_tracking_report_wizard,base.group_user,1,1,1,1
+

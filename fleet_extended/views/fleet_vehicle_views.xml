@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="capacity_and_employee_allocation_fleet_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.capacity.employee.allocation.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='hazardous']" position="after">
+                <field name="capacity"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Employee Allocation" name="employee_allocation">
+                    <field name="employee_allocation_ids" readonly="0" nolabel="1" domain="[('active', '=', True)]">
+                        <tree string="Employee Allocations" editable="bottom">
+                            <field name="employee_id" readonly="1"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="location_id" readonly="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="task_id" readonly="1"/>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="demobilize_date" readonly="1"/>
+                            <field name="pickup_time" widget="float_time" readonly="1"/>
+                            <field name="drop_time" widget="float_time" readonly="1"/>
+                            <field name="license_plate" readonly="1"/>
+                            <field name="active" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Assigned Employees" name="unassigned_employees"> 
+                    <group>
+                        <field name="task_id" string="Task"/>
+                        <field name="pickup_time" string="Pickup" widget="float_time"/>
+                        <field name="drop_time" string="Drop" widget="float_time"/>
+                        <field name="license_plate"/>
+                    </group>
+                    <field name="employee_unallocation_ids" readonly="0" nolabel="1">
+                        <tree string="Assigned Employees" editable="bottom">
+                            <field name="selection" widget="boolean"/>
+                            <field name="employee_id" string="Employee"/>
+                            <field name="task_id" string="Task"/>
+                            <field name="location_id" string="Location"/>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <!-- <field name="current_license_plate" string="Current License Plate" readonly="1"/> -->
+                            <field name="current_vehicle_name" string="Current Vehicle" readonly="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="%(fleet.fleet_vehicle_view_form)d" string="Save and Allocate Selected" type="object" class="btn-primary" special="save"/>
+                    </footer>
+                </page>
+                <page string="Documents">
+                    <field name="document_line_ids">
+                        <tree editable="bottom">
+                            <field name="vehicle_id"/>
+                            <field name="license_plate" readonly="1"/>
+                            <field name="document_line_id"/>
+                            <field name="document_number"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="doc_issue_place"/>
+                            <field name="status"/>
+                            <field name="remarks"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_fleet_document_tree" model="ir.ui.view">
+        <field name="name">fleet.document.line.tree</field>
+        <field name="model">fleet.document.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="vehicle_id"/>
+                <field name="license_plate" readonly="1"/>
+                <field name="document_line_id"/>
+                <field name="document_number"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="doc_issue_place"/>
+                <field name="status"/>
+                <field name="remarks"/>
+                <field name="attachment" widget="binary"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_fleet_document" model="ir.actions.act_window">
+        <field name="name">Document Lines</field>
+        <field name="res_model">fleet.document.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_fleet_document_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new document
+            </p>
+            <p>
+                Also you will find here all the related documents and download it by clicking on any individual
+                document.
+            </p>
+        </field>
+
+    </record>
+
+    <menuitem name="Document Lines" 
+                parent="fleet.menu_root" 
+                id="menu_fleet_document" 
+                action="action_fleet_document"
+                sequence="100"/>
+</odoo>

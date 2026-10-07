@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="available_beds_report_action" model="ir.actions.report">
+            <field name="name">Bed Availability Report</field>
+            <field name="model">available.beds.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">employee_accommodation.available_beds_report_template</field>
+            <field name="report_file">employee_accommodation.available_beds_report_template</field>
+            <field name="print_report_name">'Bed Availability Report.pdf'</field>
+            <field name="binding_model_id" ref="employee_accommodation.model_accommodation_bed"/>
+            <field name="paperformat_id" ref="employee_accommodation.paperformat_employee_accommodation"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+
+    <template id="available_beds_report_template">
+        <t t-call="web.html_container">
+            <div class="page">
+                <div class="article o_report_layout_standard">
+                    <div class="row mt-0" style="margin-top: 0 !important; padding-top: 0 !important;">
+                        <div class="col-6">
+                            <img t-if="company.logo" 
+                                t-att-src="image_data_uri(company.logo)" 
+                                style="max-height: 100px; max-width: 200px;"/>
+                        </div>
+                        <div class="col-6 text-right">
+                            <img t-if="company.top_right" 
+                                t-att-src="image_data_uri(company.top_right)" 
+                                style="max-height: 100px; max-width: 200px;"/>
+                        </div>
+                    </div>
+
+                    <style>
+                        .page {
+                            padding: 30px;
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
+                        h2 {
+                            color: #2c3e50;
+                            text-align: center;
+                            margin-bottom: 30px;
+                            font-size: 24px;
+                        }
+                        .table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 30px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        .table th, .table td {
+                            padding: 15px;
+                            text-align: left;
+                            border-bottom: 2px solid #ddd;
+                        }
+                        .table th {
+                            background-color: #3498db;
+                            color: white;
+                            font-size: 16px;
+                        }
+                        .table tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                        }
+                        .table tr:hover {
+                            background-color: #f1f1f1;
+                        }
+                        .table td {
+                            color: #34495e;
+                            font-size: 14px;
+                        }
+                        .total-row {
+                            font-weight: bold;
+                            background-color: #ecf0f1;
+                        }
+                    </style>
+
+                    <t t-foreach="docs" t-as="camp_data">
+                        <h2>Available Beds for Camp: <t t-esc="camp_data['camp_name']"/></h2>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Bed Number</th>
+                                    <th>Room</th>
+                                    <th>Floor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_beds" t-value="0"/>
+
+                                <t t-foreach="camp_data['beds']" t-as="bed">
+                                    <tr>
+                                        <td><t t-esc="bed.name"/></td>
+                                        <td><t t-esc="bed.room_id.name"/></td>
+                                        <td><t t-esc="bed.floor_id.name"/></td>
+                                        <td><t t-esc="bed.status"/></td>
+                                    </tr>
+                                    <t t-set="total_beds" t-value="total_beds + 1"/>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td colspan="3"><strong>Total Beds Available</strong></td>
+                                    <td><t t-esc="total_beds"/></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+</odoo>

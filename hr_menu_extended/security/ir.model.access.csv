@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_leave_accrual_report_wizard,leave.accrual.report.wizard,model_leave_accrual_report_wizard,base.group_user,1,1,1,1
+access_waste_recyclables,waste.recyclables,model_waste_recyclables,base.group_user,1,1,1,1

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mis_report_main"
+              name="MIS reports"
+              parent="account_accountant.menu_accounting"
+              sequence="20"/>
+              
+</odoo>

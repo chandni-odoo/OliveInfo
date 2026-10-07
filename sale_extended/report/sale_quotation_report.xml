@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_sale_quotation">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sale_extended.external_layout_template_service_agrrement">
+                        <!-- <t t-if="o.state == 'draft'"> -->
+                            <center>Quotation for Manpower Services</center>
+                            <br/>
+                            <table class="table table-bordered" style="width:100%">
+                              <tr>
+                                <td>TO</td>
+                                <td><span t-esc="o.contact_name"/><br/><span t-esc="o.mobile"/><br/></td>
+                                <td>From</td>
+                                <td><span t-esc="o.user_id.name"/><br/><span t-esc="o.user_id.login"/></td>
+                              </tr>
+                              <tr>
+                                <td>COMPANY</td>
+                                <td><span t-esc="o.partner_id.name"/></td>
+                                <td>DATE</td>
+                                <td><span t-esc="o.date_order" t-options='{"widget": "date","format": "dd/MM/yyyy"}'/></td>
+                              </tr>
+                              <tr>
+                                <td>PHONE</td>
+                                <td><span t-esc="o.partner_id.phone"/> , <span t-esc="o.partner_id.mobile"/></td>
+                                <td>Pages</td>
+                                <td>3</td>
+                              </tr>
+                              <tr>
+                                <td>SUBJECT</td>
+                                <td><span t-esc="o.subject"/></td>
+                                <td>REF(Quote No)</td>
+                                <td><span t-esc="o.name"/></td>
+                              </tr>
+                            </table>
+                            <p>Dear <b> <span t-esc="o.contact_name"/> </b></p>
+                            <p> As requested; our commercial offer is quoted below: </p>
+                            <br/>
+                            <p><b><u>Scope of Work :</u></b></p>
+                            <p><span t-esc="o.scope_of_work"/></p>
+                            <br/>
+                            <p><b>Commercial Offer:</b></p>
+
+                            <table class="table table-bordered" style="width:100%">
+                            <thead style="font-size:13px;">
+                                <tr>
+                                    <th><strong>Category</strong></th>
+                                    <th><strong>RATE</strong></th>
+                                    <th><strong>Minimum Personnel to hire</strong></th>
+                                    <th><strong>Hourly overtime</strong></th>
+                                    <th><strong>Hourly special overtime (QAR)</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size:13px;">
+                                <t t-set="price_subtotal" t-value="o.order_line.mapped('price_subtotal')"/>
+                                <tr t-foreach="o.order_line" t-as="line">
+                                    <td>
+                                        <span t-esc="line.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line.price_unit"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line.product_uom_qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line.overtime"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line.sp_overtime"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                            <p><b><u>Working Hours :</u></b></p>
+                            <h6>A minimum of <span t-esc="o.order_line.mapped('std_hrs')"/> hours per day (exclusive of one hour lunch break) and  <span t-esc= "7 - len(o.week_of.ids)"/> days a week. </h6>
+                            <h6>Minimum Contract period is for <span t-esc= "o.min_contract"/> (Extendable) from the first day of hire.</h6>
+                            <p><b>Note :</b></p>
+                            <ul>
+                              <li>During the holy month of Ramadan normal working hours shall be 6 hours. Overtime rate shall be applicable from the 7th hour. </li>
+                              <li>All vehicle/s to have a valid comprehensive insurance coverage. In case of any accidental damage due to the negligence of the employee, the same must immediately be notified to <span t-esc="o.company_id.name"/> ,  <span t-esc="o.partner_id.name"/> must obtain a police report for the accident. Dulsco would be liable only to pay the excess insurance amount and not the full damage cost. Any claims related to excess insurance amount must be informed to Dulsco in writing along with supporting proof of relevant documents within seven (07) days from date of accident/incident. Dulsco will not be responsible to reimburse to client if submitted later than seven (07) days or without proof.</li>
+                            </ul>
+                            <p><b><i>Rates Include :</i></b></p>
+                            <ul>
+                              <li>Personnel salary and uniform / basic personal protective equipment (PPE).</li>
+                              <li>Food and Accommodation Transportation will be provided by <span t-esc="o.partner_id.name"/> </li>
+                              <li>Workmen`s Compensation as per Qatar requirements.</li>
+                              <li>Medical &amp; insurance as per company policy.</li>
+                              <li>Recruitment and repatriation costs.</li>
+                              <li>Leave pay and gratuity.</li>
+                            </ul>
+                            <p><b><i><u>Validity of Quote :</u></i></b></p>
+                            <p>The rates given are applicable and valid for 30 days from the date of this quote.
+                            However; the rates given are applicable and valid for 06 months from the first day of hire and are subject to
+                            revision and inflation adjustment after 06 months.</p>
+                            <p>Payment Terms : <span t-esc="o.payment_term_id.name"/> from the date of invoice.
+                            (Subject to Finance department approval and completion of Credit Facility Form)</p>
+                            <p>Notice period of 07 days to be provided in writing prior to demobilization of any personnel.</p>
+                            <p>Any extra personnel (other than monthly contracted personnel) required for temporary contracts can be
+                            supplied if there is availability at the time of your requirement. This will be charged at our subcontract hourly rate.</p>
+
+                            <p><i><b><u>Terms and Conditions : </u></b></i></p>
+                            <ul>
+                              <li>At the moment we have overleaf mentioned categories of personnel available, however we must stress that provision of such
+                              services depends on availability of personnel at the time of confirmation of the quotation.</li>
+                              <li>The Labor Ministry requires that an agreement must be signed before any personnel can begin service. </li>
+                              <li>Payment terms to be strictly adhered to as per existing terms and conditions. </li>
+                              <li>The outsourced manpower shall be deployed for the project Drivers at location Doha.</li>
+                              <li>Any unforeseen charges or payments imposed by the Government and/or other authorities beyond the control of `DULSCO` will borne by <span t-esc="o.partner_id.name"/> </li>
+                              <li>In case of worker injury, immediate first aid has to be provided by <span t-esc="o.partner_id.name"/> and Dulsco
+                              should be informed immediately.</li>
+                              <li>Any special passes required to enter to the assigned work-site will be the responsibility of <span t-esc="o.partner_id.name"/> where Dulsco has to mobilize workers after passes are applied by <span t-esc="o.partner_id.name"/> date of mobilization to be informed by <span t-esc="o.partner_id.name"/> in advance.If passes take longer than the date of mobilization committed by <span t-esc="o.partner_id.name"/> after allthe documents are furnished by Dulsco, billing for the personnel would be done by DULSCO accordingly.</li>
+                              <li>Special PPE `s / tools if any; shall be under the scope of <span t-esc="o.partner_id.name"/> </li>
+                              <li>Deployment shall be organized after approval of QHSE and Operation Executive.</li>
+                              <li>Time cards shall be released before 6th of every month.Monthly Statement of Accounts shall be signed and stamped by both parties after the submission of monthly invoices to avoid discrepancies.</li>
+                            </ul>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <h6>Regards,</h6>
+                            <b><span t-esc="o.user_id.name"/></b><br/>
+                            Mobile : <span t-esc="o.user_id.mobile"/> , <span t-esc="o.partner_id.phone"/><br/>
+                            Email : <span t-esc="o.user_id.login"/><br/>
+                            <b>We will be pleased to receive your acceptance at your earliest convenience.</b><br/><br/><br/><br/>
+                            <h6><u>Confirmed By :</u></h6>
+                            <h6>Name :    <span t-esc="o.contact_name"/></h6>
+                            <!-- <h6>Designation :   <span t-esc="o.partner_id.child_ids.mapped('function')"/></h6> -->
+                            <h6>Signature :  </h6>
+                            <h6>Date : </h6>
+                            <h6>Company Seal : </h6>
+
+                            <div class="row" style="margin-top:64px;">
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-8">
+                                        <b>Services we offer :</b><br/>
+                                        <b>Manpower, HR Outsourcing, Waste Management</b><br/>
+                                        <b>Onshore and Offshore tank cleaning &amp; Tanker Services</b> 
+                                    </div>
+                            </div>
+                        <!-- </t> -->
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

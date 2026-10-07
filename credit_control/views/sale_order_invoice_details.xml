@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form_invoice_details_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.invoice.details</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page string="Invoice Details">
+                    <group>
+                        <group>
+                            <field name="last_invoice_date" readonly="1"/>
+                            <field name="last_invoice_number" readonly="1"/>
+                            <field name="task_uom" readonly="1"/>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="agency_fee" readonly="1"/>
+                            <field name="delivered" readonly="1"/>
+                            <field name="invoiced" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="amount" readonly="1"/>
+                            <field name="new_overtime" readonly="1"/>
+                            <field name="spe_overtime" readonly="1"/>
+                            <field name="additional_rate" readonly="1"/>
+                            <field name="branch_for" readonly="1"/>
+                            <field name="unbilled_value" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_hold_fields" model="ir.ui.view">
+        <field name="name">sale.order.form.hold.fields</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_extended.view_sale_order_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_hold']" position="replace">
+                <field name="is_hold" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='hold_reason']" position="replace">
+                <field name="hold_reason" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

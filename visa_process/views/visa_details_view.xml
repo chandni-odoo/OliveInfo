@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="visa_details_tree_view" model="ir.ui.view">
+        <field name="name">visa.details.tree.view</field>
+        <field name="model">visa.details</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="lot_no"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="visa_details_form_view" model="ir.ui.view">
+        <field name="name">visa.details.form.view</field>
+        <field name="model">visa.details</field>
+        <field name="arch" type="xml">
+            <form string="Visa">
+                <header>
+                    <button name="button_receive"  string="Receive" type="object" class="oe_highlight" states='request'/>
+                    <button name="button_update"  string="Update" type="object" class="oe_highlight" states='receive'/>
+                    <button name="button_approve"  string="Approve" type="object" class="oe_highlight" states='update'/>
+                    <button name="button_cancel"  string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['cancel'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="request,receive,update,approve,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <separator string="Visa Form"/>
+                        <group>
+                            <field name="lot_no"/>
+                            <field name="date_done"/>
+                            <field name="project"/>
+                            <field name="visa_application_no" attrs="{'invisible':[('state','!=','receive')]}"/>
+                            <field name="applied_by" attrs="{'invisible':[('state','!=','receive')]}"/>
+                        </group>
+                        <group>
+                            <field name="requested_id"/>
+                            <field name="attachment_id"/>
+                            <field name="visa_app_id" attrs="{'invisible':[('state','!=','receive')]}"/>
+                            <field name="vp_no" attrs="{'invisible':[('state','!=','update')]}"/>
+                            <field name="expiry_date" attrs="{'invisible':[('state','!=','update')]}"/>
+                            <field name="status" attrs="{'invisible':[('state','!=','update')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="More">
+                            <field name="visa_line_ids">
+                                 <tree editable='1'>
+                                     <field name="lot_line_no"/>
+                                     <field name="lot_quota"/>
+                                     <field name="nationality"/>
+                                     <field name="type_of_visa"/>
+                                     <field name="type_of_visa_profession"/>
+                                     <field name="gender"/>
+                                     <field name="requested_hr" attrs="{'column_invisible':[('parent.state','!=','receive')]}"/>
+                                     <field name="requested_mol" attrs="{'column_invisible':[('parent.state','!=','receive')]}"/>
+                                     <field name="visa_sponsor" attrs="{'column_invisible':[('parent.state','!=','receive')]}"/>
+                                     <field name="date_time" attrs="{'column_invisible':[('parent.state','!=','receive')]}"/>
+                                     <field name="approval_count" attrs="{'column_invisible':[('parent.state','!=','update')]}"/>
+                                     <field name="rejected_count" attrs="{'column_invisible':[('parent.state','!=','update')]}"/>
+                                     <field name="approval_date" attrs="{'column_invisible':[('parent.state','!=','update')]}"/>
+                                     <field name="reject_reason" attrs="{'column_invisible':[('parent.state','!=','update')]}"/>
+                                     <field name="balance_count" attrs="{'column_invisible':[('parent.state','!=','approve')]}"/>
+                                     <field name="used_count" attrs="{'column_invisible':[('parent.state','!=','approve')]}"/>
+                                 </tree>
+                             </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_visa_details" model="ir.actions.act_window">
+        <field name="name">Visa Details</field>
+        <field name="res_model">visa.details</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_visa_root"
+        name="Visa"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_visa_details"
+        action="action_view_of_visa_details"
+        parent="menu_visa_root"
+        name="Visa Process"
+        sequence="1"/>
+</odoo>

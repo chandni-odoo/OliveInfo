@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="hr_payslip_run_form_bank" model="ir.ui.view">
+            <field name="name">hr.payslip.run.form</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_draft']" position="after">
+                    <button string="Print Bank Report" name="print_bank_report_xls" type="object"/>
+                    <button string="Print Bank Report ZIP" name="print_bank_report_xls_2" type="object"/>
+                    <button string="Print Bank Other" name="print_bank_report_other_xls" type="object"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_bank_form_view_inherit" model="ir.ui.view">
+            <field name="name">res.bank.form.view</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='branch_name']" position="after">
+                    <field name="is_other"/>
+                </xpath>
+                 <xpath expr="//field[@name='is_other']" position="after">
+                    <field name="is_ahli_bank"/>
+                    <field name="payer_eid"/>
+                    <field name="payer_qid"/>
+                    <field name="is_seq"/>
+                    <field name="seq" attrs="{'invisible': [('is_seq','=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_idle_timesheet_action" model="ir.actions.report">
+        <field name="name">Idle Timesheet Excel</field>
+        <field name="model">idle.timesheet.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">project_extended.report_idle_timesheet</field>
+        <field name="report_file">project_extended.report_idle_timesheet</field>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_type">report</field>
+        <!-- <field name="paperformat_id" ref="sale_extended.paperformat_sale_quotation_people"/> -->
+    </record>
+</odoo>

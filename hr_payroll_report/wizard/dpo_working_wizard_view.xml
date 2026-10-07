@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dpo_working_report_wizard" model="ir.ui.view">
+        <field name="name">dpo.working.wizard.form</field>
+        <field name="model">dpo.working.wizard</field>
+        <field name="arch" type="xml">
+            <form string="ACP Working">
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="branch_ids" widget="many2many_tags"/>
+                    <field name="supplier_ids" widget="many2many_tags"/>
+                    <field name="exclude_legal_case"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object"
+                            string="Print Report" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dpo_working_report" model="ir.actions.act_window">
+        <field name="name">DPO Workings</field>
+        <field name="res_model">dpo.working.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_dpo_working_report"
+              name="DPO Workings"
+              parent="menu_mis_report_main"
+              action="action_dpo_working_report"
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view modifications -->
+    <record id="view_hr_applicant_form_inherit_approval" model="ir.ui.view">
+        <field name="name">hr.applicant.form.inherit.approval</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add invisible fields first -->
+            <xpath expr="//field[@name='partner_name']" position="after">
+                <field name="is_in_offer_approval" invisible="1"/>
+                <field name="current_approver_id" invisible="1"/>
+                <field name="is_offer_approved" invisible="1"/>
+                <field name="is_offer_rejected" invisible="1"/>
+                <field name="can_current_user_approve" invisible="1"/>
+                <field name="is_contract_signed_stage" invisible="1"/>
+            </xpath>
+            
+            <!-- Add Offer Approval button to header -->
+            <xpath expr="//header" position="inside">
+                <!-- <button name="action_send_for_offer_approval" string="Send for Offer Approval"
+                    type="object" class="oe_highlight"
+                    attrs="{'invisible': ['|', ('is_in_offer_approval', '=', True), ('is_offer_approved', '=', True)]}"/> -->
+                <button name="action_send_for_offer_approval" string="Send for Offer Approval"
+                    type="object" class="oe_highlight"
+                    attrs="{'invisible': ['|', '|', ('is_in_offer_approval', '=', True), ('is_offer_approved', '=', True), ('is_contract_signed_stage', '=', True)]}"/>
+                <button name="action_approve_offer" string="Approve Offer"
+                    type="object" class="oe_highlight"
+                    groups="hr_recruitment_approval.group_offer_approval"
+                    attrs="{'invisible': ['|', ('is_in_offer_approval', '!=', True), ('can_current_user_approve', '!=', True)]}"/>
+                <button name="action_reject_offer" string="Reject Offer"
+                    type="object" 
+                    groups="hr_recruitment_approval.group_offer_approval"
+                    attrs="{'invisible': ['|', ('is_in_offer_approval', '!=', True), ('can_current_user_approve', '!=', True)]}"/>
+            </xpath>
+            
+            <!-- Add approval status indicator -->
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <div class="oe_stat_button" name="approval_status_button">
+                    <div class="o_field_widget o_stat_info">
+                        <div class="o_stat_value" attrs="{'invisible': ['&amp;', ('is_offer_approved', '=', False), ('is_offer_rejected', '=', False)]}">
+                            <span attrs="{'invisible': [('is_offer_approved', '=', False)]}" class="text-success">
+                                <i class="fa fa-check"/> Approved
+                            </span>
+                            <span attrs="{'invisible': [('is_offer_rejected', '=', False)]}" class="text-danger">
+                                <i class="fa fa-times"/> Rejected
+                            </span>
+                        </div>
+                        <div class="o_stat_value" attrs="{'invisible': ['|', ('is_offer_approved', '=', True), ('is_offer_rejected', '=', True)]}">
+                            <span attrs="{'invisible': [('is_in_offer_approval', '=', False)]}" class="text-warning">
+                                <i class="fa fa-clock-o"/> Pending
+                            </span>
+                        </div>
+                        <div class="o_stat_text">Offer Status</div>
+                    </div>
+                </div>
+            </xpath>
+            
+            <!-- Add approval lines to form -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Offer Approval" attrs="{'invisible': [('offer_approval_line_ids', '=', [])]}">
+                    <field name="offer_approval_line_ids">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="user_id"/>
+                            <field name="status"/>
+                            <field name="approval_date"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_offer_approval_group_tree" model="ir.ui.view">
+        <field name="name">offer.approval.group.tree</field>
+        <field name="model">offer.approval.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_offer_approval_group_form" model="ir.ui.view">
+        <field name="name">offer.approval.group.form</field>
+        <field name="model">offer.approval.group</field>
+        <field name="arch" type="xml">
+            <form string="Offer Approval Group">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="approver_line_ids" mode="tree,form">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="user_id" required="1"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="user_id"/>
+                            </group>
+                        </form>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_offer_approvers" model="ir.actions.act_window">
+        <field name="name">Offer Approvers</field>
+        <field name="res_model">offer.approval.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Branch Approvers Menu -->
+    <menuitem id="menu_offer_approvers" 
+            name="Offer Approvers" 
+            parent="hr_recruitment.menu_crm_case_categ0_act_job" 
+            action="action_offer_approvers" 
+            sequence="5"/>
+</odoo>

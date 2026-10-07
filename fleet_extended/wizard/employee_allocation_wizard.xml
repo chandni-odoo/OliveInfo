@@ -1,0 +1,41 @@
+<odoo>
+    <record id="view_employee_allocation_report_form" model="ir.ui.view">
+        <field name="name">employee.allocation.report.form</field>
+        <field name="model">employee.allocation.report</field>
+        <field name="arch" type="xml">
+            <form string="Employee Allocation Report">
+                <sheet>
+                    <group>
+                        <field name="report_date"/>
+                    </group>
+                    <group>
+                        <field name="vehicle_ids" widget="many2many_tags"/>
+                        <!-- <field name="employee_ids" widget="many2many_tags"/> -->
+                    </group>
+                    <group>
+                        <field name="customer_ids" widget="many2many_tags"/>
+                        <field name="sale_order_ids" widget="many2many_tags"/>
+                    </group>
+                    <footer>
+                        <button name="action_print_report" string="Generate Excel" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_allocation_report" model="ir.actions.act_window">
+        <field name="name">Employee Allocation Report</field>
+        <field name="res_model">employee.allocation.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_date': context_today()}</field>
+    </record>
+
+    <menuitem id="menu_employee_allocation_report" 
+              name="Employee Allocation Report" 
+              parent="fleet.menu_fleet_reporting"
+              action="action_employee_allocation_report"
+              sequence="10"/>
+</odoo>

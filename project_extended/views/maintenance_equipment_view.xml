@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="new_equipment_view_form_inherit" model="ir.ui.view">
+        <field name="name">maintenance.equipment.form.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <field name="maintenance_team_id" position="after">
+                <field name="equipment_type_id"/>
+                <field name="hazardous"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="new_form_view_fleet_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.inherit.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="vehicle_type_id"/>
+                <field name="equipment_type_ids" widget="many2many_tags"/>
+                <field name="product_ids" widget="many2many_tags" domain="[('type', '=', 'service')]"/>
+                <field name="hazardous"/>
+            </field>
+            <xpath expr="//field[@name='driver_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='driver_id']" position="after">
+                <field name="driver" domain="[('is_driver', '=', True)]"/>
+                <field name="helper" domain="[('is_helper', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="equipment_type_tree_view">
+        <field name="name">equipment.type.tree.view</field>
+        <field name="model">equipment.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_type_form_view" model="ir.ui.view">
+        <field name="name">equipment.type.form.view</field>
+        <field name="model">equipment.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>      
+                        <field name="name"/> 
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_equipment_type">
+        <field name="name">Equipment Type</field>
+        <field name="res_model">equipment.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_equipment_type"
+        name="Equipment Type"
+        action="action_view_of_equipment_type"
+        parent="maintenance.menu_maintenance_configuration"
+        sequence="30"/>
+
+    <record model="ir.ui.view" id="vehicle_type_tree_view">
+        <field name="name">vehicle.type.tree.view</field>
+        <field name="model">vehicle.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="compactor"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="vehicle_type_form_view" model="ir.ui.view">
+        <field name="name">vehicle.type.form.view</field>
+        <field name="model">vehicle.type</field>
+        <field name="arch" type="xml">
+            <form string="Hr Details">
+                <sheet>
+                    <group>      
+                        <field name="name"/> 
+                        <field name="compactor"/> 
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_vehicle_type">
+        <field name="name">Vehicle Type</field>
+        <field name="res_model">vehicle.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_vehicle_type"
+        name="Vehicle Type"
+        action="action_view_of_vehicle_type"
+        parent="fleet.fleet_configuration"
+        sequence="40"/>       
+
+</odoo>

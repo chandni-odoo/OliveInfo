@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_filter_inherit_hr_extended" model="ir.ui.view">
+        <field name="name">hr.employee.search.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position='attributes'>
+                <attribute name="filter_domain">['|', '|', ('work_email', 'ilike', self), ('name', 'ilike', self), ('emp_no', 'ilike', self)]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">25</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='has_work_permit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <field name="emp_status" invisible="1"/>
+                <button string="Off Hire" name="action_off_hire" attrs="{'invisible': ['|', ('emp_status','!=', 'active'),('hr_employee_type','!=','subcontractor')]}" type="object" class="btn-primary"/>
+                <button string="Active" name="action_active_emp" attrs="{'invisible': [('emp_status','!=', 'off_hire')]}"  type="object" class="btn-primary"/>
+            </xpath>
+
+            <field name="work_location_id" position="before">
+                <field name="camp_info"/>
+            </field>
+            <xpath expr="//page[@name='personal_information']/group" position="inside">
+               <group string="Work Permit" name="has_work_permit">
+                    <field name="visa_no"/>
+                    <field name="permit_no"/>
+                    <field name="visa_expire"/>
+                    <field name="work_permit_expiration_date"/>
+                    <field name="has_work_permit"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']/group/group/field['address_home_id']" position="after">
+                <field name="camp_information"/>
+            </xpath>
+            <xpath expr="//field[@name='mobile_phone']" position="before">
+                <field name="emp_no" readonly='1' string="Code"/>
+                <field name="hr_employee_type" widget="radio" options="{'horizontal': true}" nolabel="1"/>
+                <field name="status_data" invisible="1"/>
+            </xpath>
+ <!--            <xpath expr="//field[@name='passport_id']" position="replace">
+                <field name="passport_id" groups="hr.group_hr_user" attrs="{'required': [('hr_employee_type', '=',  'own')]}"/>
+                <field name="passport_expiry_date"/>
+            </xpath> -->
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="pay_frequency" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}"/>
+                <field name="mentor_id" domain="[('is_mentor', '=', True)]" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}"/>
+                <field name="country_of_emp_id" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}"/>
+                <field name="date_cur_positon" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}"/>
+                <field name="working_hours" attrs="{'invisible': [('hr_employee_type','!=', 'subcontractor')]}"/>
+                <field name="hr_employee_attendance" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
+            <xpath expr="//field[@name='work_email']" position="after">
+                <field name="emp_status"/>
+                <field name="visa_profession_id" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}"/>
+                <field name="billable"/>
+                <field name="public_holiday_eligible"/>
+                <field name="product_ids" widget="many2many_tags"/>
+            </xpath>
+
+             <xpath expr="//field[@name='visa_profession_id']" position="after">
+                <field name="vendor_employee_id" attrs="{'invisible': [('hr_employee_type','!=', 'subcontractor')]}"/>
+                <field name="qid_no"/>
+                <field name="qid_validity"/>
+                <field name="passport_id" groups="hr.group_hr_user" attrs="{'required': [('hr_employee_type', '=',  'own')]}" default="NA"/>
+                <field name="passport_expiry_date"/>
+                <field name="vendor_name" domain="[('is_supplier','=', True)]" attrs="{'invisible': [('hr_employee_type','!=', 'subcontractor')]}"/>
+                <field name="sponsor_name" attrs="{'invisible': [('hr_employee_type','!=', 'subcontractor')]}"/>
+                <field name="employee_trade" string="Employee Skill" widget="many2many_tags" attrs="{'invisible': [('hr_employee_type','!=', 'subcontractor')]}"/>
+                <field name="metrash_register_no"/>
+            </xpath>
+            <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> 
+            <xpath expr="//field[@name='work_phone']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> 
+            <xpath expr="//field[@name='work_email']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> 
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> 
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_ids']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> 
+            <xpath expr="//page[@name='personal_information']" position="attributes">
+                <attribute name="groups"/>
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']//field[@name='address_home_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='hr_settings']" position="attributes">
+                <attribute name="groups"></attribute>
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="gratuity_unproductive_days"/>
+            </xpath>
+
+            <xpath expr="//page[@name='public']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','not in', ['subcontractor','own'])]}</attribute>
+            </xpath> 
+
+            <xpath expr="//field[@name='address_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+<!--            <xpath expr="//page[@name='public'][2]" position="attributes">-->
+<!--                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>-->
+<!--            </xpath>-->
+ <!--            <xpath expr="//page[1]" position="attributes">
+                <attribute name="attrs">{'invisible': [('hr_employee_type','=', 'subcontractor')]}</attribute>
+            </xpath> -->
+<!--            <xpath expr="//page[@name='public']//div[hasclass('row')]" position="before">-->
+<!--                <group>-->
+<!--                    <group></group>-->
+<!--                    <group>-->
+<!--                        <field name="product_ids" widget="many2many_tags"/>-->
+<!--                    </group>-->
+<!--                </group>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='is_driver']" position="after">-->
+<!--                <field name="product_ids" widget="many2many_tags"/>-->
+<!--            </xpath>-->
+
+            <xpath expr="//field[@name='tz']" position="after">
+                <field name="confirmation_date"/>
+                <field name="original_hire_date"/>
+                <field name="date_started"/>
+                <field name="date_pay_start"/>
+                <field name="terminattion_date"/>
+                <field name="pay_stop_date"/>
+                <field name="overtime_eligibility"/>
+                <field name="pay_class"/>
+                <field name="hourly_rate"/>
+            </xpath>
+            <xpath expr="//field[@name='study_school']" position="after">
+                <field name="salutation"/>
+                <field name="ethinic_code_id"/>
+                <field name="first_nationality_id"/>
+                <field name="second_nationality_id"/>
+                <field name="disability"/>
+            </xpath>  
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Employee Groups" name="other" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <group>
+                        <group>
+                            <field name="employee_group_id"/>
+                            <field name="employee_sub_group_id" domain="[('parent_id', '=', employee_group_id)]"/>
+                            <field name="status"/>
+                            <field name="travel_sector_id"/>
+                            <field name="passport_clearance"/>
+                            <field name="recruitment_agent_id" domain="[('is_agent', '=', True)]"/>
+                        </group>
+                        <group>
+                            <field name="emplopyee_category_id"/>
+                            <field name="family_status"/>
+                            <field name="visa_type_id"/>
+                            <field name="travel_benefit"/>
+                            <field name="recruitment_sources"/>
+                            <field name="recruitment_country_id"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Who's Who" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="who_line_ids">
+                        <tree editable="bottom">
+                            <field name="relation_type"/>
+                            <field name="name"/>
+                            <field name="date_of_birth"/>
+                            <field name="visa_no"/>
+                            <field name="pass_no"/>
+                            <field name="pass_exp_date"/>
+                            <field name="address"/>
+                            <field name="next_of_kin" required="1"/>
+                            <field name="contact_no" attrs="{'invisible': [('next_of_kin', '=', 'no')]}"/>
+                            <field name="next_kin_data" attrs="{'invisible': [('next_of_kin', '=', 'no')]}"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Documents">
+                    <field name="ducument_line_ids">
+                        <tree editable="bottom">
+                            <field name="document_line_id"/>
+                            <field name="document_number"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="doc_issue_place"/>
+                            <field name="status"/>
+                            <field name="receipt_no"/>
+                            <field name="receipt_date"/>
+                            <field name="remarks"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Passport Control" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="passport_control_line_ids">
+                        <tree editable="bottom">
+                            <field name="passport_control_id" domain="[('status','=',parent.status_data)]" />
+                            <field name="status" readonly="1" force_save="1"/>
+                            <field name="date_of_trans"/>
+                            <field name="remarks"/>
+                            <field name="exp_return_date"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Insurance" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="insurance_line_ids">
+                        <tree editable="bottom">
+                            <field name="insurance_type_id"/>
+                            <field name="plan_amount"/>
+                            <field name="premium"/>
+                            <field name="benefits"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="insurance_company_id" domain="[('insurance_company', '=', True)]"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Driving Licence Details" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="driving_licence_line_ids">
+                        <tree editable="bottom">
+                            <field name="driving_licence_id"/>
+                            <field name="licence_no"/>
+                            <field name="validity_date"/>
+                            <field name="driving_licence_issue_date"/>
+                            <field name="issuing_country"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                 <page string="Disciplinary Action" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="disciplinary_line_ids">
+                        <tree editable="bottom">
+                            <field name="action_type_id"/>
+                            <field name="action"/>
+                            <field name="date"/>
+                            <field name="action_amount"/>
+                            <field name="remarks"/>
+                            <field name="severity"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Training" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="training_line_ids">
+                        <tree editable="bottom">
+                            <field name="training_name"/>
+                            <field name="training_date"/>
+                            <field name="location"/>
+                            <field name="trainer"/>
+                            <field name="validity_date"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                 <page string="Certification" attrs="{'invisible': [('hr_employee_type','=', 'subcontractor')]}">
+                    <field name="certification_ids">
+                        <tree editable="bottom">
+                            <field name="certificate_type"/>
+                            <field name="certificate_date"/>
+                            <field name="institution"/>
+                            <field name="specialization"/>
+                            <field name="trainer"/>
+                            <field name="validity_date"/>
+                            <field name="attachment" widget="binary"/>
+                            <field name="remark"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Bank Details" name="bank">
+                    <field name="bank_ids">
+                        <tree editable="bottom">
+                            <field name="bank_id"/>
+                            <field name="branch_id"/>
+                            <field name="partner_id"/>
+                            <field name="iban_no"/>
+                            <field name="acc_number"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="res_partner_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="is_mentor"/>
+                <field name="insurance_company"/>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_agent"/>
+                <field name="contract_type_id"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[@name='sales_purchases']/group/group[2]" position="inside">
+                <field name="is_supplier"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_employee_view_kanban_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.kanban.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <div>
+                    <field name="emp_no"/>
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <field name="hr_employee_attendance"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_employee_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.tree.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+             <xpath expr="//tree/field[@name='name']" position="before">
+                    <field name="emp_no"/>
+             </xpath>
+             <xpath expr="//tree/field[@name='name']" position="after">
+                    <field name="hr_employee_attendance"/>
+             </xpath>
+            <xpath expr="//tree/field[@name='parent_id']" position="after">
+                <field name="is_resource" invisible="1"/>
+                <button string="Reported" name="action_create_attendance" type="object" attrs="{'invisible': [('is_resource', '=', True)]}" class="btn-primary"/>
+                <button string="Leave" name="%(action_leave_wizard)d" type="action" attrs="{'invisible': [('is_resource', '=', True)]}" class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_work_entry_type_view_form_inherit_peoplesole" model="ir.ui.view">
+        <field name="name">hr.work.entry.type.form.inherit.peoplesol</field>
+        <field name="model">hr.work.entry.type</field>
+        <field name="inherit_id" ref="hr_work_entry.hr_work_entry_type_view_form"/>
+        <field name="arch" type="xml">
+            <field name="is_leave" position="after">
+                <field name="is_paid"/>
+            </field>
+        </field>
+    </record>
+    <record id="hr_contract_view_form_inherit_hr" model="ir.ui.view">
+            <field name="name">hr.contract.form2</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <field name="resource_calendar_id" position="after">
+                    <field name="has_payslip" invisible="1"/>
+                </field>
+            </field>
+    </record>
+</odoo>

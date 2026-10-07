@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="site_visit_kanban_view" model="ir.ui.view">
+        <field name="name">site.visit.kanban.view</field>
+        <field name="model">site.visit</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <field name="name"/>
+                                </h4>
+                            </div>
+                            <br></br>
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <field name="partner_id"/>
+                                </h4>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="site_visit_tree_view" model="ir.ui.view">
+        <field name="name">site.visit.tree.view</field>
+        <field name="model">site.visit</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="location_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="site_visit_form_view" model="ir.ui.view">
+        <field name="name">site.visit.form.view</field>
+        <field name="model">site.visit</field>
+        <field name="arch" type="xml">
+            <form string="Site visit">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="branch_id"/>
+                            <field name="date"/>   
+                            <field name="partner_id"/>
+                            <field name="customer_id"/>
+                            <field name="prepared_id"/>
+                            <!-- <field name="location_id" domain="[('type', '=', 'other')]"/> -->
+                            <field name="location_id"/>
+                            <label for="latitude" string="Geolocation"/>
+                            <div class="o_row">
+                                <span class="oe_grey">( </span>
+                                <field name="latitude"/>
+                                <span class="oe_grey" attrs="{'invisible':[('latitude','&lt;=',0)]}">N </span>
+                                <span class="oe_grey" attrs="{'invisible':[('latitude','&gt;=',0)]}">S </span>
+                                <field name="longitude"/>
+                                <span class="oe_grey" attrs="{'invisible':[('longitude','&lt;=',0)]}">E </span>
+                                <span class="oe_grey" attrs="{'invisible':[('longitude','&gt;=',0)]}">W </span>
+                                <span class="oe_grey">) </span>
+                            </div>
+                        </group>
+                        <group> 
+                            <field name="nature_of_business"/>
+                            <field name="number_of_units"/>
+                        </group> 
+                    </group>
+                    <notebook>
+                        <page string="Waste Details">
+                            <group>
+                                <group>
+                                    <field name="waste_type_ids" widget="many2many_tags"/>
+                                    <field name="of_bins"/>
+                                    <field name="equipment_type_ids" widget="many2many_tags"/>
+                                    <field name="collection_type"/>
+                                </group>
+                                <group>
+                                    <field name="no_of_loads"/>
+                                    <field name="collection_frequency"/>
+                                    <field name="preferred_timing"/>
+                                    <field name="vehicle_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>    
+                        </page>
+                        <page string="Operations Remarks">
+                            <group>
+                                <field name="operations"/>
+                            </group>
+                        </page>
+                        <page string="Photos Taken">
+                            <group>
+                                <field name="attachment_ids" widget="one2many_list" nolabel="1">
+                                    <kanban edit="false" import="false">
+                                        <field name="id"/>
+                                        <field name="mimetype"/>
+                                        <field name="type"/>
+                                        <field name="create_uid"/>
+                                        <field name="url"/>
+                                        <field name="create_date"/>
+                                        <field name="name"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_area oe_kanban_global_click o_kanban_attachment">
+                                                    <div class="row">
+                                                        <div class="offset-10">
+                                                            <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                                                <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                                                    <span class="fa fa-ellipsis-v"/>
+                                                                </a>
+                                                                <div class="dropdown-menu" role="menu">
+                                                                    <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="o_kanban_image">
+                                                        <div class="o_kanban_image_wrapper">
+                                                            <t t-set="webimage" t-value="new RegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
+                                                            <div t-if="record.type.raw_value == 'url'" class="o_url_image fa fa-link fa-3x text-muted" aria-label="Image is a link"/>
+                                                            <img t-elif="webimage" t-attf-src="/web/image/#{record.id.raw_value}" width="100" height="100" alt="Document" class="o_attachment_image"/>
+                                                            <div t-else="!webimage" class="o_image o_image_thumbnail" t-att-data-mimetype="record.mimetype.value"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="o_kanban_details">
+                                                    <div class="o_kanban_details_wrapper">
+                                                        <div t-att-title="record.name.raw_value" class="o_kanban_record_title">
+                                                            <field name="name" class="o_text_overflow"/>
+                                                        </div>
+                                                        <div class="o_kanban_record_bottom">
+                                                            <time class="oe_kanban_bottom_left">
+                                                                <field name="create_date" widget="date"/>
+                                                            </time>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </group>
+                        </page>
+                   </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_site_visit">
+        <field name="name">Site Visit</field>
+        <field name="res_model">site.visit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="site_visit_tree_view"/>
+    </record>
+
+    <menuitem
+        id="menu_site_visit"
+        name="Site Visit "
+        action="action_view_of_site_visit"
+        parent="crm.crm_menu_sales"
+        sequence="15"/>
+</odoo>

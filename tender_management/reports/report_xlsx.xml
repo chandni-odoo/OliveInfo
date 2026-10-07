@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_tender_tracking_report_xlsx" model="ir.actions.report">
+        <field name="name">Tender Tracking XLSX</field>
+        <field name="model">tender.tracking.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">tender_management.tender_tracking_report_xlsx</field>
+        <field name="report_file">tender_management.tender_tracking_report_xlsx</field>
+        <field name="binding_model_id" ref="model_tender_tracking_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

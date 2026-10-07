@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" inherit_id="account_accountant" xml:space="preserve">
+    <t t-extend="reconciliation.line.mv_line" t-inherit="account_accountant.reconciliation.line.mv_line" t-inherit-mode="extension" owl="1">
+        <xpath expr="//tr/td[hasclass('cell_due_date')]" position="after">
+            <td class="cell_invoice_date">
+                <t t-esc="line.invoice_date"/>
+            </td>
+        </xpath>
+    </t>
+    <t t-extend="reconciliation.line" t-inherit="account_accountant.reconciliation.line" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_reconciliation_line')]/table[hasclass('accounting_view')]/thead/tr/td[hasclass('cell_due_date')]" position="after">
+            <td class="cell_invoice_date"><t t-out="state.st_line.invoice_date"/></td>
+        </xpath>
+    </t>
+</templates>

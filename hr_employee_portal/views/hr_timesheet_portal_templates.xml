@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="portal_my_timesheets_inherit_custom" inherit_id="hr_timesheet.portal_my_timesheets">
+		<xpath expr="//thead/tr/th[7]" position="before">
+			<th class="text-right">Normal Hrs</th>
+			<th class="text-right">OT Hrs</th>
+		</xpath>
+		<xpath expr="//thead/tr/th[7]" position="attributes">
+			<attribute name="string">Total Hrs</attribute>
+		</xpath>
+		<xpath expr="//tbody/t/tr/td[@class='text-right']" position="after">
+			<td class="text-right">
+				<t t-if="timesheet.units_amounts">
+	                <span t-esc="timesheet.units_amounts - timesheet.unit_amount" t-options='{"widget": "float_time"}'/>
+	            </t>
+            </td>
+			<td class="text-right">
+				<span t-if="timesheet.units_amounts" t-field="timesheet.units_amounts" t-options='{"widget": "float_time"}'/>
+				<span t-else="" t-field="timesheet.unit_amount" t-options='{"widget": "float_time"}'/>
+			</td>
+		</xpath>
+	</template>
+</odoo>

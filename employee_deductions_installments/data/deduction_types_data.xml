@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="input_type_loan_deduction" model="hr.payslip.input.type">
+        <field name="name">Loan</field>
+        <field name="code">Loan</field>
+    </record>
+    <record id="input_type_traffic_fine" model="hr.payslip.input.type">
+        <field name="name">Traffic Fine</field>
+        <field name="code">Traffic</field>
+    </record>
+</odoo>

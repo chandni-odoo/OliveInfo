@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="record_approval_view_tree" model="ir.ui.view">
+        <field name="name">record.approval.view.tree</field>
+        <field name="model">record.approval</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="model_id"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+    <record id="record_approval_view_form" model="ir.ui.view">
+        <field name="name">record.approval.view.form</field>
+        <field name="model">record.approval</field>
+        <field name="arch" type="xml">
+            <form string="Record Approval">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="model_id"/>
+                            <field name="model_name"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="filter_domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approver">
+                            <field name="approver_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id='action_record_approval' model='ir.actions.act_window'>
+        <field name="name">Record Approval</field>
+        <field name="res_model">record.approval</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_record_approval"
+        name="Approval Setting"
+        parent="base.menu_users"
+        action="action_record_approval"
+        sequence="60"/>
+
+    <record id="record_approved_view_tree" model="ir.ui.view">
+        <field name="name">record.approved.view.tree</field>
+        <field name="model">record.approved</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0">
+                <field name="res_model"/>
+                <field name="res_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="record_approved_view_form" model="ir.ui.view">
+        <field name="name">record.approved.view.form</field>
+        <field name="model">record.approved</field>
+        <field name="arch" type="xml">
+            <form string="Record Approved" create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="res_model"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="res_id"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id='action_record_approved' model='ir.actions.act_window'>
+        <field name="name">Record Approved</field>
+        <field name="res_model">record.approved</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_record_approved"
+        name="Approvalls"
+        parent="base.menu_users"
+        action="action_record_approved"
+        sequence="70"/>
+</odoo>

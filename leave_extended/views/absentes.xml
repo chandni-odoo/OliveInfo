@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_hr_absentee_tree" model="ir.ui.view">
+        <field name="name">hr.absentee.tree</field>
+        <field name="model">hr.absentee</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Absentees">
+                <field name="employee_id"/>
+                <field name="absent_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hr_absentee_form" model="ir.ui.view">
+        <field name="name">hr.absentee.form</field>
+        <field name="model">hr.absentee</field>
+        <field name="arch" type="xml">
+            <form string="Employee Absenteeism">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="absent_date"/>
+                        <field name="reason"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_absentee" model="ir.actions.act_window">
+        <field name="name">Absenteeism</field>
+        <field name="res_model">hr.absentee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_absentee_tree"/>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_absentee_root"
+              name="Absenteeism"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_hr_absentee"
+              sequence="80"/>
+</odoo>

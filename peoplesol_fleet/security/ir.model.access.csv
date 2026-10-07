@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vehicle_handover,vehicle_handover,model_vehicle_handover,,1,1,1,1
+access_vehicle_history_line,access_vehicle_history_line,model_vehicle_history_line,,1,1,1,1
+access_vehicle_tyre_detail,vehicle_tyre_detail,model_vehicle_tyre_detail,,1,1,1,1
+access_vehicle_tyre_retreading,vehicle_tyre_retreading,model_vehicle_tyre_retreading,,1,1,1,1
+access_fleet_vehicle_log_fuel,fleet.vehicle.log.fuel,model_fleet_vehicle_log_fuel,,1,1,1,1
+access_fuel_purchase_history,fuel.purchase.history,model_fuel_purchase_history,,1,1,1,1
+access_refueling_details_line,access_refueling_details_line,model_refueling_details_line,base.group_user,1,1,1,1
+access_tyre_brand,access_tyre_brand,model_tyre_brand,base.group_user,1,1,1,1

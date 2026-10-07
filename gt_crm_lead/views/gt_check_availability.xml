@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_form_view" model="ir.ui.view">
+        <field name="name">CRM Availability</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_indent_request"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible':[('indent_request_done', '!=', True)]}"
+                        string="RFQ">
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="indent_request_done" invisible="1"/>
+                <field name="check_branch_mps" invisible="1"/>
+                <button string="Check Manpower Availability" name="button_check_availability" type="object"
+                        class="btn-primary"
+                        attrs="{'invisible':['|', ('check_branch_mps', '!=', True), ('indent_request_done', '!=', False)]}"/>
+                <button string="Create RFQ" name="button_subcontractor_indent" type="object"
+                        class="btn-primary"
+                        attrs="{'invisible':['|', ('check_branch_mps', '!=', True), ('indent_request_done', '!=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_available_quantity_form_view" model="ir.ui.view">
+        <field name="name">Available Quantity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='service_ids']/tree/field[@name='end_date']"
+                   position="after">
+                <field name='available_quantity' decoration-danger="'available_quantity' &lt; 'product_uom_qty'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_trip_report_wizard_form" model="ir.ui.view">
+        <field name="name">trip.report.wizard.form</field>
+        <field name="model">trip.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Trip Sheet Report">
+                <group>
+                    <group>
+                        <field name="scheduled_date"/>
+                        <field name="vehicle_id"/>
+                    </group>
+                    <group>
+                        <field name="vehicle_type_id"/>
+                        <field name="shift_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_excel_report" string="Generate Excel Report" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_trip_report_wizard" model="ir.actions.act_window">
+        <field name="name">Trip Sheet Report</field>
+        <field name="res_model">trip.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- <field name="context">{'default_date_from': context_today().replace(day=1), 'default_date_to': context_today()}</field> -->
+    </record>
+
+    <menuitem id="menu_trip_report_root"
+        name="Reports"
+        parent="mtech_vehicle_extended.menu_operation_schedule"
+        sequence="7" />
+
+    
+    <menuitem id="menu_trip_report" name="Skip/Loader Report" parent="menu_trip_report_root" action="action_trip_report_wizard" sequence="1"/>
+
+</odoo>

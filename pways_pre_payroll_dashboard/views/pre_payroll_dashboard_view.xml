@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pre_payroll_dashboard_tree_view" model="ir.ui.view">
+            <field name="name">pre.payroll.dashboard.tree.view</field>
+            <field name="model">pre.payroll.dashboard</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date_from"/>
+                    <field name="date_end"/>
+                </tree>
+            </field>
+        </record>
+        <record id="pre_payroll_dashboard_form_view" model="ir.ui.view">
+            <field name="name">pre.payroll.dashboard.form.view</field>
+            <field name="model">pre.payroll.dashboard</field>
+            <field name="arch" type="xml">
+                <form string="Sector">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_open_dashboard"  string="Payrolls" class="oe_stat_button" icon="fa-dashboard"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_from" required="1"/>
+                                <field name="date_end" required="1"/>
+                                <field name="batch_id"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_view_of_pre_payroll_dashboard" model="ir.actions.act_window">
+            <field name="name">Pre Payroll</field>
+            <field name="res_model">pre.payroll.dashboard</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem 
+            id="menu_pre_payroll_dashboard"
+            name="Pre Payroll"
+            action="action_view_of_pre_payroll_dashboard"
+            parent="hr_payroll.menu_hr_payroll_payslips"
+            sequence="100"
+            />
+    </data>
+</odoo>

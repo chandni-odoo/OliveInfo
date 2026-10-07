@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_hr_certification_tree" model="ir.ui.view">
+        <field name="name">hr.certification.tree</field>
+        <field name="model">hr.certification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="employee_manager"/>
+                <field name="employee_status"/>
+                <field name="certificate_type"/>
+                <field name="certificate_date"/>
+                <field name="institution"/>
+                <field name="specialization"/>
+                <field name="trainer"/>
+                <field name="validity_date"/>
+                <field name="days_to_expire"/>
+                <field name="attachment" widget="binary"/>
+                <field name="remark"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hr_certification_form" model="ir.ui.view">
+        <field name="name">hr.certification.form</field>
+        <field name="model">hr.certification</field>
+        <field name="arch" type="xml">
+            <form string="Certification">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="employee_job_title"/>
+                        <field name="employee_branch"/>
+                        <field name="employee_manager"/>
+                        <field name="employee_status"/>
+                    </group>
+                    <group>
+                        <field name="certificate_type"/>
+                        <field name="certificate_date"/>
+                        <field name="institution"/>
+                        <field name="specialization"/>
+                        <field name="trainer"/>
+                        <field name="validity_date"/>
+                        <field name="attachment" widget="binary"/>
+                        <field name="remark"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_certification_search" model="ir.ui.view">
+        <field name="name">hr.certification.search</field>
+        <field name="model">hr.certification</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="certificate_type"/>
+                <field name="days_to_expire" string="Days to Expire" filter_domain="[]"/>
+                <filter name="expired" string="Expired" domain="[('days_to_expire','&lt;',0)]"/>
+                <filter name="expiring_soon" string="Expiring Soon (30 days)" domain="[('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]"/>
+                <filter name="valid" string="Valid" domain="[('days_to_expire','&gt;',30)]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter name="group_by_days" string="Days to Expire" context="{'group_by':'days_to_expire'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_certification" model="ir.actions.act_window">
+        <field name="name">Certification</field>
+        <field name="res_model">hr.certification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_certification_tree"/>
+        <field name="search_view_id" ref="view_hr_certification_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new document
+            </p>
+            <p>
+                Also you will find here all the related documents and download it by clicking on any individual
+                document.
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Menuitem -->
+    <menuitem id="menu_hr_employee_reports"
+              name="Employee Reports"
+              parent="hr.menu_hr_root"
+              sequence="7"/>
+
+    <menuitem id="menu_hr_certification"
+              name="HR Certification"
+              parent="menu_hr_employee_reports"
+              action="action_hr_certification"
+              sequence="2"/>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_attendance_muster_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.muster</field>
+        <field name="model">hr.attendance.muster</field>
+        <field name="arch" type="xml">
+            <form string="Employee attendances Muster">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <group>
+                    <group colspan="6">
+                        <field name="branch_ids" widget="many2many_tags"/>
+                        <field name="batch_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_employee_muster" string="Download"
+                        type="object" class="oe_highlight" />   
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_attendance_muster_action" model="ir.actions.act_window">
+        <field name="name">Attendances Muster</field>
+        <field name="res_model">hr.attendance.muster</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hr_attendance_muster_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_hr_attendance_muster" 
+    name="Attendances Muster" 
+    parent="hr_attendance.menu_hr_attendance_root" 
+    action="hr_attendance_muster_action"
+    sequence="98" />
+</odoo>

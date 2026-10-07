@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_home_my_payslips" name="Employee Payslips" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Payslips</t>
+                <t t-set="url" t-value="'/my/payslips'"/>
+                <!-- <t t-set="placeholder_count" t-value="'payslip_count'"/> -->
+            </t>
+        </xpath>
+    </template>
+    
+    <template id="my_payslips_list" name="My Payslips List">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <h1>My Payslips</h1>
+                <t t-if="not payslip_data">
+                    <div class="alert alert-info">
+                        No payslips found.
+                    </div>
+                </t>
+                <t t-if="payslip_data">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Employee</th>
+                                <th>Date</th>
+                                <th>Download/View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="payslip_data" t-as="data">
+                                <tr>
+                                    <td><t t-esc="data['payslip'].number"/></td>
+                                    <td><t t-esc="data['payslip'].employee_id.name"/></td>
+                                    <td><t t-esc="data['payslip'].date_to" t-options='{"widget": "date"}'/></td>
+                                    <td>
+                                        <t t-foreach="data['attachments']" t-as="attachment">
+                                            <a t-attf-href="/my/payslip/download/#{attachment.id}"
+                                             class="btn btn-sm btn-primary mr-1">
+                                                <t t-esc="attachment.name"/>
+                                            </a>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

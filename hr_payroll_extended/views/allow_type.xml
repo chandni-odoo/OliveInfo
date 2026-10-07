@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="hr_allow_type_tree_view">
+        <field name="name">hr.allow.type.tree.view</field>
+        <field name="model">hr.allow.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="type"/> 
+                <field name="code"/>
+                <field name="amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_allow_type_form_view" model="ir.ui.view">
+        <field name="name">hr.allow.type.form.view</field>
+        <field name="model">hr.allow.type</field>
+        <field name="arch" type="xml">
+            <form string="Hr Details">
+                <sheet>
+                   <!--  <div class="oe_title">
+                        <h1><field name="seq"/></h1>
+                    </div>  -->  
+                    <group>
+                        <group>               
+                            <field name="name"/>               
+                            <field name="type"/> 
+                        </group>
+                        <group> 
+                            <field name="code"/>
+                            <field name="amount"/>
+                        </group> 
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_hr_allow_type">
+        <field name="name">Hr Allow Type</field>
+        <field name="res_model">hr.allow.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+            
+     <menuitem
+        id="menu_hr_allow_type"
+        name="Allowance Template"
+        action="action_view_of_hr_allow_type"
+        parent="hr.menu_hr_employee_payroll"
+        sequence="15"/>
+        
+</odoo>

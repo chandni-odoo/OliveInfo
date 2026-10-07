@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accommodation_bed_tree" model="ir.ui.view">
+        <field name="name">accommodation.bed.tree</field>
+        <field name="model">accommodation.bed</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="camp_id"/>
+                <field name="floor_id"/>
+                <field name="room_id"/>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="occupied_employee_id"/>
+                <field name="occupied_customer"/>
+                <field name="check_in_time"/>
+                <field name="reserved_from" optional="show" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                <field name="reserved_to" optional="show" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                <field name="requested_by" optional="show" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                <field name="reservation_reason" optional="hide" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bed_form" model="ir.ui.view">
+        <field name="name">bed.form</field>
+        <field name="model">accommodation.bed</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="camp_id"/>
+                            <field name="floor_id"/>
+                            <field name="room_id"/>
+                            <field name="name"/>
+                            <field name="allocated_bed_numbers"/>
+                        </group>
+                        <group>
+                            <field name="status"/> 
+                            <field name="occupied_employee_id"/>
+                            <field name="occupied_customer"/>
+                            <field name="reserved_from" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                            <field name="reserved_to" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                            <field name="reservation_reason" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                            <field name="requested_by" attrs="{'invisible': [('status', '!=', 'reserved')]}"/>
+                            <field name="check_in_time"/> 
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_reserve_beds" model="ir.actions.server">
+        <field name="name">Reserve Beds</field>
+        <field name="model_id" ref="model_accommodation_bed"/>
+        <field name="binding_model_id" ref="model_accommodation_bed"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = {
+                    'name': 'Reserve Beds',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'bed.reservation.wizard',
+                    'view_mode': 'form',
+                    'target': 'new',
+                    'context': {'active_model': 'accommodation.bed', 'active_ids': records.ids},
+                }
+        </field>
+    </record>
+
+    <record id="action_occupied_beds" model="ir.actions.server">
+        <field name="name">Customer Onboarding</field>
+        <field name="model_id" ref="model_accommodation_bed"/>
+        <field name="binding_model_id" ref="model_accommodation_bed"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = {
+                    'name': 'Customer Onboarding',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'customer.onboarding.wizard',
+                    'view_mode': 'form',
+                    'target': 'new',
+                    'context': {
+                        'active_model': 'accommodation.bed', 
+                        'active_ids': records.ids
+                    },
+                }
+        </field>
+    </record>
+
+
+    <record id="action_beds" model="ir.actions.act_window">
+        <field name="name">Beds</field>
+        <field name="res_model">accommodation.bed</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

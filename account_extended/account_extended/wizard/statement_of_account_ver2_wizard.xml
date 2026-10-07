@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="receive_customer_wizard_form_view_v2" model="ir.ui.view">
+        <field name="name">statement.account.version2.wizard</field>
+        <field name="model">statement.account.version2.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Aging Based on Due Date</h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_ids" widget="many2many_tags"/>
+                            <field name="branch_id"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="open_invoices"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generate Report" name="button_generate_report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_for_select_customer_wizard_v2" model="ir.actions.act_window">
+        <field name="name">Statement of Account V2</field>
+        <field name="res_model">statement.account.version2.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="receive_customer_wizard_form_view_v2"/>
+        <field name="target">new</field>
+    </record>
+    
+    <menuitem 
+        id="select_customer_wizard_v2" 
+        action="action_for_select_customer_wizard_v2" 
+        parent="account.account_reports_management_menu"
+        name="Statement of Account V2"
+        sequence="101"/>
+</odoo>

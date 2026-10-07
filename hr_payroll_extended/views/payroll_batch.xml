@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="hr_employee_payroll_batch_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='contract_id']" position="before">
+                <field name="payroll_batch_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="per_based_on"/>
+                <field name="notice_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_by_employees_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.employees.view.form.inherit</field>
+        <field name="model">hr.payslip.employees</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_by_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_ids']/tree/field[@name='work_email']" position="after">
+                <field name="branch_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="payroll_batch_tree_view">
+        <field name="name">payroll.batch.tree.view</field>
+        <field name="model">payroll.batch</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="payroll_batch"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="payroll_batch_form_view" model="ir.ui.view">
+        <field name="name">payroll.batch.form.view</field>
+        <field name="model">payroll.batch</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Batch Details">
+                <sheet>
+                    <group> 
+                        <field name="payroll_batch"/> 
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_payroll_batch">
+        <field name="name">Payroll Batch</field>
+        <field name="res_model">payroll.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+            
+    <menuitem
+        id="menu_payroll_batch"
+        name="Payroll Batch"
+        action="action_view_of_payroll_batch"
+        parent="hr_payroll.menu_hr_salary_configuration"
+        sequence="20"/>
+
+    <record model="ir.ui.view" id="notice_period_tree_view">
+        <field name="name">notice.period.tree.view</field>
+        <field name="model">notice.period</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="days"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="notice_period_form_view" model="ir.ui.view">
+        <field name="name">notice.period.form.view</field>
+        <field name="model">notice.period</field>
+        <field name="arch" type="xml">
+            <form string="Notice Period"> 
+                <sheet>
+                    <group> 
+                        <field name="name"/> 
+                        <field name="days"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_notice_period">
+        <field name="name">Notice Period</field>
+        <field name="res_model">notice.period</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+            
+     <menuitem
+        id="menu_notice_period"
+        name="Notice Period"
+        action="action_view_of_notice_period"
+        parent="hr.menu_human_resources_configuration"
+        sequence="5"/>
+
+</odoo>

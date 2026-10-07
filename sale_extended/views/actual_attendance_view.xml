@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_actual_attendance_tree" model="ir.ui.view">
+            <field name="name">actual.attendance.tree</field>
+            <field name="model">actual.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="Actual Attendance" editable="bottom">
+                    <field name="date"/>
+                    <field name="emp_no"/>
+                    <field name="employee_id"/>
+                    <!-- <field name="employee_name"/> -->
+                    <field name="task"/>
+                    <field name="task_id"/>
+                    <field name="actual_type"/> 
+                    <field name="day1"/>
+                    <field name="day2"/>
+                    <field name="day3"/>
+                    <field name="day4"/>
+                    <field name="day5"/>
+                    <field name="day6"/>
+                    <field name="day7"/>
+                    <field name="day8"/>
+                    <field name="day9"/>
+                    <field name="day10"/>
+                    <field name="day11"/>
+                    <field name="day12"/>
+                    <field name="day13"/>
+                    <field name="day14"/>
+                    <field name="day15"/>
+                    <field name="day16"/>
+                    <field name="day17"/>
+                    <field name="day18"/>
+                    <field name="day19"/>
+                    <field name="day20"/>
+                    <field name="day21"/>
+                    <field name="day22"/>
+                    <field name="day23"/>
+                    <field name="day24"/>
+                    <field name="day25"/>
+                    <field name="day26"/>
+                    <field name="day27"/>
+                    <field name="day28"/>
+                    <field name="day29"/>
+                    <field name="day30"/>
+                    <field name="day31"/>
+                    <field name="time"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Form view for ActualAttendance -->
+        <record id="view_actual_attendance_form" model="ir.ui.view">
+            <field name="name">actual.attendance.form</field>
+            <field name="model">actual.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Actual Attendance">
+                    <sheet>
+                        <group>
+                            <field name="date"/>
+                            <field name="emp_no"/>
+                            <field name="employee_name"/>
+                            <field name="task"/>
+                            <field name="actual_type"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="day1"/>
+                                <field name="day2"/>
+                                <field name="day3"/>
+                                <field name="day4"/>
+                                <field name="day5"/>
+                                <field name="day6"/>
+                                <field name="day7"/>
+                                <field name="day8"/>
+                                <field name="day9"/>
+                                <field name="day10"/>
+                            </group>
+                            <group>
+                                <field name="day11"/>
+                                <field name="day12"/>
+                                <field name="day13"/>
+                                <field name="day14"/>
+                                <field name="day15"/>
+                                <field name="day16"/>
+                                <field name="day17"/>
+                                <field name="day18"/>
+                                <field name="day19"/>
+                                <field name="day20"/>
+                            </group>
+                            <group>
+                                <field name="day21"/>
+                                <field name="day22"/>
+                                <field name="day23"/>
+                                <field name="day24"/>
+                                <field name="day25"/>
+                                <field name="day26"/>
+                                <field name="day27"/>
+                                <field name="day28"/>
+                                <field name="day29"/>
+                                <field name="day30"/>
+                                <field name="day31"/>
+                                <field name="time"/>
+                                <field name="status"/>
+                            </group>
+                        </group>
+                    </sheet>
+                  
+                </form>
+            </field>
+        </record>
+
+        <record id="view_actual_attendance_filter" model="ir.ui.view">
+            <field name="name">actual.attendance.filter</field>
+            <field name="model">actual.attendance</field>
+            <field name="arch" type="xml">
+                <search string="Search Filters">
+                    <field name="status"/>
+                    <filter string="Active" name="filter_active" domain="[('active', '=', True)]"/>
+                    <filter string="Archived" name="filter_archived" domain="[('active', '=', False)]"/>
+                    <!-- Add more filters as needed -->
+                    <group expand="0" string="Group By">
+
+                        <filter name="Employee" string="Employee" domain="[]" context="{'group_by':'employee_name'}"/>
+                        <filter name="status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+                        
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_actual_attendance_tree" model="ir.actions.act_window">
+            <field name="name">Actual Attendance</field>
+            <field name="res_model">actual.attendance</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_actual_attendance_tree"/>
+        </record>
+        
+
+        <menuitem id="menu_hr_actual_attendance" 
+        name="Actual Attendances" 
+        parent="hr_attendance.menu_hr_attendance_root" 
+        action="action_actual_attendance_tree"
+        sequence="98" />
+
+     
+        <record id="model_actual_attendance_action_post" model="ir.actions.server">
+            <field name="name">Post Attendance</field>
+            <field name="model_id" ref="sale_extended.model_actual_attendance"/> 
+            <field name="binding_model_id" ref="sale_extended.model_actual_attendance"/> 
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.post_action()</field>
+        </record>
+    </data>
+</odoo>

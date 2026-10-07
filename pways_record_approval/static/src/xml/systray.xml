@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+    <t t-extend="mail.systray.ActivityMenu.Previews">
+        <t t-jquery="button[t-if*='activity.planned_count']" t-operation="before">
+            <button t-if="activity.approval_count" type="button" class="btn btn-link o_activity_filter_button mr16" t-att-data-res_model="activity.model" t-att-data-model_name="activity.name" data-filter='approval' t-att-data-approval_domain="activity.activity_domain"> <t t-esc="activity.approval_count"/> Approval </button>
+            <span t-if="!activity.approval_count" class="o_no_activity mr16">0 Approval </span>
+        </t>
+    </t>
+</templates>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="view_partner_form_ntfl" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="id_no" invisible="1"/>
+                <field name="license_no" />
+                <field name="vehicle_reg" />
+                <field name="location" />
+            </field>
+            <field name="category_id" position="after">
+                <field name="discplinary" attrs="{'invisible': [('contact_type', '!=',  'employee')]}"/>
+                <field name="date_joining" attrs="{'invisible': [('contact_type', '!=',  'employee')]}"/>
+                <field name="date_exit" attrs="{'invisible': [('contact_type', '!=',  'employee')]}"/>
+                <field name="remarks" />
+            </field>
+        </field>
+    </record>
+
+    <record id="driver_action" model="ir.actions.act_window">
+            <field name="name">Driver</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('nature_driver', '=', 'driver')]</field>
+            <field name="context">{'default_nature_driver':'driver'}</field>
+        </record>
+        <menuitem action="driver_action" id="driver_main_menu" name="Driver" parent="fleet.menu_root" sequence="50"/>
+
+    <record id="turnboy_action" model="ir.actions.act_window">
+            <field name="name">Turn Boy</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('nature_driver', '=', 'turnboy')]</field>
+            <field name="context">{'default_nature_driver':'turnboy'}</field>
+        </record>
+        <menuitem action="turnboy_action" id="turnboy_main_menu" name="Turn Boy" parent="fleet.menu_root" sequence="52"/>
+    </data>
+</odoo>

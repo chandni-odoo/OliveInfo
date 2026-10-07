@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_budget_import,access.budget.import,model_budget_import,base.group_user,1,1,1,1
+access_budget_import_line,access.budget.import.line,model_budget_import_line,base.group_user,1,1,1,1
+access_budget_variance_report_wizard,access.budget.variance.report.wizard,model_budget_variance_report_wizard,base.group_user,1,1,1,1
+access_budget_main_group,access.budget.main.group,model_budget_main_group,base.group_user,1,1,1,1
+access_budget_sub_group,access.budget.sub.group,model_budget_sub_group,base.group_user,1,1,1,1
+access_budget_monthly_variance_report_wizard,budget.monthly.variance.report.wizard,model_budget_monthly_variance_report_wizard,base.group_user,1,1,1,1
+access_budget_budget_spread_report_wizard,budget.spread.report.wizard,model_budget_spread_report_wizard,base.group_user,1,1,1,1

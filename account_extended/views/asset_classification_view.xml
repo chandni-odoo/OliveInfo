@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="asset_classification_tree_view" model="ir.ui.view">
+        <field name="name">asset.classification.tree.view</field>
+        <field name="model">asset.classification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="asset_classification_form_view" model="ir.ui.view">
+        <field name="name">asset.classification.form.view</field>
+        <field name="model">asset.classification</field>
+        <field name="arch" type="xml">
+            <form string="Asset Classification">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_asset_classification" model="ir.actions.act_window">
+        <field name="name">Asset Classification</field>
+        <field name="res_model">asset.classification</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_asset_classification"
+        action="action_view_of_asset_classification"
+        parent="account.account_invoicing_menu"
+        name="Asset Classification"
+        sequence="100"/>
+</odoo>

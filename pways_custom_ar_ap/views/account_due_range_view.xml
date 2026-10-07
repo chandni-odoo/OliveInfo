@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_due_range_tree_view" model="ir.ui.view">
+        <field name="name">account.due.range.tree.view</field>
+        <field name="model">account.due.range</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="from_range"/>
+                <field name="to_range"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_due_range_form_view" model="ir.ui.view">
+        <field name="name">account.due.range.form.view</field>
+        <field name="model">account.due.range</field>
+        <field name="arch" type="xml">
+            <form string="Due Range">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="True"/>
+                        </group>
+                        <group>
+                            <field name="from_range"/>
+                            <field name="to_range"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_account_due_range" model="ir.actions.act_window">
+        <field name="name">Due Range</field>
+        <field name="res_model">account.due.range</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_unit_type"
+        action="action_view_of_account_due_range"
+        parent="account.account_invoicing_menu"
+        name="Due Range"
+        sequence="150"/>
+</odoo>

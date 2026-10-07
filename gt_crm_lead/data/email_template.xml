@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+
+        <record id="send_mail_to_procurement_group" model="mail.template">
+            <field name="name">Procurement Group</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="subject"></field>
+            <field name="email_from"></field>
+            <field name="email_to"></field>
+            <field name="use_default_to" eval="True"/>
+            <field name="body_html" type="html">
+                <!--                <div>${object.body_html}</div>-->
+                <div></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

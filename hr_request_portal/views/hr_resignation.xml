@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_hr_resignation_form_inherit" model="ir.ui.view">
+        <field name="name">hr.resignation.form.inherit</field>
+        <field name="model">hr.resignation</field>
+        <field name="inherit_id" ref="hr_resignation.employee_resignation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="request_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button string="View Request"
+                        name="action_open_request"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('request_id','=',False)]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='sepration_type']" position="after">
+                <field name="resignation_date" attrs="{'invisible': [('sepration_type', '!=', 'resign')]}"/>
+                <field name="notice_id" attrs="{'invisible': [('sepration_type', '!=', 'resign')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='reason']" position="after">
+                <group>
+                    <group >
+                        <field name="reason_for_leaving_id" attrs="{'invisible': [('sepration_type', '!=', 'resign')]}"/>
+                    </group>
+                    <group>
+                        <field name="manager_comment" attrs="{'invisible': [('sepration_type', '!=', 'resign')]}"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="replace">
+                <field name="branch_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

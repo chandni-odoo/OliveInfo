@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_record_approval,access_record_approval,model_record_approval,base.group_user,1,1,1,1
+access_record_approved,access_record_approved,model_record_approved,base.group_user,1,1,1,1
+access_record_approver,access_record_approver,model_record_approver,base.group_user,1,1,1,1
+access_pending_details_wizard,access_pending_details_wizard,model_pending_details_wizard,base.group_user,1,1,1,1
+access_pending_details_line_wizard,access_pending_details_line_wizard,model_pending_details_line_wizard,base.group_user,1,1,1,1
+pways_record_approval.access_reject_reason_wizard,access_reject_reason_wizard,pways_record_approval.model_reject_reason_wizard,base.group_user,1,1,1,1
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_partner_warning" model="ir.ui.view">
+        <field name="name">sale.order.form.partner.warning</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <!-- Declare fields first -->
+                <field name="is_partner_blacklisted" invisible="1"/>
+                <field name="is_partner_credit_blocked" invisible="1"/>
+                
+                <!-- Ribbons with proper priority -->
+                <widget name="web_ribbon" 
+                        title="Blacklisted" 
+                        bg_color="bg-danger text-white" 
+                        attrs="{'invisible': [('is_partner_blacklisted', '=', False)]}"/>
+                <widget name="web_ribbon" 
+                        title="Credit Blocked" 
+                        bg_color="bg-danger text-white" 
+                        attrs="{'invisible': ['|', ('is_partner_blacklisted', '=', True), ('is_partner_credit_blocked', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_opportunity_form_partner_warning" model="ir.ui.view">
+        <field name="name">crm.lead.form.partner.warning</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <!-- Declare fields first -->
+                <field name="is_partner_blacklisted" invisible="1"/>
+                <field name="is_partner_credit_blocked" invisible="1"/>
+                
+                <!-- Ribbons with proper priority -->
+                <widget name="web_ribbon" 
+                        title="Blacklisted" 
+                        bg_color="bg-danger text-white" 
+                        attrs="{'invisible': [('is_partner_blacklisted', '=', False)]}"/>
+                <widget name="web_ribbon" 
+                        title="Credit Blocked" 
+                        bg_color="bg-danger text-white" 
+                        attrs="{'invisible': ['|', ('is_partner_blacklisted', '=', True), ('is_partner_credit_blocked', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

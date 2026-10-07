@@ -1,0 +1,1671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="portal_attendance" name="Portal layout : Attendance" inherit_id="portal.portal_breadcrumbs"
+              priority="50">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'attendance_list_view'" class="breadcrumb-item">My Attendance</li>
+
+            <li t-if="attendance_id" t-attf-class="breadcrumb-item #{'active ' if not attendance_id else ''}">
+                <a t-if="attendance_id">
+                    <t t-esc="attendance_id.name"/>
+                </a>
+                <t t-else="">
+                    <t t-esc="attendance_id.name"/>
+                </t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_attendance" name="Employee Attendance" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Attendance</t>
+                <t t-set="url" t-value="'/my/attendance'"/>
+                <t t-set="placeholder_count" t-value="'attendance_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- <template id="portal_my_attendance" name="Pickings List">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Attendance</t>
+            </t>
+            <t t-if="not attendance_ids">
+                <p>There are currently no attendance for your account.</p>
+            </t>
+            <t t-if="attendance_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Employee</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Work Hours</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <t t-foreach="attendance_ids" t-as="attendance">
+                    <tr>
+                        <td>
+                            <t t-esc="attendance.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="attendance.check_in"/>
+                        </td>
+                        <td>
+                            <span t-field="attendance.check_out"/>
+                        </td>
+                        <td>
+                            <span t-esc="round(attendance.worked_hours,2)"/>
+                        </td>
+                        <td> 
+                            <a t-att-href="'/my/edit/attendance/%s' % attendance.id" class="btn btn-primary">
+                                <span t-if="not attendance.check_out">Add Check Out</span>
+                                <span t-else="">View</span>
+                            </a>
+                        </td> -->
+                        <!-- <td>
+                            <button class="btn btn-primary" t-att-data-url="'/my/create/attendance/n_page/%s' % attendance.id" onclick="window.location.href=this.getAttribute('data-url');">Submit</button>
+                        </td> -->
+                    <!-- </tr>
+                </t>
+            </t>
+        </t>
+    </template> -->
+
+    <template id="attendance_error" name="Attendance Error">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="alert alert-danger">
+                    <p>An error occurred processing your attendance:</p>
+                    <p t-esc="error_message"/>
+                    <a t-att-href="redirect_url" class="btn btn-primary">Return to Attendance</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="create_attendance" name="Create/Edit Attendance">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3>
+                            <t t-if="edit_attendance">Edit Attendance - Add Check Out</t>
+                            <t t-else="">Create New Attendance</t>
+                        </h3>
+                        <form id="onchange_create_attendance" action="/create/attendance" method="post" class="o_mark_required">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <t t-if="edit_attendance">
+                                <input type="hidden" name="attendance_id" t-att-value="attendance.id"/>
+                            </t>
+
+                            <!-- Employee Selection -->
+                            <div class="form-group row">
+                                <label for="selection_employee_ids" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Name:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <select id="selection_employee_ids" name="employee_ids" class="form-control" t-att-readonly="edit_attendance">
+                                        <t t-foreach="employee_ids" t-as="emp">
+                                            <option t-att-value="emp.id" t-att-selected="edit_attendance and attendance.employee_id.id == emp.id">
+                                                <t t-esc="emp.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Job Title (added field) -->
+                            <div class="form-group row">
+                                <label for="job_title" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Job Title:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="text" id="job_title" name="job_title" class="form-control" readonly="readonly" t-att-value="job_title"/>
+                                </div>
+                            </div>
+
+                            <!-- Employee Type -->
+                            <div class="form-group row">
+                                <label for="hr_employee_type" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Employee Type:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="text" id="hr_employee_type" name="hr_employee_type" class="form-control" readonly="readonly"
+                                        t-att-value="employee_type_display"/>
+                                </div>
+                            </div>
+
+                            <!-- Check-In (visible only when creating new) -->
+                            <div class="form-group row" t-if="not edit_attendance">
+                                <label for="check_in_date" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Check In:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="datetime-local" id="check_in_date" name="check_in_date" class="form-control" required="required"/>
+                                </div>
+                            </div>
+
+                            <!-- Display check-in time when editing -->
+                            <div class="form-group row" t-if="edit_attendance">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-form-label">Check In:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="text" class="form-control" readonly="readonly"
+                                        t-att-value="attendance.check_in.strftime('%Y-%m-%d %H:%M')"/>
+                                    <input type="hidden" name="check_in_date" t-att-value="attendance.check_in.strftime('%Y-%m-%dT%H:%M')"/>
+                                </div>
+                            </div>
+
+                            <!-- Check-Out -->
+                            <!-- <div class="form-group row">
+                                <label for="check_out_date" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Check Out:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="datetime-local" id="check_out_date" name="check_out_date" class="form-control"
+                                        t-att-required="edit_attendance"
+                                        t-att-value="edit_attendance and current_datetime or ''"/>
+                                </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <label for="check_out_date" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Check Out:</label>
+                                <div class="col-lg-7 col-md-8 col-sm-8">
+                                    <input type="datetime-local" id="check_out_date" name="check_out_date" class="form-control"
+                                        t-att-required="edit_attendance"
+                                        t-if="edit_attendance"
+                                        t-att-value="current_datetime"/>
+                                        
+                                    <input type="datetime-local" id="check_out_date" name="check_out_date" class="form-control"
+                                        t-att-required="edit_attendance"
+                                        t-if="not edit_attendance"/>
+                                </div>
+                            </div>
+
+                            <!-- Error message display -->
+                            <t t-if="request.httprequest.args.get('error')">
+                                <div class="alert alert-danger">
+                                    <t t-if="request.httprequest.args.get('error') == 'invalid_date_range'">
+                                        Check Out must be after Check In
+                                    </t>
+                                    <t t-if="request.httprequest.args.get('error') == 'invalid_date_format'">
+                                        Invalid date format
+                                    </t>
+                                    <t t-if="request.httprequest.args.get('error') == 'creation_error'">
+                                        Error creating attendance record
+                                    </t>
+                                </div>
+                            </t>
+
+                            <!-- Buttons -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <t t-if="edit_attendance">Update Check Out</t>
+                                    <t t-else="">Create Attendance</t>
+                                </button>
+                                <a href="/my/attendance" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_attendance" name="Attendance List">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">Attendance</t>
+            <div class="container mt16">
+                <!-- Create Attendance Button -->
+                <div class="clearfix mb16">
+                    <div class="float-right">
+                        <a href="/my/create/attendance/n_page" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"/> Create Attendance
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Attendance Table (unchanged from original) -->
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Employee Number</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Work Hours</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="attendance_ids" t-as="attendance">
+                                <tr>
+                                    <td><t t-esc="attendance.employee_id.name"/></td>
+                                    <td><t t-esc="attendance.employee_id.emp_no"/></td>
+                                    <td>
+                                        <span t-field="attendance.check_in" t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                    </td>
+                                    <td>
+                                        <t t-if="attendance.check_out">
+                                            <span t-field="attendance.check_out" t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm:ss"}'/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                    <td>
+                                        <t t-esc="round(attendance.worked_hours, 2)"/> hrs
+                                    </td>
+                                    <td>
+                                        <t t-if="not attendance.check_out">
+                                            <a t-att-href="'/my/edit/attendance/%s' % attendance.id" class="btn btn-sm btn-warning">
+                                                Add Check Out
+                                            </a>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--    Commented since there were multiple employees-->
+    <!--    <template id="portal_timeoff" name="Portal layout : Time Off" inherit_id="portal.portal_breadcrumbs" priority="50">-->
+    <!--        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">-->
+    <!--            <li t-if="page_name == 'leave_list_view'" class="breadcrumb-item">My Leave</li>-->
+    <!--            <li t-if="employee_id" t-attf-class="breadcrumb-item #{'active ' if not employee_id else ''}">-->
+    <!--                <a t-if="employee_id">-->
+    <!--                    <t t-foreach="employee_id" t-as="emp">-->
+    <!--                        <t t-esc="emp.name"/>-->
+    <!--                    </t>-->
+    <!--                </a>-->
+    <!--                <t t-else="">-->
+    <!--                    <t t-foreach="employee_id" t-as="emp">-->
+    <!--                        <t t-esc="emp.name"/>-->
+    <!--                    </t>-->
+    <!--                </t>-->
+    <!--            </li>-->
+    <!--        </xpath>-->
+    <!--    </template>-->
+
+    <template id="portal_my_home_timeoff" name="Employee Time Off" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Leave</t>
+                <t t-set="url" t-value="'/my/leave'"/>
+                <t t-set="placeholder_count" t-value="'leave_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_leave" name="Employee Portal">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Leave</t>
+            </t>
+            <t t-if="not leave_ids">
+                <p>There are currently no attendance for your account.</p>
+            </t>
+            <t t-if="leave_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Employee</th>
+                        <th>Description</th>
+                        <th>Time Off Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Duty Resumption</th>
+                    </tr>
+                </thead>
+                <t t-foreach="leave_ids" t-as="line">
+                    <tr>
+                        <td>
+                            <span t-esc="line.employee_id.name"/>
+                            <t t-if="line.create_uid.id != request.env.user.id">
+                                <small class="text-muted">(by <t t-esc="line.create_uid.name"/>)</small>
+                            </t>
+                        </td>
+                        <td>
+                            <!-- <span t-esc="line.name or ''"/> -->
+                            <span t-field="line.name"/>
+                        </td>
+                        <td>
+                            <span t-field="line.holiday_status_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="line.date_from"/>
+                        </td>
+                        <td>
+                            <span t-field="line.date_to"/>
+                        </td>
+                        <td>
+                            <span t-field="line.duration_display"/>
+                        </td>
+                        <td>
+                            <span t-field="line.state"/>
+                        </td>
+                        <td>
+                            <t t-set="duty_exists" t-value="line.id in duty_exists_map"/>
+                            <t t-if="line.state == 'validate'">
+                                <t t-if="not duty_exists">
+                                    <form role="form" method="post" action="/my/create/duty/n_page">
+                                        <input type="hidden" name="leave_id" t-att-value="line.id"/>
+                                        <button type="submit" class="btn btn-secondary btn-sm">Create Duty Resumption</button>
+                                    </form>
+                                </t>
+                                <t t-else="">
+                                    <button type="button" class="btn btn-secondary btn-sm" disabled="disabled">
+                                        Duty Resumption Created
+                                    </button>
+                                </t>
+                            </t>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="portal_duty" name="Portal layout : Duty Resumption" inherit_id="portal.portal_breadcrumbs"
+              priority="50">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'duty_list_view'" class="breadcrumb-item">My Duty Resumption</li>
+            <li t-if="duty_id" t-attf-class="breadcrumb-item #{'active ' if not duty_id else ''}">
+                <a t-if="duty_id">
+                    <t t-esc="duty_id.name"/>
+                </a>
+                <t t-else="">
+                    <t t-esc="duty_id.name"/>
+                </t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_duty" name="Employee Duty Resumption" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Duty Resumption</t>
+                <t t-set="url" t-value="'/my/duty'"/>
+                <t t-set="placeholder_count" t-value="'duty_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_duty" name="Pickings List">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Duty Resumption</t>
+            </t>
+            <t t-if="not duty_ids">
+                <p>There are currently no attendance for your account.</p>
+            </t>
+            <t t-if="duty_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Employee</th>
+                        <th>Leave Type</th>
+                        <th>Reporting Date</th>
+                        <th>Duty Resumption Date</th>
+                        <th>Early / Late Reason</th>
+                    </tr>
+                </thead>
+                <t t-foreach="duty_ids" t-as="line">
+                    <tr>
+                        <td>
+                            <t t-esc="line.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="line.leave_type_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="line.reporting_date"/>
+                        </td>
+                        <td>
+                            <span t-field="line.duty_resumption_date"/>
+                        </td>
+                        <td>
+                            <span t-field="line.reason"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- <template id="create_attendance" name="Create Attendance">
+        <t t-call="portal.portal_layout">
+            <div id="onchange_create_attendance">
+                <form role="form" method="post" action="/create/attendance" target="_self">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="form-row text-center" style="margin-left:50px;"> -->
+                        <!--                                            EMPLOYEE-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="employee_ids">Name</label>
+                            <select name="employee_ids" id="selection_employee_ids" class="form-control">
+                                <option value="">Employee Names...</option>
+                                <t t-foreach="employee_dict" t-as="e">
+                                    <option t-att-value="e.get('id')" t-esc="e.get('name')"/>
+                                </t>
+                            </select>
+                        </div> -->
+                        <!--                                Title-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Job Title</label>
+                            <input type="text" id="job_title" class="form-control" disabled="True"/>
+                        </div> -->
+                        <!--                        Task-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Task</label>
+                            <input type="text" id="task" class="form-control" disabled="True"/>
+                        </div> -->
+
+                        <!--                        Customer-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Customer</label>
+                            <input type="text" id="customer" class="form-control" disabled="True"/>
+                        </div> -->
+
+                        <!--                        Location-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Location</label>
+                            <input type="text" id="location" class="form-control" disabled="True"/>
+                        </div> -->
+
+                        <!--                        Shift-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Shift</label>
+                            <input type="text" id="shift" class="form-control" disabled="True"/>
+                        </div> -->
+
+                        <!--                        Start Time and End Time-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="job_title">Start and End Time</label>
+                            <input type="text" id="start_end_time" class="form-control" disabled="True"/>
+                        </div> -->
+
+                        <!--                        Task-->
+                        <!--                        <div class="col-6">-->
+                        <!--                            <label class="col-form-label" style="margin-right: 120px;">Task</label>-->
+                        <!--                            <select name="emp_task" id="task_id" class="form-control" disabled="True">-->
+                        <!--                                <option value="">Task...</option>-->
+                        <!--                                <t t-foreach="task_list" t-as="b">-->
+                        <!--                                    <option t-att-value="b.id" t-esc="b.name"/>-->
+                        <!--                                </t>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
+                        <!-- <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;">Employee Type</label>
+                            <select class="form-control link-style" id="hr_employee_type" disabled="True">
+                                <option value="">Select ...</option>
+                                <option value="own">Own</option>
+                                <option value="subcontractor">Subcontractor</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="check_in_date">Check In</label>
+                            <input id="check_in_date" type="text" name="check_in_date"
+                                   class="form-control datetimepicker-input"
+                                   data-toggle="datetimepicker" data-target="#check_in_date"
+                                   autocomplete="off" placeholder="Enter Check In Date"/>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-form-label" style="margin-right: 120px;" for="check_out_date">Check Out</label>
+                            <input id="check_out_date" type="text" name="check_out_date"
+                                   class="form-control datetimepicker-input"
+                                   data-toggle="datetimepicker" data-target="#check_out_date"
+                                   autocomplete="off" placeholder="Enter Check Out Date"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"/>
+                        <div class="col-10">
+                            <div id="message_error" class="d-none alert alert-danger" style="width: 607px;margin-left: 40px;margin-top: 10px;"/> -->
+                            <!--                            <div id="message_success" class="d-none alert alert-info" style="width: 607px;margin-left: 40px;margin-top: 10px;"/>-->
+                        <!-- </div>
+                        <div class="col-2"/>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" class="btn btn-primary float-right send_info_attendance">Submit
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template> -->
+
+    <template id="create_leave_page" name="Create Leave Page">
+        <t t-call="portal.portal_layout">
+            <div id="onchange_emp_new">
+                <div>
+                    <div>
+                        <h5 class="w-100 text-center">Create Leaves</h5>
+                    </div>
+                    <div id="create_leave_page_js">
+                        <form role="form" method="post" action="/create/leave" target="_self" id="create_leaves_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="current_employee_id" t-att-value="current_employee_id"/>
+
+                            <div class="form-row" style="margin-left:50px;">
+                                <!-- Left Column -->
+                                    <div class="col-md-6">
+                                    <!-- Employee Selection -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <div class="d-flex align-items-center">
+                                                <label class="col-form-label col-sm-4" for="employee_ids">Employee</label>
+                                                <div class="col-sm-8">
+                                                    <select name="employee_ids" id="selection_employee_ids" class="form-control">
+                                                        <option value="">Select Employee...</option>
+                                                        <t t-foreach="all_employees_dict" t-as="e">
+                                                            <option t-att-value="e.get('id')" t-esc="e.get('name')" t-att-selected="e.get('id') == employee_id"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- EMPLOYEE (hidden if on_behalf_of is selected) -->
+                                    <div class="form-group row" id="on_behalf_container">
+                                        <label class="col-form-label col-sm-4" for="on_behalf_of">On Behalf Of</label>
+                                        <div class="col-sm-8">
+                                            <select name="on_behalf_of" id="on_behalf_of" class="form-control" disabled="True">
+                                                <option value="">Select Employee...</option>
+                                                <t t-foreach="subordinate_dict" t-as="e">
+                                                    <option t-att-value="e.get('id')" t-esc="e.get('name')"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                        <!-- Time Off Type -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4" for="holidays_status_ids">Time Off Type</label>
+                                        <div class="col-sm-8">
+                                            <select name="holidays_status_ids" id="holidays_status_ids" class="form-control">
+                                                <option value="">Time Off Type...</option>
+                                                <t t-foreach="status_dict" t-as="l">
+                                                    <option t-att-value="l.get('id')" t-esc="l.get('name')"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Start Date -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4" for="alt_disability">Start Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control o_website_form_input duration" name="start_date_leave" id="start_date"/>
+                                        </div>
+                                    </div>
+                                    <!-- End Date -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4 end_date" for="alt_disability">End Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control o_website_form_input end_date duration" name="end_date_leave" id="end_date"/>
+                                        </div>
+                                    </div>
+                                    <!-- Air Ticket -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Air Ticket</label>
+                                        <div class="col-sm-8">
+                                            <select name="air_ticket" class="form-control">
+                                                <option value="">Select ...</option>
+                                                <option value="company">Company</option>
+                                                <option value="self">Self</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Emergency Contact -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Emergency Contact</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control o_website_form_input" rows="1"
+                                                    name="emergency_contact_number"
+                                                    id="emergency_contact_number"
+                                                    placeholder="Emergency Contact"></textarea>
+                                        </div>
+                                    </div>
+                                    <!-- Address -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Address</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control o_website_form_input" rows="2"
+                                                    name="address" id="address"
+                                                    placeholder="Address"></textarea>
+                                        </div>
+                                    </div>
+                                    <!-- Description -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Description</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control o_website_form_input" rows="2"
+                                                    name="description_leave" id="description"
+                                                    placeholder="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <!-- Remaining Leaves -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Available Leaves</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="rem_leaves" class="form-control" disabled="True"/>
+                                        </div>
+                                    </div>
+                                    <!-- Title -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Job Title</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="job_title" class="form-control" disabled="True"/>
+                                        </div>
+                                    </div>
+                                    <!-- Branch -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Branch</label>
+                                        <div class="col-sm-8">
+                                            <select name="emp_branch" id="branch_id" class="form-control" disabled="True">
+                                                <option value="">Branch...</option>
+                                                <t t-foreach="branch_list" t-as="b">
+                                                    <option t-att-value="b.id" t-esc="b.name"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Manager -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Manager</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="selection_manager_ids" class="form-control" disabled="True"/>
+                                        </div>
+                                    </div>
+                                    <!-- Coach -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Coach</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="selection_coach_ids" class="form-control" disabled="True"/>
+                                        </div>
+                                    </div>
+                                    <!-- Joining Date -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4" for="alt_disability">Joining Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control o_website_form_input" name="joining_date_leave" id="joining_date" disabled="True"/>
+                                        </div>
+                                    </div>
+                                    <!-- Company -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Company</label>
+                                        <div class="col-sm-8">
+                                            <select name="emp_company" id="company_id" class="form-control" disabled="True">
+                                                <option value="">Company...</option>
+                                                <t t-foreach="company_list" t-as="c">
+                                                    <option t-att-value="c.id" t-esc="c.name"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Duration -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-4">Duration</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="duration" class="form-control" disabled="True"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary float-right send_info">Submit</button>
+                                <!-- <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close</button> -->
+                                <a href="/my/leave" class="btn btn-secondary">Close</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- <template id="create_leave_page" name="Create Leave Page">
+        <t t-call="portal.portal_layout">
+            <div id="onchange_emp_new">
+                <div>
+                    <div>
+                        <h5 class="w-100 text-center">Create Leaves</h5>
+                    </div>
+                    <div id="create_leave_page_js">
+                        <form role="form" method="post" action="/create/leave" target="_self" id="create_leaves_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <div class="form-row text-center" style="margin-left:50px;"> -->
+                                <!--                                            EMPLOYEE-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;" for="employee_ids">Name</label>
+                                    <select name="employee_ids" id="selection_employee_ids" class="form-control">
+                                        <option value="">Employee Names...</option>
+                                        <t t-foreach="employee_dict" t-as="e">
+                                            <option t-att-value="e.get('id')" t-esc="e.get('name')" t-if="employee_id" value="employee_id"/>
+                                        </t>
+                                    </select>
+                                </div> -->
+                                <!--                                Remaining Leaves-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Available Leaves</label>
+                                    <input type="text" id="rem_leaves" class="form-control" disabled="True"/>
+                                </div> -->
+                                <!--                                            TIMEOFF-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 68px;font-size: 15px;" for="holidays_status_ids">Time Off Type</label>
+                                    <select name="holidays_status_ids" class="form-control">
+                                        <option value="">Time Off Type...</option>
+                                        <t t-foreach="status_dict" t-as="l">
+                                            <option t-att-value="l.get('id')" t-esc="l.get('name')"/>
+                                        </t>
+                                    </select>
+                                </div> -->
+                                <!--                                Title-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Job Title</label>
+                                    <input type="text" id="job_title" class="form-control" disabled="True"/>
+                                </div> -->
+                                <!--                               Branch-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Branch</label>
+                                    <select name="emp_branch" id="branch_id" class="form-control" disabled="True">
+                                        <option value="">Branch...</option>
+                                        <t t-foreach="branch_list" t-as="b">
+                                            <option t-att-value="b.id" t-esc="b.name"/>
+                                        </t>
+                                    </select>
+                                </div> -->
+                                <!--                               Manager-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Manager</label>
+                                    <input type="text" id="selection_manager_ids" class="form-control" disabled="True"/>
+                                </div> -->
+                                <!--                               Coach-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Coach</label>
+                                    <input type="text" id="selection_coach_ids" class="form-control" disabled="True"/>
+                                </div> -->
+                                <!--                                Joining Date-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" for="alt_disability" style="margin-right: 120px;">Joining Date</label>
+                                    <input type="date" class="form-control o_website_form_input" name="joining_date_leave" id="joining_date" disabled="True"/>
+                                </div> -->
+                                <!--                               Company-->
+                                <!-- <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Company</label>
+                                    <select name="emp_company" id="company_id" class="form-control" disabled="True">
+                                        <option value="">Company...</option>
+                                        <t t-foreach="company_list" t-as="c">
+                                            <option t-att-value="c.id" t-esc="c.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="col-form-label" for="alt_disability" style="margin-right: 120px;">Start Date</label>
+                                    <input type="date" class="form-control o_website_form_input duration" name="start_date_leave" id="start_date"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="col-form-label end_date" for="alt_disability" style="margin-right: 120px;">End Date</label>
+                                    <input type="date" class="form-control o_website_form_input end_date duration" name="end_date_leave" id="end_date"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Duration</label>
+                                    <input type="text" id="duration" class="form-control" disabled="True"/>
+                                </div>
+                            </div>
+                            <div class="form-row text-center" style="margin-left:50px; margin-top:10px;">
+
+                                <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 120px;">Air Ticket</label>
+                                    <select name="air_ticket" class="form-control">
+                                        <option value="">Select ...</option>
+                                        <option value="company">Company</option>
+                                        <option value="self">Self</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 68px;font-size: 15px;">Emergency Contact</label>
+                                    <textarea class="form-control o_website_form_input" rows="1"
+                                              name="emergency_contact_number"
+                                              id="emergency_contact_number"
+                                              placeholder="Emergency Contact"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="col-form-label" style="margin-right: 68px;font-size: 15px;">Address</label>
+                                    <textarea class="form-control o_website_form_input" rows="2"
+                                              name="address" id="address"
+                                              placeholder="Address"
+                                              style="width: 849px;margin-left: 76px;"/>
+                                </div>
+                            </div>
+
+                            <div class="form-row text-center" style="margin-left:50px; margin-top:10px;">
+                                <div class="col-12">
+                                    <textarea class="form-control o_website_form_input" rows="2"
+                                              name="description_leave" id="description"
+                                              placeholder="Description"
+                                              style="width: 849px;margin-left: 76px;"/>
+                                </div>
+                                <div id="message_error_lives" class="d-none alert alert-danger" style="width: 607px; margin: auto; margin-top: 30px;"/> -->
+                                <!--                                <div id="message_success_lives" class="d-none alert alert-info" style="width: 607px;margin-left: 83px;margin-top: 10px;"/>-->
+                            <!-- </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary float-right send_info">Submit
+                                </button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template> -->
+
+    <template id="create_duty_resumption" name="Create Duty Resumption">
+        <t t-call="portal.portal_layout">
+            <div id="onchange_create_duty_resumption">
+                <div>
+                    <h5 class="w-100 text-center">Create Duty Resumption</h5>
+                </div>
+                <div id="create_duty_resumption_js">
+                    <form role="form" method="post" action="/create/duty" target="_self" id="create_duty_form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                        <div class="form-row" style="margin-left:50px;">
+                            <!-- Left Column -->
+                                <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <div class="d-flex align-items-center">
+                                            <label class="col-form-label col-sm-4" for="employee_ids">Name</label>
+                                            <div class="col-sm-8">
+                                                <select name="employee_ids" id="selection_employee_ids" class="form-control">
+                                                    <option value="">Employee Names...</option>
+                                                    <t t-foreach="employee_dict" t-as="e">
+                                                        <option t-att-value="e.get('id')" t-esc="e.get('name')" 
+                                                                t-att-selected="e.get('id') == current_employee_id"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row d-none" id="on_behalf_of_group">
+                                    <label class="col-form-label col-sm-4" for="on_behalf_of">On Behalf Of</label>
+                                    <div class="col-sm-8">
+                                        <select name="on_behalf_of" id="on_behalf_of" class="form-control" disabled="True">
+                                            <option value="">Select Employee...</option>
+                                            <t t-foreach="subordinate_dict" t-as="e">
+                                                <option t-att-value="e.get('id')" t-esc="e.get('name')"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Leave -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="emp_leaves">Leave</label>
+                                    <div class="col-sm-8">
+                                        <select name="emp_leaves" id="selection_leave_ids" class="form-control">
+                                            <option value="">Select Leave...</option>
+                                            <t t-foreach="leave_ids" t-as="l">
+                                                <option t-att-value="l['id']" t-esc="l['name']"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Time Off Type -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="holidays_status_ids">Time Off Type</label>
+                                    <div class="col-sm-8">
+                                        <select name="holidays_status_ids" id="holidays_status_id" class="form-control" disabled="True">
+                                            <option value="">Select Time Off Type...</option>
+                                            <t t-foreach="holidays_status_ids" t-as="s">
+                                                <option t-att-value="s.id" t-esc="s.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Job Title -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="job_title">Job Title</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="job_title" class="form-control" disabled="True"/>
+                                    </div>
+                                </div>
+                                <!-- Branch -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="emp_branch">Branch</label>
+                                    <div class="col-sm-8">
+                                        <select name="emp_branch" id="branch_id" class="form-control" disabled="True">
+                                            <option value="">Branch...</option>
+                                            <t t-foreach="branch_list" t-as="b">
+                                                <option t-att-value="b.id" t-esc="b.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <!-- Manager -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="selection_manager_ids">Manager</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="selection_manager_ids" class="form-control" disabled="True"/>
+                                    </div>
+                                </div>
+                                <!-- Coach -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="selection_coach_ids">Coach</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="selection_coach_ids" class="form-control" disabled="True"/>
+                                    </div>
+                                </div>
+                                <!-- Reporting Date -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="reporting_date">Reporting Date</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control o_website_form_input" name="reporting_date" id="reporting_date"/>
+                                    </div>
+                                </div>
+                                <!-- Duty Resumption Date -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="duty_resumption_date">Duty Resumption Date</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control o_website_form_input end_date" name="duty_resumption_date" id="duty_resumption_date"/>
+                                    </div>
+                                </div>
+                                <!-- Early / Late Reason -->
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-4" for="reason">Early / Late Reason</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control o_website_form_input" rows="3" name="reason" id="reason" placeholder="Early / Late Reason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row text-center" style="margin-left:50px; margin-top:10px;">
+                            <div id="message_error_lives" class="d-none alert alert-danger" style="width: 607px; margin: auto; margin-top: 30px;"></div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary float-right send_info">Submit</button>
+                            <!-- <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close</button> -->
+                            <a href="/my/duty" class="btn btn-secondary">Close</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- <template id="create_duty_resumption" name="Create Duty Resumption">
+        <t t-call="portal.portal_layout">
+            <div id="onchange_create_duty_resumption">
+                <div>
+                    <h5 class="w-100 text-center">Create Duty Resumption</h5>
+                </div>
+                <form role="form" method="post" action="/create/duty" target="_self">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="form-row text-center" style="margin-left:50px;"> -->
+                        <!--                                            EMPLOYEE-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;" for="employee_ids">Name</label>
+                            <select name="employee_ids" id="selection_employee_ids" class="form-control">
+                                <option value="">Employee Names...</option>
+                                <t t-foreach="employee_dict" t-as="e">
+                                    <option t-att-value="e.get('id')" t-esc="e.get('name')"/>
+                                </t>
+                            </select>
+                        </div> -->
+                        <!--                               Leave-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;">Leave</label>
+                            <select name="emp_leaves" id="selection_leave_ids" class="form-control">
+                                <option value="">Leave...</option>
+                                <t t-foreach="leave_ids" t-as="l">
+                                    <option t-att-value="l.id" t-esc="l.name"/>
+                                </t>
+                            </select>
+                        </div> -->
+                        <!--                                            Leave Type-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 68px;font-size: 15px;" for="holidays_status_ids">Time Off Type</label>
+                            <select name="holidays_status_ids" id="holidays_status_id" class="form-control">
+                                <option value="">Time Off Type...</option>
+                                <t t-foreach="status_dict" t-as="l">
+                                    <option t-att-value="l.get('id')" t-esc="l.get('name')"/>
+                                </t>
+                            </select>
+                        </div> -->
+                        <!--                                Title-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;">Job Title</label>
+                            <input type="text" id="job_title" class="form-control" disabled="True"/>
+                        </div> -->
+                        <!--                               Branch-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;">Branch</label>
+                            <select name="emp_branch" id="branch_id" class="form-control" disabled="True">
+                                <option value="">Branch...</option>
+                                <t t-foreach="branch_list" t-as="b">
+                                    <option t-att-value="b.id" t-esc="b.name"/>
+                                </t>
+                            </select>
+                        </div> -->
+                        <!--                               Manager-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;">Manager</label>
+                            <input type="text" id="selection_manager_ids" class="form-control" disabled="True"/>
+                        </div> -->
+                        <!--                    <div class="col-12">-->
+                        <!--                            <label class="col-form-label" style="margin-right: 120px;">Manager</label>-->
+                        <!--                            <select name="employee_ids" id="selection_manager_ids" class="form-control" disabled="True">-->
+                        <!--                                <option value="">Employee Manager...</option>-->
+                        <!--                                <t t-foreach="all_employee_dict" t-as="e">-->
+                        <!--                                    <option t-att-value="e.get('id')" t-esc="e.get('name')"/>-->
+                        <!--                                </t>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
+                        <!--                               Coach-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 120px;">Coach</label>
+                            <input type="text" id="selection_coach_ids" class="form-control" disabled="True"/>
+                        </div> -->
+                        <!--                        <div class="col-12">-->
+                        <!--                            <label class="col-form-label" style="margin-right: 120px;">Coach</label>-->
+                        <!--                            <select name="employee_ids" id="selection_coach_ids" class="form-control" disabled="True">-->
+                        <!--                                <option value="">Employee Coach...</option>-->
+                        <!--                                <t t-foreach="all_employee_dict" t-as="e">-->
+                        <!--                                    <option t-att-value="e.get('id')" t-esc="e.get('name')"/>-->
+                        <!--                                </t>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
+                        <!-- <div class="col-12">
+                            <label class="col-form-label" for="alt_disability" style="margin-right: 120px;">Reporting Date</label>
+                            <input type="date" class="form-control o_website_form_input" name="reporting_date" id="reporting_date"/>
+                        </div>
+                        <div class="col-12">
+                            <label class="col-form-label end_date" for="alt_disability" style="margin-right: 120px;">Duty Resumption Date</label>
+                            <input type="date" class="form-control o_website_form_input end_date" name="duty_resumption_date" id="duty_resumption_date"/>
+                        </div>
+                        <div class="col-12">
+                            <label class="col-form-label" style="margin-right: 68px;font-size: 15px;">Early / Late Reason</label>
+                            <textarea class="form-control o_website_form_input" rows="3" name="reason" id="reason" placeholder="Early / Late Reason"
+                                      style="width: 849px;margin-left: 76px;"/>
+                        </div>
+                    </div> -->
+
+                    <!-- <div class="form-row text-center" style="margin-left:50px; margin-top:10px;">
+                        <div id="message_error_lives" class="d-none alert alert-danger" style="width: 607px; margin: auto; margin-top: 30px;"/> -->
+                        <!--                                <div id="message_success_lives" class="d-none alert alert-info" style="width: 607px;margin-left: 83px;margin-top: 10px;"/>-->
+                    <!-- </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary float-right send_info">Submit
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 395px;">Close
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </t>
+    </template> -->
+
+    <!-- MAINMAINMAINMAINMAINMAINMAINMAIN -->
+    <template id="portal_searchbar_extend" name="Surtex Search Information" inherit_id="portal.portal_searchbar">
+        <xpath expr="//div[@t-if='searchbar_sortings']" position="before">
+            <div class="form-inline" id="slots_availabilities">
+                <div class="btn-group">
+                    <!--                    <button t-if="create_attendance" type="button" style="margin-right: 10px;border-radius: 2px;"-->
+                    <!--                            class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModal">Create Attendance-->
+                    <!--                    </button>-->
+                    <form t-if="create_attendance" role="form" method="post" action="/my/create/attendance/n_page">
+                        <button type="submit" class="btn btn-secondary btn-sm" role="">Create Attendance</button>
+                    </form>
+                    <!--                    <button t-if="create_leves" type="button" style="margin-right: 10px;border-radius: 2px;"-->
+                    <!--                            class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myLeaves">Create Leaves-->
+                    <!--                    </button>-->
+                    <form t-if="create_leaves" role="form" method="post" action="/my/leave/n_page">
+                        <button type="submit" class="btn btn-secondary btn-sm" role="">Create Leaves</button>
+                    </form>
+                    <!--                    <button t-if="create_duty" type="button" style="margin-right: 10px;border-radius: 2px;"-->
+                    <!--                            class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myDuty">Create Duty-->
+                    <!--                        Resumption-->
+                    <!--                    </button>-->
+                    <form t-if="create_duty" role="form" method="post" action="/my/create/duty/n_page">
+                        <button type="submit" class="btn btn-secondary btn-sm" role="">Create Duty Resumption</button>
+                    </form>
+
+                    <!--                    <div id="myModal" class="modal fade" role="dialog">-->
+                    <!--                        <div class="modal-dialog modal-lg">-->
+                    <!--                            <div class="modal-content">-->
+                    <!--                                <div class="modal-header">-->
+                    <!--                                    <h5 class="modal-title w-100 text-center">Create Attendance</h5>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="modal-body" style="height:450px">-->
+                    <!--                                    <form role="form" method="post" action="/create/attendance" target="_self">-->
+                    <!--                                        <div class="row text-center">-->
+                    <!--                                            <div class="col-5">-->
+                    <!--                                                <label class="col-form-label" style="margin-left: 90px;">Check In-->
+                    <!--                                                </label>-->
+                    <!--                                                <input type="hidden" name="csrf_token"-->
+                    <!--                                                       t-att-value="request.csrf_token()"/>-->
+
+                    <!--                                                <input id="check_in_date" type="text" name="check_in_date"-->
+                    <!--                                                       class="form-control datetimepicker-input"-->
+                    <!--                                                       data-toggle="datetimepicker" data-target="#check_in_date"-->
+                    <!--                                                       style="margin-left:200px;" autocomplete="off"-->
+                    <!--                                                       placeholder="Enter Check In Date"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-5">-->
+                    <!--                                                <label class="col-form-label">Check Out</label>-->
+                    <!--                                                <input id="check_out_date" type="text" name="check_out_date"-->
+                    <!--                                                       class="form-control datetimepicker-input"-->
+                    <!--                                                       data-toggle="datetimepicker" data-target="#check_out_date"-->
+                    <!--                                                       style="margin-left:145px;" autocomplete="off"-->
+                    <!--                                                       placeholder="Enter Check Out Date"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-5">-->
+                    <!--                                                <label class="col-form-label">Employee Name</label>-->
+                    <!--                                                <select name="employee_id" class="form-control link-style">-->
+                    <!--                                                    <option value="">...</option>-->
+                    <!--                                                    <t t-foreach="employee_id" t-as="e" style="margin-left:200px;"-->
+                    <!--                                                       autocomplete="off">-->
+                    <!--                                                        <option t-att-value="e.id" t-esc="e.name">-->
+                    <!--                                                        </option>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-5">-->
+
+                    <!--                                                <label class="col-form-label">Employee Type</label>-->
+                    <!--                                                <select style="width:300px" class="form-control link-style">-->
+                    <!--                                                    <option value="">Select ...</option>-->
+                    <!--                                                    <option t-att-value="'own'">Own</option>-->
+                    <!--                                                    <option t-att-value="'subcontractor'">Subcontractor</option>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-5">-->
+                    <!--                                                <label class="col-form-label">Payroll Batch</label>-->
+                    <!--                                                <select name="x_studio_payroll_batch" class="form-control link-style">-->
+                    <!--                                                    <option value="">Select ...</option>-->
+                    <!--                                                    <t t-foreach="x_studio_payroll_batch" t-as="batch">-->
+                    <!--                                                        <option t-att-value="batch.id" t-esc="batch.payroll_batch">-->
+                    <!--                                                        </option>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="row">-->
+                    <!--                                            <div class="col-2"/>-->
+                    <!--                                            <div class="col-10">-->
+                    <!--                                                <div id="message_error" class="d-none alert alert-danger"-->
+                    <!--                                                     style="width: 607px;margin-left: 40px;margin-top: 10px;"/>-->
+                    <!--                                                <div id="message_success" class="d-none alert alert-info"-->
+                    <!--                                                     style="width: 607px;margin-left: 40px;margin-top: 10px;"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-2"/>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="modal-footer text-center">-->
+                    <!--                                            <button type="submit"-->
+                    <!--                                                    class="btn btn-primary float-right send_info_attendance">-->
+                    <!--                                                Submit-->
+                    <!--                                            </button>-->
+                    <!--                                            <button type="button" class="btn btn-danger" data-dismiss="modal"-->
+                    <!--                                                    style="margin-right: 395px;">Close-->
+                    <!--                                            </button>-->
+                    <!--                                        </div>-->
+                    <!--                                    </form>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="myDuty" class="modal fade" role="dialog">-->
+                    <!--                        <div class="modal-dialog modal-lg">-->
+                    <!--                            <div class="modal-content">-->
+                    <!--                                <div class="modal-header">-->
+                    <!--                                    <h5 class="modal-title w-100 text-center">Create Duty Resumption</h5>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="modal-body" style="height:450px;">-->
+                    <!--                                    <form role="form" method="post" action="/create/duty" target="_self">-->
+                    <!--                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+                    <!--                                        <div class="form-row text-center" style="margin-left:50px;">-->
+                    <!--                                            <div class="col-12">-->
+                    <!--                                                <label class="col-form-label"-->
+                    <!--                                                       style="margin-right: 68px;font-size: 15px;" for="leave_type_id">-->
+                    <!--                                                    Time Off Type-->
+                    <!--                                                </label>-->
+                    <!--                                                <select name="leave_type_id" class="form-control link-style">-->
+                    <!--                                                    <option value="">Time Off Type...</option>-->
+                    <!--                                                    <t t-foreach="status_dict" t-as="duty">-->
+                    <!--                                                        <option t-att-value="duty.get('id')" t-esc="duty.get('name')">-->
+                    <!--                                                        </option>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" style="margin-right: 120px;"-->
+                    <!--                                                       for="employee_id">Employee Name-->
+                    <!--                                                </label>-->
+                    <!--                                                <select name="employee_id" class="form-control">-->
+                    <!--                                                    <option value="">Employee Names...</option>-->
+                    <!--                                                    <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                        <option t-att-value="e.id" t-esc="e.name"/>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" for="alt_disability"-->
+                    <!--                                                       style="margin-right: 120px;">Reporting Date-->
+                    <!--                                                </label>-->
+                    <!--                                                <input type="date" class="form-control o_website_form_input"-->
+                    <!--                                                       name="reporting_date" id="reporting_date"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label end_date" for="alt_disability"-->
+                    <!--                                                       style="margin-right: 120px;">Duty Resumption Date-->
+                    <!--                                                </label>-->
+                    <!--                                                <input type="date" class="form-control o_website_form_input end_date"-->
+                    <!--                                                       name="duty_resumption_date" id="duty_resumption_date"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-12">-->
+                    <!--                                                <label class="col-form-label"-->
+                    <!--                                                       style="margin-right: 68px;font-size: 15px;">Reason-->
+                    <!--                                                </label>-->
+                    <!--                                                <textarea class="form-control o_website_form_input" rows="3"-->
+                    <!--                                                          name="reason" id="reason"-->
+                    <!--                                                          placeholder="Early / Late Reason"-->
+                    <!--                                                          style="width: 849px;margin-left: 76px;"/>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="modal-footer text-center">-->
+                    <!--                                            <button type="submit" class="btn btn-primary" role="">Submit</button>-->
+                    <!--                                            <button type="button" class="btn btn-danger" data-dismiss="modal"-->
+                    <!--                                                    style="margin-right: 395px;">-->
+                    <!--                                                Close-->
+                    <!--                                            </button>-->
+                    <!--                                        </div>-->
+                    <!--                                    </form>-->
+                    <!--                                </div>-->
+
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div id="myLeaves" class="modal fade" role="dialog">-->
+                    <!--                        <div class="modal-dialog modal-lg">-->
+                    <!--                            <div class="modal-content">-->
+                    <!--                                <div class="modal-header">-->
+                    <!--                                    <h5 class="modal-title w-100 text-center">Create Leaves</h5>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="modal-body" style="height:350px;">-->
+                    <!--                                    <form role="form" method="post" action="/create/leave" target="_self">-->
+                    <!--                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+
+                    <!--                                        <div class="form-row text-center" style="margin-left:50px;">-->
+
+                    <!--                                            &lt;!&ndash;                                            TIMEOFF&ndash;&gt;-->
+                    <!--                                            <div class="col-12">-->
+                    <!--                                                <label class="col-form-label"-->
+                    <!--                                                       style="margin-right: 68px;font-size: 15px;"-->
+                    <!--                                                       for="holidays_status_ids">Time Off Type-->
+                    <!--                                                </label>-->
+                    <!--                                                <select name="holidays_status_ids" class="form-control">-->
+                    <!--                                                    <option value="">Time Off Type...</option>-->
+                    <!--                                                    <t t-foreach="status_dict" t-as="l">-->
+                    <!--                                                        <option t-att-value="l.get('id')" t-esc="l.get('name')"/>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            &lt;!&ndash; <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" style="margin-right: 120px;" for="emp_no">Employee No.</label>-->
+                    <!--                                                <select name="emp_no" class="form-control">-->
+                    <!--                                                    <option value="">Employee No...</option>-->
+                    <!--                                                    <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                        <option t-att-value="e.id" t-esc="e.emp_no)" />-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div> &ndash;&gt;-->
+
+                    <!--                                            &lt;!&ndash;                                            ONCHANGE EMPLOYEE&ndash;&gt;-->
+                    <!--                                            <t t-set="check" t-value="0"/>-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" style="margin-right: 120px;"-->
+                    <!--                                                       for="employee_ids">Employee-->
+                    <!--                                                    Name-->
+                    <!--                                                </label>-->
+                    <!--                                                <select name="employee_ids" class="form-control">-->
+                    <!--                                                    <option value="">Employee Names...</option>-->
+                    <!--                                                    <t t-foreach="employee_dict" t-as="e">-->
+                    <!--                                                        <option t-att-value="e.get('id')" t-esc="e.get('name')"/>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                                <t t-set="check" t-value="1"/>-->
+                    <!--                                            </div>-->
+
+                    <!--                                            <div>-->
+                    <!--                                                &lt;!&ndash;                                                <select class="form-control" name="employee_ids">&ndash;&gt;-->
+                    <!--                                                &lt;!&ndash;                                                    <t t-foreach="employee_ids" t-as="e">&ndash;&gt;-->
+                    <!--                                                &lt;!&ndash;                                                        <option t-att-value="e.id" t-esc="e.name"/>&ndash;&gt;-->
+                    <!--                                                &lt;!&ndash;                                                        &lt;!&ndash;                                                        <strong t-out="request.session['employee_ids']"/>&ndash;&gt;&ndash;&gt;-->
+                    <!--                                                &lt;!&ndash;                                                    </t>&ndash;&gt;-->
+                    <!--                                                &lt;!&ndash;                                                </select>&ndash;&gt;-->
+                    <!--                                                <select class="form-control" name="employee_ids">-->
+                    <!--                                                    <t t-foreach="employee_ids" t-as="timezone">-->
+                    <!--                                                        <option t-att-value="timezone" t-out="timezone"-->
+                    <!--                                                                t-att-selected="(timezone == request.session.employee_ids) and 1 or None"/>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+
+                    <!--                                            &lt;!&ndash;                                            <div>&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                <t t-if="check == 1">&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                    <span>Time displayed in&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                        <strong t-out="request.session['employee_ids']"/>&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                        timezone&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                    </span>&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                                </t>&ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;                                            </div>&ndash;&gt;-->
+
+                    <!--                                            &lt;!&ndash;                                            BRANCH&ndash;&gt;-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" style="margin-right: 120px;">Employee-->
+                    <!--                                                    Branch-->
+                    <!--                                                </label>-->
+                    <!--                                                <select name="emp_branch" class="form-control">-->
+                    <!--                                                    <option value="">Employee Branch...</option>-->
+                    <!--                                                    <t t-foreach="branch_list" t-as="b">-->
+                    <!--                                                        <option t-att-value="b.id" t-esc="b.name"/>-->
+                    <!--                                                    </t>-->
+                    <!--                                                </select>-->
+
+                    <!--                                            </div>-->
+
+
+                    <!--                                            &lt;!&ndash; </t> &ndash;&gt;-->
+                    <!--                                            &lt;!&ndash;         <div class="col-4">-->
+                    <!--                                                        <label class="col-form-label" style="margin-right: 120px;">Employee-->
+                    <!--                                                            Title-->
+                    <!--                                                        </label>-->
+                    <!--                                                        <select name="emp_title" class="form-control" id="#emp_nos">-->
+                    <!--                                                            <option value="">Employee Title...</option>-->
+                    <!--                                                            <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                                <option t-att-value="e.job_title" t-esc="e.job_title"/>-->
+                    <!--                                                            </t>-->
+                    <!--                                                        </select>-->
+                    <!--                                                    </div>-->
+                    <!--                                                    <div class="col-4">-->
+                    <!--                                                        <label class="col-form-label" style="margin-right: 120px;">Coach-->
+                    <!--                                                        </label>-->
+                    <!--                                                        <select name="emp_coach" class="form-control" id="#emp_nos">-->
+                    <!--                                                            <option value="">Coach...</option>-->
+                    <!--                                                            <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                                <option t-att-value="e.coach_id" t-esc="e.coach_id"/>-->
+                    <!--                                                            </t>-->
+                    <!--                                                        </select>-->
+                    <!--                                                    </div>-->
+                    <!--                                                    <div class="col-4">-->
+                    <!--                                                        <label class="col-form-label" style="margin-right: 120px;">Employee-->
+                    <!--                                                            Joining Date-->
+                    <!--                                                        </label>-->
+                    <!--                                                        <select name="emp_join_dat" class="form-control" id="#emp_nos">-->
+                    <!--                                                            <option value="">Joining Date..</option>-->
+                    <!--                                                            <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                                <option t-att-value="e.joining_date"-->
+                    <!--                                                                        t-esc="e.joining_date"/>-->
+                    <!--                                                            </t>-->
+                    <!--                                                        </select>-->
+                    <!--                                                    </div>-->
+                    <!--                                                    <div class="col-4">-->
+                    <!--                                                        <label class="col-form-label" style="margin-right: 120px;">Company</label>-->
+                    <!--                                                            <select name="emp_company" class="form-control" id="#emp_nos">-->
+                    <!--                                                                <option value="">Company...</option>-->
+                    <!--                                                                <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                                    <option t-att-value="e.company_id" t-esc="e.company_id" />-->
+                    <!--                                                                </t>-->
+                    <!--                                                            </select>-->
+                    <!--                                                    </div>-->
+                    <!--                                                    <div class="col-4">-->
+                    <!--                                                        <label class="col-form-label" style="margin-right: 120px;">Employee Status</label>-->
+                    <!--                                                            <select name="emp_status" class="form-control" id="#emp_nos">-->
+                    <!--                                                                <option value="">Status..</option>-->
+                    <!--                                                                <t t-foreach="employee_ids" t-as="e">-->
+                    <!--                                                                    <option t-att-value="e.status" t-esc="e.status" />-->
+                    <!--                                                                </t>-->
+                    <!--                                                            </select>-->
+                    <!--                                                    </div>-->
+                    <!--     &ndash;&gt;-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label" for="alt_disability"-->
+                    <!--                                                       style="margin-right: 120px;">Start Date-->
+                    <!--                                                </label>-->
+                    <!--                                                <input type="date" class="form-control o_website_form_input"-->
+                    <!--                                                       name="start_date_leave" id="start_date"/>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-4">-->
+                    <!--                                                <label class="col-form-label end_date" for="alt_disability"-->
+                    <!--                                                       style="margin-right: 120px;">End Date-->
+                    <!--                                                </label>-->
+                    <!--                                                <input type="date"-->
+                    <!--                                                       class="form-control o_website_form_input end_date"-->
+                    <!--                                                       name="end_date_leave"/>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="form-row text-center "-->
+                    <!--                                             style="margin-left: 70px;margin-top:10px;">-->
+                    <!--                                            <div class="col-4 holidays_status_half_costome">-->
+                    <!--                                                <select name="shift_type_type" class="form-control shift_type_type"-->
+                    <!--                                                        style="width:290px;">-->
+                    <!--                                                    <option value="">Select ...</option>-->
+                    <!--                                                    <option value="request_unit_half">Half Day</option>-->
+                    <!--                                                    <option value="request_unit_hours">Custom Hours</option>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-4 mornig_afternon_type">-->
+                    <!--                                                <select name="shift_type" class="form-control"-->
+                    <!--                                                        style="width: 192px;">-->
+                    <!--                                                    <option value="">Shift Type...</option>-->
+                    <!--                                                    <option value="am">Morning</option>-->
+                    <!--                                                    <option value="pm">Afternoon</option>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-2 hours_from_to">-->
+                    <!--                                                <select name="from_time" class="form-control"-->
+                    <!--                                                        style="width:160px;margin-left:26px;">-->
+                    <!--                                                    <option value="From To"></option>-->
+                    <!--                                                    <option value="0" style="">12:00 AM</option>-->
+                    <!--                                                    <option value="0.5" style="">12:30 AM</option>-->
+                    <!--                                                    <option value="1" style="">1:00 AM</option>-->
+                    <!--                                                    <option value="1.5" style="">1:30 AM</option>-->
+                    <!--                                                    <option value="2" style="">2:00 AM</option>-->
+                    <!--                                                    <option value="2.5" style="">2:30 AM</option>-->
+                    <!--                                                    <option value="3" style="">3:00 AM</option>-->
+                    <!--                                                    <option value="3.5" style="">3:30 AM</option>-->
+                    <!--                                                    <option value="4" style="">4:00 AM</option>-->
+                    <!--                                                    <option value="4.5" style="">4:30 AM</option>-->
+                    <!--                                                    <option value="5" style="">5:00 AM</option>-->
+                    <!--                                                    <option value="5.5" style="">5:30 AM</option>-->
+                    <!--                                                    <option value="6" style="">6:00 AM</option>-->
+                    <!--                                                    <option value="6.5" style="">6:30 AM</option>-->
+                    <!--                                                    <option value="7" style="">7:00 AM</option>-->
+                    <!--                                                    <option value="7.5" style="">7:30 AM</option>-->
+                    <!--                                                    <option value="8" style="">8:00 AM</option>-->
+                    <!--                                                    <option value="8.5" style="">8:30 AM</option>-->
+                    <!--                                                    <option value="9" style="">9:00 AM</option>-->
+                    <!--                                                    <option value="9.5" style="">9:30 AM</option>-->
+                    <!--                                                    <option value="10" style="">10:00 AM</option>-->
+                    <!--                                                    <option value="10.5" style="">10:30 AM</option>-->
+                    <!--                                                    <option value="11" style="">11:00 AM</option>-->
+                    <!--                                                    <option value="11.5" style="">11:30 AM</option>-->
+                    <!--                                                    <option value="12" style="">12:00 PM</option>-->
+                    <!--                                                    <option value="12.5" style="">12:30 PM</option>-->
+                    <!--                                                    <option value="13" style="">1:00 PM</option>-->
+                    <!--                                                    <option value="13.5" style="">1:30 PM</option>-->
+                    <!--                                                    <option value="14" style="">2:00 PM</option>-->
+                    <!--                                                    <option value="14.5" style="">2:30 PM</option>-->
+                    <!--                                                    <option value="15" style="">3:00 PM</option>-->
+                    <!--                                                    <option value="15.5" style="">3:30 PM</option>-->
+                    <!--                                                    <option value="16" style="">4:00 PM</option>-->
+                    <!--                                                    <option value="16.5" style="">4:30 PM</option>-->
+                    <!--                                                    <option value="17" style="">5:00 PM</option>-->
+                    <!--                                                    <option value="17.5" style="">5:30 PM</option>-->
+                    <!--                                                    <option value="18" style="">6:00 PM</option>-->
+                    <!--                                                    <option value="18.5" style="">6:30 PM</option>-->
+                    <!--                                                    <option value="19" style="">7:00 PM</option>-->
+                    <!--                                                    <option value="19.5" style="">7:30 PM</option>-->
+                    <!--                                                    <option value="20" style="">8:00 PM</option>-->
+                    <!--                                                    <option value="20.5" style="">8:30 PM</option>-->
+                    <!--                                                    <option value="21" style="">9:00 PM</option>-->
+                    <!--                                                    <option value="21.5" style="">9:30 PM</option>-->
+                    <!--                                                    <option value="22" style="">10:00 PM</option>-->
+                    <!--                                                    <option value="22.5" style="">10:30 PM</option>-->
+                    <!--                                                    <option value="23" style="">11:00 PM</option>-->
+                    <!--                                                    <option value="23.5" style="">11:30 PM</option>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div class="col-2 hours_from_to">-->
+                    <!--                                                <select name="to_time" class="form-control"-->
+                    <!--                                                        style="width: 160px;margin-left: 67px;">-->
+                    <!--                                                    <option value="From To"></option>-->
+                    <!--                                                    <option value="0" style="">12:00 AM</option>-->
+                    <!--                                                    <option value="0.5" style="">12:30 AM</option>-->
+                    <!--                                                    <option value="1" style="">1:00 AM</option>-->
+                    <!--                                                    <option value="1.5" style="">1:30 AM</option>-->
+                    <!--                                                    <option value="2" style="">2:00 AM</option>-->
+                    <!--                                                    <option value="2.5" style="">2:30 AM</option>-->
+                    <!--                                                    <option value="3" style="">3:00 AM</option>-->
+                    <!--                                                    <option value="3.5" style="">3:30 AM</option>-->
+                    <!--                                                    <option value="4" style="">4:00 AM</option>-->
+                    <!--                                                    <option value="4.5" style="">4:30 AM</option>-->
+                    <!--                                                    <option value="5" style="">5:00 AM</option>-->
+                    <!--                                                    <option value="5.5" style="">5:30 AM</option>-->
+                    <!--                                                    <option value="6" style="">6:00 AM</option>-->
+                    <!--                                                    <option value="6.5" style="">6:30 AM</option>-->
+                    <!--                                                    <option value="7" style="">7:00 AM</option>-->
+                    <!--                                                    <option value="7.5" style="">7:30 AM</option>-->
+                    <!--                                                    <option value="8" style="">8:00 AM</option>-->
+                    <!--                                                    <option value="8.5" style="">8:30 AM</option>-->
+                    <!--                                                    <option value="9" style="">9:00 AM</option>-->
+                    <!--                                                    <option value="9.5" style="">9:30 AM</option>-->
+                    <!--                                                    <option value="10" style="">10:00 AM</option>-->
+                    <!--                                                    <option value="10.5" style="">10:30 AM</option>-->
+                    <!--                                                    <option value="11" style="">11:00 AM</option>-->
+                    <!--                                                    <option value="11.5" style="">11:30 AM</option>-->
+                    <!--                                                    <option value="12" style="">12:00 PM</option>-->
+                    <!--                                                    <option value="12.5" style="">12:30 PM</option>-->
+                    <!--                                                    <option value="13" style="">1:00 PM</option>-->
+                    <!--                                                    <option value="13.5" style="">1:30 PM</option>-->
+                    <!--                                                    <option value="14" style="">2:00 PM</option>-->
+                    <!--                                                    <option value="14.5" style="">2:30 PM</option>-->
+                    <!--                                                    <option value="15" style="">3:00 PM</option>-->
+                    <!--                                                    <option value="15.5" style="">3:30 PM</option>-->
+                    <!--                                                    <option value="16" style="">4:00 PM</option>-->
+                    <!--                                                    <option value="16.5" style="">4:30 PM</option>-->
+                    <!--                                                    <option value="17" style="">5:00 PM</option>-->
+                    <!--                                                    <option value="17.5" style="">5:30 PM</option>-->
+                    <!--                                                    <option value="18" style="">6:00 PM</option>-->
+                    <!--                                                    <option value="18.5" style="">6:30 PM</option>-->
+                    <!--                                                    <option value="19" style="">7:00 PM</option>-->
+                    <!--                                                    <option value="19.5" style="">7:30 PM</option>-->
+                    <!--                                                    <option value="20" style="">8:00 PM</option>-->
+                    <!--                                                    <option value="20.5" style="">8:30 PM</option>-->
+                    <!--                                                    <option value="21" style="">9:00 PM</option>-->
+                    <!--                                                    <option value="21.5" style="">9:30 PM</option>-->
+                    <!--                                                    <option value="22" style="">10:00 PM</option>-->
+                    <!--                                                    <option value="22.5" style="">10:30 PM</option>-->
+                    <!--                                                    <option value="23" style="">11:00 PM</option>-->
+                    <!--                                                    <option value="23.5" style="">11:30 PM</option>-->
+                    <!--                                                </select>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+
+                    <!--                                        <div class="form-row" style="margin-top:10px;">-->
+                    <!--                                            <div class="col-12 container row text-center">-->
+                    <!--                                                <div class="col-4">-->
+                    <!--                                                    <label class="col-form-label"-->
+                    <!--                                                           style="margin-right: 68px;font-size: 15px;">Air Ticket-->
+                    <!--                                                    </label>-->
+                    <!--                                                    <select name="air_ticket" class="form-control air_ticket"-->
+                    <!--                                                            style="width:290px;">-->
+                    <!--                                                        <option value="">Select ...</option>-->
+                    <!--                                                        <option value="company">Company</option>-->
+                    <!--                                                        <option value="self">Self</option>-->
+                    <!--                                                    </select>-->
+                    <!--                                                </div>-->
+                    <!--                                                <div class="col-8">-->
+                    <!--                                                    <label class="col-form-label"-->
+                    <!--                                                           style="margin-right: 68px;font-size: 15px;">Emergency-->
+                    <!--                                                        Contact-->
+                    <!--                                                    </label>-->
+
+                    <!--                                                    <textarea class="form-control o_website_form_input" rows="3"-->
+                    <!--                                                              name="emergency_contact_number"-->
+                    <!--                                                              id="emergency_contact_number"-->
+                    <!--                                                              placeholder="Emergency Contact"-->
+                    <!--                                                              style="width: 849px;margin-left: 76px;"></textarea>-->
+                    <!--                                                </div>-->
+                    <!--                                                <div class="col-8">-->
+                    <!--                                                    <label class="col-form-label"-->
+                    <!--                                                           style="margin-right: 68px;font-size: 15px;">Address-->
+                    <!--                                                    </label>-->
+
+                    <!--                                                    <textarea class="form-control o_website_form_input" rows="3"-->
+                    <!--                                                              name="address" id="address"-->
+                    <!--                                                              placeholder="Address"-->
+                    <!--                                                              style="width: 849px;margin-left: 76px;"></textarea>-->
+                    <!--                                                </div>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+
+                    <!--                                        <div class="form-row" style="margin-top:10px;">-->
+                    <!--                                            <div class="col-12">-->
+                    <!--                                                <textarea class="form-control o_website_form_input" rows="3"-->
+                    <!--                                                          name="description_leave" id="description"-->
+                    <!--                                                          placeholder="Description"-->
+                    <!--                                                          style="width: 849px;margin-left: 76px;"></textarea>-->
+                    <!--                                            </div>-->
+                    <!--                                            <div id="message_error_lives" class="d-none alert alert-danger"-->
+                    <!--                                                 style="width: 607px;margin-left: 83px;margin-top: 10px;"></div>-->
+                    <!--                                            <div id="message_success_lives" class="d-none alert alert-info"-->
+                    <!--                                                 style="width: 607px;margin-left: 83px;margin-top: 10px;"></div>-->
+                    <!--                                        </div>-->
+
+                    <!--                                        <div class="modal-footer">-->
+                    <!--                                            <button type="submit" class="btn btn-primary float-right send_info">Submit-->
+                    <!--                                            </button>-->
+                    <!--                                            <button type="button" class="btn btn-danger" data-dismiss="modal"-->
+                    <!--                                                    style="margin-right: 395px;">Close-->
+                    <!--                                            </button>-->
+                    <!--                                        </div>-->
+                    <!--                                    </form>-->
+                    <!--                                </div>-->
+
+
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

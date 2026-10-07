@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_monthly_variance_report_wizard_form" model="ir.ui.view">
+        <field name="name">monthly.variance.report.wizard.form</field>
+        <field name="model">budget.monthly.variance.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Monthly Variance Report Parameters">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_ids" widget="many2many_tags"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                            <!-- <field name="budget_ids" widget="many2many_tags" domain="[('company_id', 'in', company_ids)]"/> -->
+                            <field name="budget_ids" widget="many2many_tags" domain="[('branch_id', 'in', branch_ids)]"/>
+                        </group>
+                        <group>
+                            <field name="report_date"/>
+                            <field name="show_consolidated"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Generate Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_monthly_variance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Monthly Variance Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">budget.monthly.variance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_monthly_variance_report_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem 
+        id="menu_monthly_variance_report" 
+        name="Monthly Variance Report" 
+        parent="account.account_reports_management_menu" 
+        action="action_monthly_variance_report_wizard"
+        groups="budget_customizations.group_account_admin"/>
+</odoo>

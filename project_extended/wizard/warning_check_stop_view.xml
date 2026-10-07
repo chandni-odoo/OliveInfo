@@ -1,0 +1,31 @@
+<odoo>
+
+    <data>
+
+        <record id="warning_check_stop_wizard_view_form" model="ir.ui.view">
+            <field name="name">warning.check.stop.wizard.view</field>
+            <field name="model">warning.check.stop.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <!--                        <button name="create_lpo_control" string="Create LPO" type="object" class="oe_highlight"/>-->
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="warning_check_stop_wizard_action" model="ir.actions.act_window">
+            <field name="name">Warning Check Stop</field>
+            <field name="res_model">warning.check.stop.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="warning_check_stop_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="shift_type_tree" model="ir.ui.view">
+        <field name="name">fleet.shift.type.tree</field>
+        <field name="model">fleet.shift.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_view_shift_type" model="ir.actions.act_window">
+        <field name="name">Fleet Shift Type</field>
+        <field name="res_model">fleet.shift.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <menuitem id="menu_shift_type" name="Fleet Shift type" parent="fleet.fleet_configuration" action="action_view_shift_type" />
+</odoo>

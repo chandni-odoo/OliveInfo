@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_move_form_invoice_inherit_branch" model="ir.ui.view">
+        <field name="name">view.move.form.inherit.branch</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='name']" position="after">
+                <field name="branch_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_bank_statement_form_inherit_branch2" model="ir.ui.view">
+        <field name="name">view.bank.statement.form.inherit.branch</field>
+        <field name="model">account.bank.statement</field>
+        <field name="inherit_id" ref="account.view_bank_statement_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='branch_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='branch_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.view</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="branch_id"/>
+            </xpath> 
+        </field>
+    </record>
+    <record id="res_branch_group_tree_view" model="ir.ui.view">
+        <field name="name">res.branch.group.tree.view</field>
+        <field name="model">res.branch.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="res_branch_group_form_view" model="ir.ui.view">
+        <field name="name">res.branch.group.form.view</field>
+        <field name="model">res.branch.group</field>
+        <field name="arch" type="xml">
+            <form string="Region">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_res_branch_group" model="ir.actions.act_window">
+        <field name="name">Branch Group</field>
+        <field name="res_model">res.branch.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem 
+        id="menu_res_branch_group"
+        name="Branch Group"
+        action="action_res_branch_group"
+        parent="base.menu_users"
+        sequence="10"
+        />
+
+    <record id="res_branch_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.branch.view.form.inherit</field>
+        <field name="model">res.branch</field>
+        <field name="inherit_id" ref="branch.branch_res_branch_view_form"/>
+        <field name="arch" type="xml">
+            <field name="address" position="after">
+                <field name="code"/>
+                <field name="branch_for"/>
+                <field name="branch_group_id"/>
+            </field>
+            <field name="telephone" position="after">
+                <field name="sale_sequence_id"/>
+            </field>
+        </field>
+    </record>
+    <record id="branch.branch_action_res_branch" model="ir.actions.act_window">
+        <field name="name">Branch (BU)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.branch</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create a new branch.
+            </p>
+        </field>
+    </record>
+    <menuitem id="branch.branch_menu_res_branch"
+        name="Branch (BU)"  
+        parent="base.menu_users" 
+        action="branch.branch_action_res_branch" />
+</odoo>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_leave_sattelment">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-family: 'Times New Roman', Times, serif;">
+                        <div class="header">
+                            <div style="display:flex; flex-direction:column; justify-content:center;min-height:100vh;">
+                                <center><u><b><span style="font-size:20px;">DULSCO QATAR W.L.L.</span></b></u></center>
+                                <center><u><b><span style="font-size:18px;">Leave Settlement</span></b></u></center>
+                                <div class="row">
+                                    <div class="col-3" style="text-align:left;">
+                                        <span style="text-align:right;">Leave Number: <t t-esc="o.name"/></span>
+                                    </div><div class="col-3"/><div class="col-3"/>
+                                    <div class="col-3" style="text-align:right;">
+                                        <span style="text-align:left;">Date: <t t-esc="o.date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align:justify">
+                            <div class="col-4">
+                                <span>Name : <t t-esc="o.employee_id.name"/></span><br/>
+                                <span>Title : <t t-esc="o.job_title"/></span><br/>
+                                <span>Branch : <t t-esc="o.employee_id.branch_id.code"/> - <t t-esc="o.employee_id.branch_id.name"/></span><br/>
+                                <span>Joining Date : <t t-esc="o.employee_id.date_started" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span><br/>
+                                <span>Leave Eligibility : <t t-if="o.settlement_ids.filtered(lambda x: x.code == 'leave')"><t t-esc="o.settlement_ids.filtered(lambda x: x.code == 'leave')[0].remarks" t-value=" 100* (' '.replace(' ',u'\xa0').encode('utf-8')) "/></t></span><br/>
+                            </div><div class="col-4"></div>
+                            <div class="col-4">
+                                <t t-set="total_allownce" t-value="sum(o.employee_id.contract_id.allowance_ids.filtered(lambda x: x.category_id.code == 'ALW').mapped('amount'))"/>
+                                <span>Code :</span>
+                                <span><t t-esc="o.employee_id.emp_no"/></span><br/>
+                                <span>Basic : <t t-esc="o.basic_salary" t-options='{"widget": "float", "precision": 2}'/></span><br/>
+                                <span>Allowances : <t t-esc="total_allownce" t-options='{"widget": "float", "precision": 2}'/></span><br/>
+                                <span>Total : <t t-esc="total_allownce + o.basic_salary" t-options='{"widget": "float", "precision": 2}'/></span><br/>
+                                <t t-set="total_deduction" t-value="sum(o.employee_id.contract_id.allowance_ids.filtered(lambda x: x.category_id.code == 'DED').mapped('amount'))"/>
+                                <span>Ded/Recovery : <t t-esc="total_deduction" t-options='{"widget": "float", "precision": 2}'/></span><br/>
+                            </div>
+                        </div><hr style="border-top: 1px solid black;"/>
+                        <table style="width: 100%;">
+                            <thead style="width: 100%;">
+                                <tr>
+                                    <th>Duration From</th>
+                                    <th>Duration To</th>
+                                    <th>Accured Days</th>
+                                    <th>Extra Unpaid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span>
+                                        <t t-esc="o.date_from" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                    </td>
+                                    <td><span>
+                                        <t t-esc="o.date_to" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                    </td>
+                                    <td><span>
+                                        <t t-esc="o.accrued_leaves" t-options='{"widget": "float", "precision": 2}'/></span>
+                                    </td>
+                                    <td><span><t t-esc="o.extra_unpaid"/></span></td>
+                                </tr>
+                                <!-- <td><span>Leave Period</span></td>
+                                <tr t-foreach="o.settlement_ids" t-as="line">
+                                    <td><span>
+                                        <t t-esc="line.date_from" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                    </td>
+                                    <td><span>
+                                      <t t-esc="line.date_to" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table><hr style="border-top: 1px solid black;"/>
+                        <div class="row">
+                            <t t-set="total_encashment" t-value="sum(o.settlement_ids.filtered(lambda x: x.is_encashment == True).mapped('duration_qty'))"/>
+                            <t t-set="additional_paid_days" t-value="sum(o.settlement_ids.filtered(lambda x: x.is_paid == True).mapped('duration_qty'))"/>
+                            <div class="col-6">Additional Paid Days:
+                                <t t-esc="additional_paid_days" t-options='{"widget": "float", "precision": 2}'/>
+                            </div>
+                            <div class="col-6">Encashment Days : 
+                                <t t-esc="total_encashment" t-options='{"widget": "float", "precision": 2}'/>
+                            </div>
+
+                        </div><hr style="border-top: 1px solid black;"/>
+                        <table style="width: 100%;">
+                            <thead style="width: 100%;">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Remarks</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.settlement_ids" t-as="line">
+                                    <td>
+                                        <span>
+                                            <t t-if="line.code"><t t-esc="line.code"/></t>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            ><t t-if="line.payslip_inout_type_id"><t t-esc="line.payslip_inout_type_id.name"/></t>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="line.date_from" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="line.date_to" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <t t-if="line.eligibility_days"><t t-esc="line.eligibility_days"/></t> Days
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <t t-if="line.sub_total"><t t-esc="line.sub_total" t-options='{"widget": "float", "precision": 2}'/></t>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <t t-if="o.loan_count > 0">
+                                    <t t-if="len(o.leave_loan_amount())!=0">
+                                    <t t-foreach="o.leave_loan_amount()" t-as="loan">
+                                     <!-- <t t-set="advance_qty" t-value="o.leave_loan_amount[loan].get('qty')"/> -->
+                                    <tr>
+                                        <td>
+                                            <span>Advance Payment</span>
+                                        </td>
+                                        <td>
+                                            <span>Advance Payment</span>
+                                        </td>
+                                        <td>
+                                            <span><t t-esc="o.leave_loan_amount()[loan].get('date_from')" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                        </td>
+                                        <td>
+                                            <span><t t-esc="o.leave_loan_amount()[loan].get('date_to')" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></span>
+                                        </td>
+                                        <td>
+                                            <span>Advance Salary for <t t-esc="o.leave_loan_amount()[loan].get('qty')" t-options='{"widget": "float", "precision": 2}'/> Days</span>
+                                        </td>
+                                        <td>
+                                            <span><t t-esc="o.leave_loan_amount()[loan].get('loan_amount')" t-options='{"widget":"float", "precision":2}'/></span>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </t>
+
+                                </t>
+                                
+                                    <!-- <t t-if="o.last_month_sal_cal().get('pending_salary')"> -->
+                                    <!-- <t t-foreach="o.settlement_ids.filtered(lambda x: x.code == 'leave')" t-as="l">
+                                        <tr>
+                                        <t t-if="len(o.last_month_sal_cal())!=0">
+                                        <t t-if="o.last_month_sal_cal().get(l)['rec_name']==l">
+                                            <td></td>
+                                            <td><span><b>Pending Salary</b></span></td>
+                                            <td><t t-esc="o.last_month_sal_cal().get(l)['from_date']"></t></td>
+                                            <td><t t-esc="o.last_month_sal_cal().get(l)['to_date']"></t></td>
+                                            <td></td>
+                                            <td><span><t t-esc="o.last_month_sal_cal().get(l)['pending_salary']" t-options='{"widget":"float", "precision":2}'/></span></td>
+                                        </t>
+                                    </t>
+                                        </tr>
+                                    </t> -->
+                                
+                            </tbody>
+                        </table><br/>
+                        <div style="text-align:right;">
+                            <span style="border-top: 1px solid black; padding:5px;"><b>Net Payable :&#160;<t t-esc="o.amount_total + o.pending_salary" t-options='{"widget":"float", "precision":2}'/></b></span>
+                        </div><hr style="border-top: 1px solid black;"/>
+                        <div style="text-align:right;">* Amount in QAR.</div>
+                        <div style="text-align:left;">
+                            <span>Remarks : <t t-esc="o.remarks_of_leave"/></span>
+                        </div><hr style="border-top: 1px solid black;"/>
+                        <div class="row" style="margin-top: 80px;">
+                            <div class="col-4"><span  style="border-top: 1px solid black; padding:5px;">Prepared By</span></div>
+                            <div class="col-4"><span style="border-top: 1px solid black; padding:5px;">Checked By Finance</span></div>
+                            <div class="col-4"><span style="border-top: 1px solid black; padding:5px;">Recipient's Sign</span></div>
+                        </div>
+                         <div class="row" style="margin-top: 80px; margin-right:5px">
+                            <div class="col-4"><span style="border-top: 1px solid black; padding:5px;">Checked By HR</span></div>
+                            <div class="col-4"><span style="border-top: 1px solid black; padding:5px;">Finance Approval</span></div>
+                            <div class="col-4"><span style="border-top: 1px solid black; padding:5px;">Business Unit Head</span></div>
+                        </div><hr style="border-top: 1px solid black;"/>
+                        <div>Payment Details</div>
+                        <div class="row">
+                            <div class="col-4">Cash / Bank</div>
+                            <div class="col-4">Cheque No :</div>
+                            <div class="col-4">Date :</div>
+                        </div>
+                        <div>Note :</div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

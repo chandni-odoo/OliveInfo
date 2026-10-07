@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <menuitem id="menu_employee_accommodation_root" name="Accommodation" sequence="10"
+                    web_icon="employee_accommodation,static/description/icon.png"/>
+            <menuitem id="menu_employee_accommodation" 
+                    parent="menu_employee_accommodation_root"
+                    name="Operation" 
+                    sequence="2"/>
+            <menuitem id="menu_camps" 
+                    parent="menu_employee_accommodation"
+                    name="Camps" action="action_camps" 
+                    sequence="1"/>
+            <menuitem id="menu_floors" 
+                    parent="menu_employee_accommodation"
+                    name="Floors" action="action_floors" 
+                    sequence="2"/>
+            <menuitem id="menu_rooms" 
+                    parent="menu_employee_accommodation"
+                    name="Rooms" action="action_rooms" 
+                    sequence="3"/>
+            <menuitem id="menu_beds" 
+                    parent="menu_employee_accommodation"
+                    name="Beds" action="action_beds" 
+                    sequence="4"/>
+
+        <menuitem id="menu_facility_root" 
+                name="Facilities" 
+                parent="menu_employee_accommodation_root" 
+                sequence="3"/>
+            <menuitem id="menu_facility" 
+                name="Manage Facilities" 
+                parent="menu_facility_root" 
+                action="facility_action"
+                sequence="1"/>
+
+        <menuitem id="menu_accommodation_root" 
+                name="Employee Accommodation" 
+                parent="menu_employee_accommodation_root"
+                sequence="4"/>
+            <menuitem id="menu_check_in" 
+                name="Check-In" 
+                parent="menu_accommodation_root" 
+                action="action_check_in"
+                sequence="1"/>
+            <menuitem id="menu_check_out" 
+                name="Check-Out" 
+                parent="menu_accommodation_root" 
+                action="action_check_out"
+                sequence="2"/>
+            <menuitem id="menu_check_list" 
+                name="Check-List" 
+                parent="menu_accommodation_root" 
+                action="action_check_list"
+                sequence="3"/>
+            <menuitem id="menu_employee_list" 
+                name="Occupancy List" 
+                parent="menu_accommodation_root" 
+                action="action_employee_list"
+                sequence="4"/>
+            <menuitem id="menu_employee_fines"
+              name="Employee Fines and Disciplinary Actions"
+              parent="menu_accommodation_root"
+              action="action_employee_disciplinary"
+              sequence="5"/>
+
+        <menuitem id="menu_transfer_root" 
+                name="Transfer" 
+                parent="menu_employee_accommodation_root"
+                sequence="5"/>
+            <menuitem id="menu_employee_transfer" 
+                name="Employee Transfers" 
+                parent="menu_transfer_root" 
+                action="action_employee_transfer"
+                sequence="1"/>
+
+        <menuitem id="menu_client_accommodation_root" 
+                name="Customer Lease" 
+                parent="menu_employee_accommodation_root"
+                sequence="6"/>
+            <menuitem id="menu_client_accommodation" 
+                name="Customer Accommodation Agreements" 
+                parent="menu_client_accommodation_root" 
+                action="action_client_accommodation"
+                sequence="1"/>
+            <menuitem id="menu_customer_checkin" 
+                name="Customer Check-In"
+                parent="menu_client_accommodation_root" 
+                action="action_customer_checkin"
+                sequence="2"/>
+            <menuitem id="menu_customer_checkout" 
+                name="Customer Check-Out"
+                parent="menu_client_accommodation_root" 
+                action="action_customer_checkout"
+                sequence="3"/>
+            <menuitem id="menu_customer_checklist" 
+                name="Customer Check-List"
+                parent="menu_client_accommodation_root" 
+                action="action_customer_checklist"
+                sequence="4"/>
+
+        <menuitem id="menu_reports_root" 
+                name="Reports" 
+                parent="menu_employee_accommodation_root"
+                sequence="7"/>
+</odoo>

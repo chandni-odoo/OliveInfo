@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_hr_employee_deduction_tree" model="ir.ui.view">
+    <field name="name">hr.employee.deduction.tree</field>
+    <field name="model">hr.employee.deduction</field>
+    <field name="arch" type="xml">
+      <tree string="Employee Deductions">
+        <field name="name"/>
+        <field name="employee_id"/>
+        <field name="deduction_type_id"/>
+        <field name="total_amount"/>
+        <field name="no_of_installments"/>
+        <field name="date"/>
+        <field name="state" widget="badge"/>
+        <field name="amount_paid"/>
+        <field name="amount_balance"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_hr_employee_deduction_form" model="ir.ui.view">
+    <field name="name">hr.employee.deduction.form</field>
+    <field name="model">hr.employee.deduction</field>
+    <field name="arch" type="xml">
+      <form string="Employee Deduction">
+        <header>
+          <button name="compute_installments" string="Compute Installments" type="object"
+                  states="draft" class="btn-primary"/>
+          <button name="action_approve" string="Approve" type="object"
+                  states="draft" class="btn-success"/>
+          <button name="action_cancel" string="Cancel" type="object"
+                  states="draft,approved" class="btn-danger"/>
+          <button name="action_set_to_draft" string="Set to Draft" type="object"
+                  states="cancel" class="btn-default"/>
+          <button name="action_create_journal_entry" string="Create Journal Entry" type="object"
+                  states="approved" class="btn-warning"/>
+          <button name="action_open_journal_entry" string="View Journal Entry" type="object"
+                  states="approved" attrs="{'invisible': [('journal_entry_id','=',False)]}"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,approved,cancel"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="name" readonly="1"/>
+            <field name="employee_id" options="{'no_create': True}"/>
+            <field name="deduction_type_id"/>
+            <field name="total_amount"/>
+            <field name="date"/>
+            <field name="no_of_installments"/>
+          </group>
+          <notebook>
+            <page string="Installments">
+              <field name="installment_ids" context="{'default_deduction_id': active_id}">
+                <tree editable="bottom">
+                  <field name="due_date"/>
+                  <field name="amount"/>
+                  <field name="state" readonly="1"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+          <group>
+            <field name="journal_entry_id" readonly="1"/>
+            <field name="amount_paid" readonly="1"/>
+            <field name="amount_balance" readonly="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_deduction_type_tree" model="ir.ui.view">
+        <field name="name">hr.employee.deduction.type.tree</field>
+        <field name="model">hr.employee.deduction.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <!-- <field name="input_type_id"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_deduction_type_form" model="ir.ui.view">
+        <field name="name">hr.employee.deduction.type.form</field>
+        <field name="model">hr.employee.deduction.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <!-- <field name="input_type_id"/> -->
+                        <field name="debit_account_id"/>
+                        <field name="credit_account_id"/>
+                        <field name="journal_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_deduction_type" model="ir.actions.act_window">
+        <field name="name">Deduction Types</field>
+        <field name="res_model">hr.employee.deduction.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+  <record id="action_hr_employee_deduction" model="ir.actions.act_window">
+    <field name="name">Employee Deductions</field>
+    <field name="res_model">hr.employee.deduction</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Create a new employee deduction</p>
+    </field>
+  </record>
+
+  <menuitem id="menu_hr_employee_deduction_root" 
+            name="Employee Installments"
+            parent="hr.menu_hr_root"
+            sequence="8"/>
+
+  <menuitem id="menu_hr_deduction_type" 
+          name="Deduction Types" 
+          parent="menu_hr_employee_deduction_root" 
+          action="action_deduction_type"
+          sequence="20"/>
+
+  <menuitem id="menu_hr_employee_deduction"
+            name="Request for Installments"
+            parent="menu_hr_employee_deduction_root"
+            action="action_hr_employee_deduction"
+            sequence="10"/>
+</odoo>

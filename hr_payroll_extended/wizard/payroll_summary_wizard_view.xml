@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payroll_summary_wizard_view" model="ir.ui.view">
+            <field name="name">payroll.summary.wizard.form</field>
+            <field name="model">payroll.summary.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="batch_id"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Print" name="action_report_print" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="payroll_summary_wizard_action_view" model="ir.actions.act_window">
+            <field name="name">Payroll Summary Wizard</field>
+            <field name="res_model">payroll.summary.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="payroll_summary_wizard_view"/>
+        </record>
+
+         <menuitem id="payroll_summary_wizard_menu" 
+            name="Payroll Summary"  
+            parent="hr_payroll.menu_hr_payroll_report"
+            action="payroll_summary_wizard_action_view"/>
+    </data>
+</odoo>

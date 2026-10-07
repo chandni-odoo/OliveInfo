@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_hr_document_line_tree" model="ir.ui.view">
+        <field name="name">hr.document.line.tree</field>
+        <field name="model">hr.document.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="emp_branch_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_manager"/>
+                <field name="employee_status"/>
+                <field name="document_line_id"/>
+                <field name="document_number"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="doc_issue_place"/>
+                <field name="status"/>
+                <field name="days_to_expire"/>
+                <!-- <field name="receipt_no"/>
+                <field name="receipt_date"/> -->
+                <field name="remarks"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hr_document_line_form" model="ir.ui.view">
+        <field name="name">hr.document.line.form</field>
+        <field name="model">hr.document.line</field>
+        <field name="arch" type="xml">
+            <form string="Document Line">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="employee_job_title"/>
+                        <field name="employee_manager"/>
+                        <field name="employee_status"/>
+                        <field name="document_line_id"/>
+                    </group>
+                    <group>
+                        <field name="document_number"/>
+                        <field name="valid_from"/>
+                        <field name="valid_to"/>
+                    </group>
+                    <group>
+                        <field name="doc_issue_place"/>
+                        <field name="status"/>
+                    </group>
+                    <group>
+                        <field name="receipt_no"/>
+                        <field name="receipt_date"/>
+                        <field name="remarks"/>
+                    </group>
+                    <group>
+                        <field name="attachment" filename="document_number"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_document_line_search" model="ir.ui.view">
+        <field name="name">hr.document.line.search</field>
+        <field name="model">hr.document.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="emp_branch_id"/>
+                <field name="document_line_id"/>
+                <field name="document_number"/>
+                <field name="status"/>
+
+                <!-- Filters -->
+                <field name="days_to_expire" string="Days to Expire"/>
+                
+                <filter name="expired" string="Expired" domain="[('days_to_expire','&lt;',0)]"/>
+                <filter name="expiring_soon" string="Expiring Soon (≤30 days)" domain="[('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]"/>
+                <filter name="valid" string="Valid (30+ days)" domain="[('days_to_expire','&gt;',30)]"/>
+                <filter name="history" string="History" domain="[('status','=','history')]"/>
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="group_by_days" string="Days to Expire" context="{'group_by':'days_to_expire'}"/>
+                    <filter name="employee" string="Employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                    <filter name="branch" string="Branch" domain="[]" context="{'group_by':'emp_branch_id'}"/>
+                    <filter name="document" string="Document Type" domain="[]" context="{'group_by':'document_line_id'}"/>
+                    <filter name="status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_document_line" model="ir.actions.act_window">
+        <field name="name">Document Lines</field>
+        <field name="res_model">hr.document.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_document_line_tree"/>
+        <field name="search_view_id" ref="view_hr_document_line_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new document
+            </p>
+            <p>
+                Also you will find here all the related documents and download it by clicking on any individual
+                document.
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Menuitem -->
+
+    <menuitem id="menu_hr_document_line"
+              name="HR Document Lines"
+              parent="hr_menu_extended.menu_hr_employee_reports"
+              action="action_hr_document_line"
+              sequence="1"/>
+</odoo>

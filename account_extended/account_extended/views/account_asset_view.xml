@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_asset_form_inherit" model="ir.ui.view">
+            <field name="name">view.account.asset.form.inherit</field>
+            <field name="model">account.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_open_fleet_vehicle" type="object" class="oe_stat_button" icon="fa-car" attrs="{'invisible': [('vehicle_count', '=', 0)]}">
+                        <field name="vehicle_count" widget="statinfo" string="Vehicles"/>
+                    </button>
+                    <button name="action_open_equipment" type="object" class="oe_stat_button" icon="fa-wrench" attrs="{'invisible': [('equipment_count', '=', 0)]}">
+                        <field name="equipment_count" widget="statinfo" string="Equipments"/>
+                    </button>
+                </xpath>
+                <field name="original_value" position="before">
+                    <field name="asset_sequence"/>
+                </field>
+                <field name="analytic_tag_ids" position="after">
+                    <field name="location_id"/>
+                    <field name="sub_location_id" domain="[('location_id', '=', location_id)]"/>
+                    <field name="classification_id"/>
+                </field>
+                <field name="book_value" position="after">
+                    <field name="has_equipment" invisible="1"/>
+                    <field name="has_vehicle" invisible="1"/>
+                </field>
+                <button name="validate" position="before">
+                    <button name="create_equipment" string="Create Equipment" type="object" class="btn-primary"  attrs="{'invisible':[('has_equipment','=', True)]}"/>
+                    <button name="create_fleet_vehicle" string="Create Vehicle" type="object" class="btn-primary"  attrs="{'invisible':[('has_vehicle','=', True)]}"/>
+                </button>
+                <field name="original_value" position="after">
+                    <field name="asset_qty"/>
+                </field>
+                <field name="first_depreciation_date" position="after">
+                    <field name="asset_remarks"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_leave_sattelment" model="ir.actions.report">
+            <field name="name">Leave Settlement Report</field>
+            <field name="model">leave.settlement</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">peoplesol_leave_settlement.report_leave_sattelment</field>
+            <field name="report_file">peoplesol_leave_settlement.report_leave_sattelment</field>
+            <field name="print_report_name">'Leave Settlement - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_leave_settlement"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

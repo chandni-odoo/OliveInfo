@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="customer_region_tree_view" model="ir.ui.view">
+        <field name="name">customer.region.tree.view</field>
+        <field name="model">customer.region</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="customer_sector_tree_view" model="ir.ui.view">
+        <field name="name">customer.sector.tree.view</field>
+        <field name="model">customer.sector</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="main_industry_tree_view" model="ir.ui.view">
+        <field name="name">main.industry.tree.view</field>
+        <field name="model">main.industry</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_location_tree_view" model="ir.ui.view">
+        <field name="name">hr.location.tree.view</field>
+        <field name="model">hr.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="grade_type_tree_view" model="ir.ui.view">
+        <field name="name">grade.type.tree.view</field>
+        <field name="model">grade.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+      </field>
+    </record>
+    <record id="customer_segment_tree_view" model="ir.ui.view">
+        <field name="name">customer.segment.tree.view</field>
+        <field name="model">customer.segment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="frequency_days_tree_view" model="ir.ui.view">
+        <field name="name">frequency.days.tree.view</field>
+        <field name="model">frequency.days</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="days"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hold_reason_tree_view" model="ir.ui.view">
+        <field name="name">hold.reason.tree.view</field>
+        <field name="model">hold.reason</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+        <!-- Form View -->
+    <record id="customer_region_form_view" model="ir.ui.view">
+        <field name="name">customer.region.form.view</field>
+        <field name="model">customer.region</field>
+        <field name="arch" type="xml">
+            <form string="Region">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="customer_sector_form_view" model="ir.ui.view">
+        <field name="name">customer.sector.form.view</field>
+        <field name="model">customer.sector</field>
+        <field name="arch" type="xml">
+            <form string="Sector">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="main_industry_form_view" model="ir.ui.view">
+        <field name="name">main.industry.form.view</field>
+        <field name="model">main.industry</field>
+        <field name="arch" type="xml">
+            <form string="Industry">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hr_location_form_view" model="ir.ui.view">
+        <field name="name">hr.location.form.view</field>
+        <field name="model">hr.location</field>
+        <field name="arch" type="xml">
+            <form string="Location">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="grade_type_form_view" model="ir.ui.view">
+        <field name="name">grade.type.form.view</field>
+        <field name="model">grade.type</field>
+        <field name="arch" type="xml">
+            <form string="Grade">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="customer_segment_form_view" model="ir.ui.view">
+        <field name="name">customer.segment.form.view</field>
+        <field name="model">customer.segment</field>
+        <field name="arch" type="xml">
+            <form string="Customer Segment">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hold_reason_form_view" model="ir.ui.view">
+        <field name="name">hold.reason.form.view</field>
+        <field name="model">hold.reason</field>
+        <field name="arch" type="xml">
+            <form string="Hold Reason">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="frequency_days_form_view" model="ir.ui.view">
+        <field name="name">frequency.days.form.view</field>
+        <field name="model">frequency.days</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="days"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_of_grade_type" model="ir.actions.act_window">
+        <field name="name">Grade</field>
+        <field name="res_model">grade.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_hr_location" model="ir.actions.act_window">
+        <field name="name">Location</field>
+        <field name="res_model">hr.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_main_industry" model="ir.actions.act_window">
+        <field name="name"> Industry</field>
+        <field name="res_model">main.industry</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_customer_sector" model="ir.actions.act_window">
+        <field name="name">Sector</field>
+        <field name="res_model">customer.sector</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_customer_region" model="ir.actions.act_window">
+        <field name="name">Region</field>
+        <field name="res_model">customer.region</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_customer_segment" model="ir.actions.act_window">
+        <field name="name">Customer Segment</field>
+        <field name="res_model">customer.segment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_reason_hold" model="ir.actions.act_window">
+        <field name="name">Hold Reason</field>
+        <field name="res_model">hold.reason</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_frequency" model="ir.actions.act_window">
+        <field name="name">Frequency</field>
+        <field name="res_model">frequency.days</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem 
+        id="menu_customer_region" name="Region"
+        action="action_view_customer_region"
+        parent="sale.menu_sale_config"
+        sequence="10"
+        />
+    <menuitem 
+        id="menu_customer_sector"
+        name="Sector"
+        action="action_view_of_customer_sector"
+        parent="sale.menu_sale_config"
+        sequence="15"/>
+    <menuitem
+        id="menu_main_industry"
+        name="Industry"
+        action="action_view_of_main_industry"
+        parent="sale.menu_sale_config"
+        sequence="20"/>
+    <menuitem
+        id="menu_hr_location"
+        name="Lacation"
+        action="action_view_of_hr_location"
+        parent="sale.menu_sale_config"
+        sequence="25"/>
+    <menuitem
+        id="menu_grade_type"
+        name="Grade"
+        action="action_view_of_grade_type"
+        parent="sale.menu_sale_config"
+        sequence="30"/>
+    <menuitem
+        id="menu_customer_segment"
+        name="Customer Segment"
+        action="action_view_of_customer_segment"
+        parent="sale.menu_sale_config"
+        sequence="30"/>
+    <menuitem
+        id="menu_reason_of_hold"
+        name="Hold Reason"
+        action="action_view_of_reason_hold"
+        parent="sale.menu_sale_config"
+        sequence="35"/>
+    <menuitem 
+        id="menu_frequency" name="Frequency"
+        action="action_view_frequency"
+        parent="sale.menu_sale_config"
+        sequence="29"
+        />
+</odoo>

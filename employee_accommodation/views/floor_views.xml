@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accommodation_floor_tree" model="ir.ui.view">
+        <field name="name">accommodation.floor.tree</field>
+        <field name="model">accommodation.floor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="camp_id"/>
+                <field name="name"/>
+                <field name="number_of_rooms"/>
+                <field name="size"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_floor_form" model="ir.ui.view">
+        <field name="name">accommodation.floor.form</field>
+        <field name="model">accommodation.floor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="camp_id"/> 
+                            <field name="name"/>   
+                        </group>
+                        <group>
+                            <field name="number_of_rooms"/>
+                            <field name="size"/>
+                            <field name="facilities" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_floors" model="ir.actions.act_window">
+        <field name="name">Floors</field>
+        <field name="res_model">accommodation.floor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

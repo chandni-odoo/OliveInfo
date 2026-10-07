@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Tree view for Budget Import (Main View) -->
+        <record id="view_budget_import_tree" model="ir.ui.view">
+            <field name="name">budget.import.tree</field>
+            <field name="model">budget.import</field>
+            <field name="arch" type="xml">
+                <tree string="Budget Import" editable="top" decoration-muted="active == False" decoration-info="state == 'draft'" decoration-success="state == 'posted'">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="branch_id"/>
+                    <field name="responsible_id"/>
+                    <field name="year"/>
+                    <!-- <field name="budget_position_id"/> -->
+                    <field name="budget_position_id" domain="[('branch_id', '=', branch_id)]"/>
+                    <field name="budget_position_branch_id" string="Position Branch"/>
+                    <field name="analytic_account_id"/>
+                    <field name="jan"/>
+                    <field name="feb"/>
+                    <field name="mar"/>
+                    <field name="apr"/>
+                    <field name="may"/>
+                    <field name="jun"/>
+                    <field name="jul"/>
+                    <field name="aug"/>
+                    <field name="sep"/>
+                    <field name="oct"/>
+                    <field name="nov"/>
+                    <field name="dec"/>
+                    <field name="state"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view for Budget Import -->
+        <record id="view_budget_import_form" model="ir.ui.view">
+            <field name="name">budget.import.form</field>
+            <field name="model">budget.import</field>
+            <field name="arch" type="xml">
+                <form string="Budget Import">
+                    <header>
+                        <button name="post_action" string="Post" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="reset_to_draft" string="Reset to Draft" type="object" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                        <button name="action_archive" string="Archive" type="object" attrs="{'invisible': [('active', '=', False)]}"/>
+                        <button name="action_unarchive" string="Unarchive" type="object" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                            <field name="active" invisible="1"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Budget Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="branch_id" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="responsible_id" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="year" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Budget Lines">
+                                <field name="budget_line_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree string="Budget Lines" editable="bottom">
+                                        <!-- <field name="budget_position_id" required="1"/> -->
+                                        <field name="budget_position_id" required="1" domain="[('branch_id', '=', parent.branch_id)]"/>
+                                        <field name="budget_position_branch_id" string="Position Branch"/>
+                                        <field name="analytic_account_id" required="1"/>
+                                        <field name="jan" sum="Jan Total"/>
+                                        <field name="feb" sum="Feb Total"/>
+                                        <field name="mar" sum="Mar Total"/>
+                                        <field name="apr" sum="Apr Total"/>
+                                        <field name="may" sum="May Total"/>
+                                        <field name="jun" sum="Jun Total"/>
+                                        <field name="jul" sum="Jul Total"/>
+                                        <field name="aug" sum="Aug Total"/>
+                                        <field name="sep" sum="Sep Total"/>
+                                        <field name="oct" sum="Oct Total"/>
+                                        <field name="nov" sum="Nov Total"/>
+                                        <field name="dec" sum="Dec Total"/>
+                                        <field name="total" sum="Grand Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search view for Budget Import -->
+        <record id="view_budget_import_filter" model="ir.ui.view">
+            <field name="name">budget.import.filter</field>
+            <field name="model">budget.import</field>
+            <field name="arch" type="xml">
+                <search string="Search Budget Import">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="branch_id"/>
+                    <field name="responsible_id"/>
+                    <field name="year"/>
+                    <filter string="Active" name="filter_active" domain="[('active', '=', True)]"/>
+                    <filter string="Archived" name="filter_archived" domain="[('active', '=', False)]"/>
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Posted" name="filter_posted" domain="[('state', '=', 'posted')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_company" string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter name="group_by_branch" string="Branch" domain="[]" context="{'group_by':'branch_id'}"/>
+                        <filter name="group_by_responsible" string="Responsible" domain="[]" context="{'group_by':'responsible_id'}"/>
+                        <filter name="group_by_year" string="Year" domain="[]" context="{'group_by':'year'}"/>
+                        <filter name="group_by_state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Budget Import -->
+        <record id="action_budget_import" model="ir.actions.act_window">
+            <field name="name">Budget Import</field>
+            <field name="res_model">budget.import</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_budget_import_filter"/>
+            <field name="context">{'search_default_filter_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new budget import
+                </p>
+                <p>
+                    Use this form to import budgets with monthly distribution.
+                </p>
+            </field>
+        </record>
+
+        
+        <!-- Menu Item -->
+        <menuitem id="menu_account_budget_import" 
+                  name="Budget Import" 
+                  parent="account.menu_finance_entries_management" 
+                  action="action_budget_import"
+                  sequence="10"/>
+        
+        <record id="model_budget_import_action_post" model="ir.actions.server">
+            <field name="name">Post Budget</field>
+            <field name="model_id" ref="model_budget_import"/>
+            <field name="binding_model_id" ref="model_budget_import"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">
+        if records:
+            records.post_action()
+            </field>
+        </record>
+
+        <record id="model_budget_import_action_update_position" model="ir.actions.server">
+            <field name="name">Update Position  Branch</field>
+            <field name="model_id" ref="model_budget_import"/>
+            <field name="binding_model_id" ref="model_budget_import"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">
+        if records:
+            action = records.action_update_budget_position_by_branch()
+            </field>
+        </record>
+    </data>
+</odoo>

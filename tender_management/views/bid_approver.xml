@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tender_bid_approver_group_form" model="ir.ui.view">
+        <field name="name">tender.bid.approver.group.form</field>
+        <field name="model">tender.bid.approver.group</field>
+        <field name="arch" type="xml">
+            <form string="Tender Bid Approver Group">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <notebook>
+                        <page string="Approvers (in order)">
+                            <field name="approver_line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tender_bid_approver_group_tree" model="ir.ui.view">
+        <field name="name">tender.bid.approver.group.tree</field>
+        <field name="model">tender.bid.approver.group</field>
+        <field name="arch" type="xml">
+            <tree string="Tender Bid Approver Groups">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tender_bid_approver_group" model="ir.actions.act_window">
+        <field name="name">Bid Approver Group</field>
+        <field name="res_model">tender.bid.approver.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

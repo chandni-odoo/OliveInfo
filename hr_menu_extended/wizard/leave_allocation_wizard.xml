@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_leave_accrual_report_wizard_form" model="ir.ui.view">
+        <field name="name">leave.accrual.report.wizard.form</field>
+        <field name="model">leave.accrual.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Leave Accrual Report">
+                <sheet>
+                    <group>
+                        <field name="as_on_date"/>
+                        <field name="employee_id" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_excel_report" string="Generate Excel Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_leave_accrual_report_wizard" model="ir.actions.act_window">
+        <field name="name">Leave Accrual Report</field>
+        <field name="res_model">leave.accrual.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_leave_accrual_report_wizard_form"/>
+    </record>
+
+    <menuitem id="menu_hr_employee_reports"
+              name="Employee Reports"
+              parent="hr.menu_hr_root"
+              sequence="7"/>
+
+    <menuitem id="menu_hr_leave_accrual_excel"
+              name="Leave Accrual Excel Report"
+              parent="menu_hr_employee_reports"
+              action="action_leave_accrual_report_wizard"
+              sequence="6"/>
+</odoo>

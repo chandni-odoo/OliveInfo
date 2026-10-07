@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="purchase_approval_tree_view" model="ir.ui.view">
+        <field name="name">purchase.approval.tree.view</field>
+        <field name="model">purchase.approval</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="model"/>
+                <field name="purchase_type"/>
+                <field name="branch_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_approval_form_view" model="ir.ui.view">
+        <field name="name">purchase.approval.form.view</field>
+        <field name="model">purchase.approval</field>
+        <field name="arch" type="xml">
+            <form string="Region">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="model"/>
+                        </group>
+                        <group>
+                            <field name="purchase_type"/>
+                            <field name="branch_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval Lines">
+                            <field name="approval_line_ids" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="limit"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purchase_approval" model="ir.actions.act_window">
+        <field name="name">Purchase Approval</field>
+        <field name="res_model">purchase.approval</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem 
+        id="menu_purchase_approval"
+        name="Approval"
+        action="action_purchase_approval"
+        parent="base.menu_users"
+        sequence="12"
+        />
+</odoo>

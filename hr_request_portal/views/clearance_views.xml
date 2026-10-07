@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_clearance_request_form" model="ir.ui.view">
+        <field name="name">clearance.request.form</field>
+        <field name="model">clearance.request</field>
+        <field name="arch" type="xml">
+            <form string="Clearance Request">
+                <field name="is_finance_user" invisible="1"/>
+                <field name="is_it_user" invisible="1"/>
+                <field name="is_hr_user" invisible="1"/>
+                <header>
+                    <!-- Submit button to send to manager -->
+                    <button name="action_submit" string="Submit to Manager" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight"/>
+                    
+                    <!-- Manager approval button - only visible to those who can approve -->
+                    <button name="action_manager_approve" string="Manager Approval" type="object" 
+                            attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('is_current_user_manager', '=', False)]}" 
+                            class="oe_highlight"/>
+                    
+                    <!-- Manager reject button -->
+                    <button name="action_reject" string="Reject" type="object" 
+                            attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('is_current_user_manager', '=', False)]}" 
+                            class="btn-danger"/>
+                    
+                    <!-- Group approver buttons - only visible when in manager_approve state -->
+                    <!-- <button name="action_approve" string="Approve" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'manager_approve')]}" 
+                            class="oe_highlight" groups="hr_request_portal.group_clearance_approver"/>
+                    
+                    <button name="action_reject" string="Reject" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'manager_approve')]}" 
+                            class="btn-danger" groups="hr_request_portal.group_clearance_approver"/> -->
+                    
+                    <button name="action_department_approve" string="Approve" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'manager_approve')]}"
+                        groups="hr_request_portal.group_finance_admin,hr_request_portal.group_it_admin,hr_request_portal.group_hr_admin"/>
+                    <button name="action_department_reject" string="Reject" type="object" class="btn-secondary"
+                        attrs="{'invisible': [('state', '!=', 'manager_approve')]}"
+                        groups="hr_request_portal.group_finance_admin,hr_request_portal.group_it_admin,hr_request_portal.group_hr_admin"/>
+                    
+                    <!-- Final submit button -->
+                    <button name="action_final_submit" string="Final Submit" type="object" 
+                            attrs="{'invisible': [('state', '!=', 'approve')]}" class="oe_highlight"/>
+                    
+                    <!-- Reset to draft button -->
+                    <button name="action_draft" string="Reset to Draft" type="object" 
+                            attrs="{'invisible': [('state', 'in', ['draft', 'submit'])]}"/>
+                    
+                    <!-- Updated status bar to include manager_approve state -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,manager_approve,approve,submit"/>
+                </header>
+                <sheet>
+                    <field name="is_current_user_manager" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <!-- <field name="department_id" readonly="1"/> -->
+                            <field name="branch_id"/>
+                            <field name="job_id"/>
+                            <field name="manager_id" readonly="1"/>
+                            <field name="request_date"/>
+                            <field name="relieving_date"/>
+                        </group>
+                        <group>
+                            <field name="document_exists" invisible="1"/>
+                            <field name="final_document" filename="final_document_filename" 
+                                   attrs="{'invisible': [('document_exists', '=', False)]}"/>
+                            <field name="final_document_filename" invisible="1"/>
+                            <field name="attachments" filename="attachments_filename"/>
+                            <field name="attachments_filename" invisible="1"/>
+                            <field name="description"/>
+                            <field name="requirements"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Department Concerned">
+                            <group col="3">
+                                <group>
+                                    <field name="vehicle_keys" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="uniforms_shoes" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="drawer_keys" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="gate_pass" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="petrol_card" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="traffic_violation" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="warehouse_keys" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="tools_hardware" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="business_cards" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                    <field name="job_files_handover" 
+                                           attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                           force_save="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="remarks_department" 
+                                       placeholder="Enter remarks for Department Concerned..."
+                                       attrs="{'readonly': ['|', ('state', 'not in', ['draft', 'pending']), ('is_current_user_manager', '=', False)]}"
+                                       force_save="1"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Page 2: Finance & Administration -->
+                        <page string="Finance &amp; Administration">
+                            <group col="3">
+                                <group>
+                                    <field name="petty_cash" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="petty_cash" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="bank_loan" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="bank_loan" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="house_furnishing" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="house_furnishing" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="wages_cash" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="wages_cash" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="company_loan" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="company_loan" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="phone_bills" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="phone_bills" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="salary_advance" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="salary_advance" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="office_keys" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="office_keys" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="accommodation_keys" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                    <field name="accommodation_keys" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_finance_admin"
+                                           force_save="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="remarks_finance" 
+                                       attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                       groups="hr_request_portal.group_finance_admin"
+                                       force_save="1"/>
+                                <field name="remarks_finance" 
+                                       readonly="1" 
+                                       groups="!hr_request_portal.group_finance_admin"
+                                       force_save="1"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Page 3: Information Technology -->
+                        <page string="Information Technology">
+                            <group col="3">
+                                <group>
+                                    <field name="computer_accessories" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="computer_accessories" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="biometric_access_block" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="biometric_access_block" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="user_name_block" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="user_name_block" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="books_manuals_it" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="books_manuals_it" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                   <field name="mobile_sim_card" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="mobile_sim_card" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="password_block" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                    <field name="password_block" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_it_admin"
+                                           force_save="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="remarks_it" 
+                                       attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                       groups="hr_request_portal.group_it_admin"
+                                       force_save="1"/>
+                                <field name="remarks_it" 
+                                       readonly="1" 
+                                       groups="!hr_request_portal.group_it_admin"
+                                       force_save="1"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Page 4: Human Resources -->
+                        <page string="Human Resources">
+                            <group col="3">
+                                <group>
+                                    <field name="labour_card" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    <field name="labour_card" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    
+                                    <field name="library_books_hr" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    <field name="library_books_hr" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="insurance_card" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    <field name="insurance_card" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                   <field name="bank_notification" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    <field name="bank_notification" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="driving_license" 
+                                           attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                           groups="hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                    <field name="driving_license" 
+                                           readonly="1" 
+                                           groups="!hr_request_portal.group_hr_admin"
+                                           force_save="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="remarks_hr" 
+                                       attrs="{'readonly': [('state', 'not in', ['draft', 'pending', 'manager_approve'])]}"
+                                       groups="hr_request_portal.group_hr_admin"
+                                       force_save="1"/>
+                                <field name="remarks_hr" 
+                                       readonly="1" 
+                                       groups="!hr_request_portal.group_hr_admin"
+                                       force_save="1"/>
+                            </group>
+                        </page>
+                        <page string="Approval History" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="approval_history_ids" readonly="1">
+                                <tree>
+                                    <field name="user_id"/>
+                                    <field name="status"/>
+                                    <field name="date_done"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_clearance_request_tree" model="ir.ui.view">
+        <field name="name">clearance.request.tree</field>
+        <field name="model">clearance.request</field>
+        <field name="arch" type="xml">
+            <tree string="Clearance Requests" decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'confirm'" decoration-success="state == 'submit'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <!-- <field name="department_id"/> -->
+                <field name="branch_id"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_clearance_request" model="ir.actions.act_window">
+        <field name="name">Clearance Requests</field>
+        <field name="res_model">clearance.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new clearance request</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_clearence_request" name="Final Clearance"
+        action="action_clearance_request" parent="employee_request" sequence="4"/> 
+
+</odoo> 

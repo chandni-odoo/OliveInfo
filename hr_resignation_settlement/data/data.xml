@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data  noupdate="1">
+        <record id="sequence_hr_settlement" model="ir.sequence">
+            <field name="name">Hr Other Settlements</field>
+            <field name="code">other.settlements</field>    
+            <field name="padding">5</field>
+            <field name="prefix">OSN/</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_lead_form_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='contact_name']" position="before">
+                <field name="select_sub_contact" domain="[('id', 'child_of', partner_id)]"/>
+            </xpath>
+
+            <xpath expr="//group[@name='lead_partner']//field[@name='partner_id']" position= "after">
+                <field name="customer_id"/>
+                <field name="credit_limit"/>
+                <field name="ava_credit_bal"/>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']//field[@name='partner_id']" position= "after">
+                <field name="customer_id" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="credit_limit" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="ava_credit_bal" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="attributes">
+                <attribute name="string">Lead Description</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_priority']/field[@name='tag_ids']" position="after">
+                <field name="branch_for" invisible="1"/>
+                <field name="create_uid"/>
+            </xpath>
+            <field name="team_id" position="after">
+                <field name="food" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="accommodation" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="transport" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="fat" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+            </field>
+            <xpath expr="//page[@name='lead']" position="after">
+                <page string="Services/Products" >
+                    <!-- attrs="{'invisible': [('branch_for', '=',  'mro')]}" -->
+                    <field name="service_ids">
+                        <tree editable="bottom">
+                            <field name="product_id" domain="[('branch_id', '=', parent.branch_id)]"/>
+                            <field name="waste_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                            <field name="equipment_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                            <field name="vehicle_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                            <!-- <field name="frequency" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                            <field name="frequency_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom" readonly="0"/>
+                            <field name="location_id"  attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" />
+                            <field name="start_date" attrs="{'column_invisible': [('parent.branch_for', '=',  'es')]}"/>
+                            <field name="end_date" attrs="{'column_invisible': [('parent.branch_for', '=',  'es')]}"/>
+                            <!-- <field name="skills" attrs="{'column_invisible': [('parent.branch_for', '=',  'es')]}" widget="many2many_tags"/> -->
+                            <field name ="std_hrs" attrs="{'column_invisible': [('parent.branch_for', '=',  'es')]}"/>
+                            <!-- <field name ="ot_hrs" attrs="{'column_invisible': [('parent.branch_for', '=',  'es')]}"/> -->
+                            <field name="product_uom_category_id" invisible="1"/>
+                            <!-- <field name="fleet_type" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                            <field name="trip_no" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" optional="hide"/>
+                            <field name="weekday" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" optional="hide"/>
+                            <field name="time" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" optional="hide"/>
+                            <!-- <field name="location_id"  domain="[('type', '=', 'other')]" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+                <attribute name='string'>New Costing</attribute>
+                <attribute name="context">{'default_is_costing': True, 'default_state':'costing'}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="before">
+                <button name="create_site_visit" type="object" string="Site Visit" class="oe_highlight" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_schedule_meeting']" position="before">
+                <button type="object" name="site_visits" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('site_count', '=', 0)]}">
+                <field name="site_count" widget="statinfo" string="Visit"/>
+                </button>
+            </xpath>
+           <!--  <xpath expr="//field[@name='partner_id']"  position="attributes">
+                <attribute name ="domain">[('is_customer', '=', True)]</attribute>
+            </xpath> -->
+        </field>
+    </record>
+</odoo>

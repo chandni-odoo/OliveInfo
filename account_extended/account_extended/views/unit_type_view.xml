@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="unit_type_tree_view" model="ir.ui.view">
+        <field name="name">unit.type.tree.view</field>
+        <field name="model">unit.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="unit_type_form_view" model="ir.ui.view">
+        <field name="name">unit.type.form.view</field>
+        <field name="model">unit.type</field>
+        <field name="arch" type="xml">
+            <form string="Unit Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="is_invoice"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_res_company_order_form_inherit" model="ir.ui.view">
+            <field name="name">res.company.view</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phone']" position="before">
+                    <field name="bank_id"/>
+                </xpath>
+            </field>
+    </record>
+
+    <record id="action_view_of_unit_type" model="ir.actions.act_window">
+        <field name="name">Unit Type</field>
+        <field name="res_model">unit.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_unit_type"
+        action="action_view_of_unit_type"
+        parent="account.account_invoicing_menu"
+        name="Unit Type"
+        sequence="98"/>
+</odoo>

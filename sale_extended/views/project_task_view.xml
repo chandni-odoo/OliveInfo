@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_task_form2_inherit_extend_custom" model="ir.ui.view">
+        <field name="name">project.task.custom.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_trade_task"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o" 
+                        attrs="{'invisible': [('is_trade', '=', False)]}">
+                    <field name="trade_task_count" widget="statinfo" string="Trade Test"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_assign_to_me']" position="after">
+                <field name="trade_test" invisible="1"/>
+                <field name="is_trade" invisible="1"/>
+                <button name="action_trade_test" type="object"
+                        string="Trade Test" class="oe_highlight"
+                        attrs="{'invisible': [('is_trade', '=', False)]}"/>
+            </xpath>
+
+            <field name="recurring_task" position="after">
+                <field name="frequency_id" attrs="{'invisible': [('branch_for', '!=', 'es')]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

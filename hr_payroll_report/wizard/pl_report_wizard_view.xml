@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pl_report_wizard_new" model="ir.ui.view">
+        <field name="name">pl.report.wizard.form</field>
+        <field name="model">pl.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Comparative P&amp;L Report">
+                <group>
+                    <field name="date"/>
+                    <field name="company_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_print_report"
+                            type="object"
+                            string="Print Excel"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pl_report_wizard_new" model="ir.actions.act_window">
+        <field name="name">Comparative P&amp;L</field>
+        <field name="res_model">pl.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_pl_report_wizard_new"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_pl_report_new"
+              name="Comparative P&amp;L"
+              parent="menu_mis_report_main"
+              action="action_pl_report_wizard_new"
+              sequence="15"
+              groups="budget_customizations.group_account_admin"/>
+</odoo>

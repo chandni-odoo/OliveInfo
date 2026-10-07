@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rfq_request_approved_group" model="res.groups">
+        <field name="name">RFQ Request Approver</field>
+    </record>
+</odoo>

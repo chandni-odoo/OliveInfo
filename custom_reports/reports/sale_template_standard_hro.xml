@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_sale_quotation_test">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="custom_reports.external_layout_template_so_hro">
+                        <t t-if="o.state">
+                            <center>
+                                <h4><b>Proposal for Contract Staffing</b></h4>
+                            </center>
+                            <br />
+                            <table class="table table-bordered" style="border: 2px solid black !important;">
+                                <tr style="border: 2px solid black !important;">
+                                    <td style="border: 2px solid black !important;"><strong>TO</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.contact_name" /><br /></td>
+                                    <td style="border: 2px solid black !important;"><strong>From</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.user_id.name" /><br /></td>
+                                </tr>
+                                <tr style="border: 2px solid black !important;">
+                                    <td style="border: 2px solid black !important;"><strong>COMPANY</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.partner_id.name" /></td>
+                                    <td style="border: 2px solid black !important;"><strong>DATE</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.date_order" t-options='{"widget": "date","format": "dd/MM/yyyy"}' /></td>
+                                </tr>
+                                <tr style="border: 2px solid black !important;">
+                                    <td style="border: 2px solid black !important;"><strong>PHONE</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.mobile" /></td>
+                                    <td style="border: 2px solid black !important;"><strong>EMAIL</strong></td>
+                                    <td style="border: 2px solid black !important;"><span class="topage" /><span t-esc="o.partner_id.email" /></td>
+                                </tr>
+                                <tr style="border: 2px solid black !important;">
+                                    <td style="border: 2px solid black !important;"><strong>SUBJECT</strong></td>
+                                    <td style="border: 2px solid black !important;"><span t-esc="o.subject" /></td>
+                                    <td style="border: 2px solid black !important;"><strong>REF(Quote No)</strong></td>
+                                    <td><span t-esc="o.name" /></td>
+                                </tr>
+                            </table>
+                            <p>Dear <b> <span t-esc="o.contact_name" /> </b></p>
+                            <p> We thank you for your interest in working with DULSCO.</p>
+                            <p> Reference to your enquiry, we are pleased to submit our most competitive proposal for your kind perusal. </p>
+                            <t t-if="o.sale_type != 'cost_plus'">
+                                <p><b><u>Scope of Work :</u></b></p>
+                                <p><span t-esc="o.scope_of_work" /></p>
+                                <br />
+                                <p><b>Commercial Offer:</b></p>
+                                <p> Please find below our proposal for
+                                    <t t-if="o.sale_type == 'bundle'">
+                                        resource
+                                    </t>
+                                    <t t-else="">
+                                        manpower
+                                    </t>
+                                    outsourcing at the following rates:
+                                </p>
+                            </t>
+                            <t t-if="o.sale_type == 'cost_plus'">
+                                <p> Please find below our proposal for outsourcing of following resources for a minimum period of <b><span t-esc="o.min_contract" /> </b> at the following rate:</p>
+                            </t>
+                            <t t-if="o.sale_type == 'bundle'">
+                                <table class="table table-bordered" style="border: 2px solid black !important;">
+                                    <thead style="font-size:13px;border: 2px solid black !important;" class="thead-light">
+                                        <tr style="border: 2px solid black !important;">
+                                            <th style="border: 2px solid black !important;"><strong>S.No.</strong></th>
+                                            <th style="border: 2px solid black !important;"><strong>Category</strong></th>
+                                            <th style="border: 2px solid black !important;"><strong>Minimum Personnel to hire</strong></th>
+                                            <th style="border: 2px solid black !important;"><strong>Minimum Contract Period</strong></th>
+                                            <th style="border: 2px solid black !important;"><strong>Monthly Billing per person (QAR)</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size:13px;border: 2px solid black !important;">
+                                        <t t-set="i" t-value="1" />
+                                        <tr t-foreach="o.order_line" t-as="line" style="border: 2px solid black !important;">
+                                            <td style="border: 2px solid black !important;">
+                                                <span t-esc="i" />
+                                                <t t-set="i" t-value="i+1" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.product_id.name" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.product_uom_qty" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="o.min_contract" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.price_unit" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p><u>The Monthly fee includes the following components of the costs:</u></p>
+                                <ul>1. Salary </ul>
+                                <ul>2. Cost of work Visa / Qatar ID </ul>
+                                <ul>3. Employment benefits </ul>
+                                <ul>4. Insurance </ul>
+                                <ul>5. Service charges </ul>
+                            </t>
+                            <t t-if="o.sale_type == 'standard'">
+                                <table class="table table-bordered" style="border: 2px solid black !important;">
+                                    <thead class="table table-bordered" style="border: 2px solid black !important;">
+                                        <tr>
+                                            <th style="font-size:13px;border: 2px solid black !important;"><strong>Category</strong></th>
+                                            <th style="font-size:13px;border: 2px solid black !important;"><strong>Minimum Personnel to hire</strong></th>
+                                            <th style="font-size:13px;border: 2px solid black !important;"><strong>RATE</strong></th>
+                                            <th style="font-size:13px;border: 2px solid black !important;"><strong>Hourly overtime</strong></th>
+                                            <th style="font-size:13px;border: 2px solid black !important;"><strong>Hourly special overtime (QAR)</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table table-bordered" style="border: 2px solid black !important;">
+                                        <t t-set="price_subtotal" t-value="o.order_line.mapped('price_subtotal')" />
+                                        <tr t-foreach="o.order_line" t-as="line">
+                                            <td style="font-size:13px;border: 2px solid black !important;">
+                                                <span t-esc="line.name" />
+                                            </td>
+                                            <td style="font-size:13px;border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.product_uom_qty" />
+                                            </td>
+                                            <td style="font-size:13px;border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.price_unit" />
+                                            </td>
+                                            <td style="font-size:13px;border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.overtime" />
+                                            </td>
+                                            <td style="font-size:13px;border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.sp_overtime" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="o.sale_type == 'cost_plus'">
+                                <table class="table table-bordered" style="border: 2px solid black !important;">
+                                    <thead style="font-size:13px;border: 2px solid black !important;" class="thead-light">
+                                        <tr style="border: 2px solid black !important;">
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>SL No.</strong></th>
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Position</strong></th>
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Salary Per Person Per Month (QAR)</strong></th>
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Service Fee Per Person Per Month (QAR)</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size:13px;border: 2px solid black !important;">
+                                        <t t-set="price_subtotal" t-value="o.order_line.mapped('price_subtotal')" />
+                                        <t t-set="i" t-value="1" />
+                                        <tr t-foreach="o.order_line" t-as="line" style="border: 2px solid black !important;">
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="i" />
+                                                <t t-set="i" t-value="i+1" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.product_id.name" />
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <p>
+                                                    <t t-if="line.price_unit in [0,1]">
+                                                        <span>As per Client</span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-esc="line.price_unit" />
+                                                    </t>
+                                                </p>
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <span t-esc="line.sale_amount" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p><b><u>Other Charges:</u></b></p>
+                                <table class="table table-bordered" style="border: 2px solid black !important;">
+                                    <thead style="font-size:13px;border: 2px solid black !important;" class="thead-light">
+                                        <tr>
+                                            <th colspan="2" style="border: 2px solid black !important;" class="text-center"><strong>SI. No.</strong></th>
+                                            <th colspan="5" style="border: 2px solid black !important;" class="text-center"><strong>Components</strong></th>
+                                            <th colspan="5" style="border: 2px solid black !important;" class="text-center"><strong>Amount</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size:13px;border: 2px solid black !important;">
+                                        <t t-set="typed_ids" t-value="o.addtionl_charge_sale_order_ids.mapped('based_cost')" />
+                                        <tr t-foreach="list(set(typed_ids))" t-as="type" style="border: 2px solid black !important;">
+                                            <t t-set="i" t-value="1" />
+                                            <td colspan="12" style="border: 2px solid black !important;background-color:darkgray;">
+                                                <center><b><span t-esc="dict(o.env['so.additional.charges'].search([('id', '=', o.addtionl_charge_sale_order_ids.filtered(lambda x: x.based_cost == type).ids)], limit = 1)._fields['based_cost'].selection).get(o.env['so.additional.charges'].search([('id', '=', o.addtionl_charge_sale_order_ids.filtered(lambda x: x.based_cost == type).ids)], limit = 1).based_cost)" /></b>
+                                                </center>
+                                            </td>
+                                        <tr t-foreach="o.addtionl_charge_sale_order_ids.filtered(lambda x: x.based_cost == type)" t-as="line" style="border: 2px solid black !important;">
+                                            <td colspan="2" style="border: 2px solid black !important;">
+                                                <span t-esc="i" />
+                                                <t t-set="i" t-value="i+1" />
+                                            </td>
+                                            <td colspan="5" style="border: 2px solid black !important;" class="text-left">
+                                                <p>
+                                                    <span t-esc="line.product_id.name" />
+                                                </p>
+                                            </td>
+                                            <td colspan="5" style="border: 2px solid black !important;" class="text-left">
+                                                <p>
+                                                    <t t-if="line.price_unit > 0">
+                                                        <span t-esc="line.price_unit" />
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-esc="line.remarks" />
+                                                    </t>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p><b><u>Note: -</u></b></p>
+                                <p>If the candidate is sourced locally, then transfer of sponsorship and QID renewal charges will be invoiced on actuals to <b> <span t-esc="o.partner_id.name" /> </b> .</p>
+                            </t>
+                            <t t-if="o.sale_type == 'standard'">
+                                <p><b><u>Covenants :</u></b></p>
+                                <p><b>1) <u>Working Hours </u></b></p>
+                                <h6>
+                                    <p> A minimum of <span t-esc="o.order_line.mapped('std_hrs')[0]" /> hours per day (excluding of one hour lunch break)/ <span t-esc="7 - o.week_of_no" />days a week</p>
+                                </h6>
+                                <p><b>2) <u>Hourly Special Overtime </u></b></p>
+                                <h6> Hourly Special Overtime is chargeable for a minimum <span t-esc="o.order_line.mapped('std_hrs')[0]" /> hours per day </h6>
+                                <p><b>3) <u>Minimum Contract Period </u></b></p>
+                                <h6> Minimum Contract period is for <span t-esc="o.min_contract" /> from the first day of deployment. </h6>
+                                <p><b>4) <u>Payment Terms And Conditions </u></b></p>
+                                <h6>
+                                    <p>
+                                        <span t-esc="o.note" />
+                                    </p>
+                                </h6>
+                                <h6>
+                                    <p>5) The following needs to be arranged by</p>
+                                </h6>
+                                <table class="table table-bordered" style="border: 2px solid black !important;">
+                                    <thead style="font-size:13px;border: 2px solid black !important;" class="thead-light">
+                                        <tr style="border: 2px solid black !important;">
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Accommodation</strong></th>
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Food</strong></th>
+                                            <th style="border: 2px solid black !important;" class="text-center"><strong>Transportation</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size:13px;border: 2px solid black !important;">
+                                        <tr style="border: 2px solid black !important;">
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <t t-if="o.accommodation">
+                                                    <span t-esc="o.partner_id.name" />
+                                                </t>
+                                                <t t-else="">
+                                                    Dulsco
+                                                </t>
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <t t-if="o.food">
+                                                    <span t-esc="o.partner_id.name" />
+                                                </t>
+                                                <t t-else="">
+                                                    Dulsco
+                                                </t>
+                                            </td>
+                                            <td style="border: 2px solid black !important;" class="text-center">
+                                                <t t-if="o.transport">
+                                                    <span t-esc="o.partner_id.name" />
+                                                </t>
+                                                <t t-else="">
+                                                    Dulsco
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <h6>
+                                    <p>6) PPEs limited to Coverall, Helmet, Safety Shoes, Goggles and Reflective Vest shall be under the scope of DULSCO. Any other PPE’s and tools required to perform the work shall be provided by <b> <span t-esc="o.partner_id.name" /></b> without any additional cost on DULSCO. </p>
+                                </h6>
+                                <p><b>7) <u>Attendance Records </u></b></p>
+                                <h6>
+                                    <p>Attendance records of all employees need to be maintained by <b><span t-esc="o.partner_id.name" /></b> and shall be handed over to DULSCO on or before 3rd day of subsequent month. </p>
+                                </h6>
+                                <p><b>8) <u>Ramadan Timings and Overtime </u></b></p>
+                                <h6>
+                                    <p> During the Holy Month of Ramadan, normal working hours will be reduced to six (6) hours. Overtime rates will be applicable from the 7th hour onwards. </p>
+                                </h6>
+                                <h6>
+                                    <p>9) Any special gate passes required for the personnel to enter the assigned worksite and certification of any nature will be the responsibility of <b><span t-esc="o.partner_id.name" /></b> without any additional cost on DULSCO. </p>
+                                </h6>
+                                <p><b><span t-esc="o.partner_id.name" /></b> to obtain gate passes within <b><span t-esc="o.get_pass" /> </b> days after submission of required documents by DULSCO. After <b> <span t-esc="o.get_pass" /> </b> days, minimum eight Standard Working Hours per day shall be charged during the idle days due to delay in obtaining gate passes. (if applicable)</p>
+                                <h6>
+                                    <p>10) All vehicles/equipment to have a valid insurance coverage. In case of any accidental damage due to the negligence of the employee, the same must immediately be notified to DULSCO. <b> <span t-esc="o.partner_id.name" /></b> must obtain a police report for the accident. DULSCO would be liable only to pay the excess insurance amount and not the full damage cost. Any claims related to excess insurance amount must be informed to DULSCO in writing along with supporting proof of relevant documents within seven (07) days from date of accident/incident. DULSCO will not be responsible to reimburse to client if submitted later than seven (07) days or without proof. This clause is applicable only for the deployment of Drivers and Operators. </p>
+                                </h6>
+                                <h6>
+                                    <p>11) In case of any work-related injury, immediate first aid and medical assistance has to be provided by <b> <span t-esc="o.partner_id.name" /></b> and DULSCO should be informed immediately.</p>
+                                </h6>
+                                <h6>
+                                    <p>12) Service Agreement must be signed between <b> <span t-esc="o.partner_id.name" /></b> and DULSCO before any personnel can be deployed for service.</p>
+                                </h6>
+                                <h6>
+                                    <p>13) If any government or statutory levy, cess, duties, rates, or taxes, including VAT imposed in respect of supply of the Services during the Term shall be fully to <b> <span t-esc="o.partner_id.name" /> </b>account and will be charged to <b><span t-esc="o.partner_id.name" /></b> forthwith.</p>
+                                </h6>
+                                <h6>
+                                    <p>14) The above quoted price, if accepted, is applicable and valid for the period of <b> <span t-esc="o.min_contract" /></b>. The prices are subjected to renewal thereafter.</p>
+                                </h6>
+                                <h6>
+                                    <p>15) A minimum written notice of <b><span t-esc="o.off_hire_notice_period" /></b> is required to off hire the personnel deployed failing which DULSCO will charge for the notice period days.</p>
+                                </h6>
+                                <h6>
+                                    <p>16) For termination of this contract, a minimum notice period of <b><span t-esc="o.notice_period" /></b> has to be provided to DULSCO and all this needs to be communicated in writing to DULSCO by <b><span t-esc="o.partner_id.name" /></b>.</p>
+                                </h6>
+                                <h6>
+                                    <p>17) This agreement is effective from the date it is signed and shall continue for a period of <b><span t-esc="o.min_contract" /></b> and shall stand renewed automatically thereafter unless and until it is terminated by either party with prior written notice of not less than 30 days.</p>
+                                </h6>
+                                <h6>
+                                    <p>18) This proposal is valid till <span t-esc="o.validity_date" t-options='{"widget": "date","format": "dd/MM/yyyy"}' /></p>
+                                </h6>
+                            </t>
+                            <t t-if="o.sale_type == 'bundle'">
+                                <p><b><u>Covenants :</u></b></p>
+                                <p><b>1) <u>Payment Terms &amp; Conditions </u></b></p>
+                                <h6> <span t-esc="o.note" /></h6>
+                                <p><b>2) <u>Payment To Employees </u></b></p>
+                                <h6>
+                                    <p> DULSCO will be responsible for the payment of the salary to the employee and payroll will be processed by DULSCO.</p>
+                                </h6>
+                                <h6><span>3) Minimum working hours will be <span t-esc="o.order_line.mapped('std_hrs')[0]" /> hrs per day (excluding 1 hr break); <span t-esc="7 - o.week_of_no" /> days a week. </span></h6>
+                                <h6>
+                                    <span>4) Accommodation, Food and Transportation needs to be arranged by
+                                        <b>
+                                            <t t-if="o.aft_type_by == 'client'">
+                                                <span t-esc="o.partner_id.name" />
+                                            </t>
+                                            <t t-else="">
+                                                <span t-esc="dict(o._fields['aft_type_by'].selection).get(o.aft_type_by)" />
+                                            </t>
+                                        </b>
+                                    </span>
+                                </h6>
+                                <h6>
+                                    <p><b>5) <u>Attendance Records</u></b></p>
+                                    <h6>a) <span>Attendance records of all employees need to be maintained by <b><span t-esc="o.partner_id.name" /></b> and shall be handed over to DULSCO by 3rd day of subsequent month.</span></h6>
+                                    <h6>b) <span>Consolidated leave records will be maintained by DULSCO. All the end of service benefits will be processed by DULSCO. </span></h6>
+                                </h6>
+                                <h6>
+                                    <p><b>6) <u>Over Time Charges</u></b></p>
+                                    <p>a) An overtime rate at the rate of 1.25 times on the monthly billing value will be applicable over and above <b><span t-esc="o.order_line.mapped('std_hrs')[0]" /></b> hrs of work per day.</p>
+                                    <p>b) For work on weekly off days/public holidays, at the rate of 1.5 times on the monthly billing value will be applicable. </p>
+                                </h6>
+                                <p><b>7) <u>Ramadan Timings and Overtime </u></b></p>
+                                <h6>
+                                    <p> During the Holy Month of Ramadan, normal working hours will be reduced by 2 (two) hours, however the full monthly charge will be applicable. Apart from the monthly charge, overtime rates will be applicable from the 7th hour onwards. </p>
+                                </h6>
+                                <p><b>8) <u>Cash Handling By Employees </u></b></p>
+                                <p>a) In case <b> <span t-esc="o.partner_id.name" /></b> is deploying outsourced employees at work sites / offices where they are handling cash, the same needs to be informed to DULSCO in advance. </p>
+                                <p>b) DULSCO will be getting the employees insured for the average value they will be handling on a daily basis. </p>
+                                <p>c) The insurance cost for the same to be borne by <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                <h6>
+                                    <p>9) <b><span t-esc="o.partner_id.name" /></b> may implement a cash incentive program for DULSCO personnel according to its company policies. All cash incentive payments shall be made through DULSCO, based on the information received from <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                </h6>
+                                <h6>
+                                    <p>The same shall be invoiced to <b><span t-esc="o.partner_id.name" /></b> and <b><span t-esc="o.partner_id.name" /> </b>will make payment to DULSCO prior to disbursement of the cash incentives.</p>
+                                </h6>
+                                <h6>
+                                    <p>10) Any special security passes required for the personnel to enter to the assigned worksite &amp; certification of any nature will be the responsibility of <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                </h6>
+                                <h6>
+                                    <p>11) <b><span t-esc="o.partner_id.name" /></b> shall depute Personnel only at <b><span t-esc="o.partner_id.name" /></b> (own, rented, subsidiaries, associated companies &amp; company interest) to perform activities related to <b><span t-esc="o.partner_id.name" /></b> products or services.</p>
+                                </h6>
+                                <h6>
+                                    <p>12) Candidate to submit all required certificate/s for applying visa and DULSCO will take work visa with professions available at the time of applying for the visa.</p>
+                                </h6>
+                                <h6>
+                                    <p>13) The availability of the above personnel (new recruits) depends on the final confirmation at the time of the order being placed. The personnel would start working only on work visa which will take minimum <b><span t-esc="o.get_pass" /> </b> days from the date the candidate complete the joining formalities.</p>
+                                </h6>
+                                <h6>
+                                    <p><b><span t-esc="o.partner_id.name" /> </b>has to give confirmation on the final selection of the candidate within two working days from the date of first interview.</p>
+                                </h6>
+                                <h6>
+                                    <p>14) Service Agreement must be signed between <b><span t-esc="o.partner_id.name" /> </b>and DULSCO before any personnel can be put on service.</p>
+                                </h6>
+                                <h6>
+                                    <p>15) All visa, insurance and government related fees are subject to change from time to time and DULSCO will keep <b><span t-esc="o.partner_id.name" /> </b>informed about the same and revised charges applicable from there on. </p>
+                                </h6>
+                                <h6>
+                                    <p>16) If any government or statutory levy, cess, duties, rates or taxes, including VAT imposed in respect of supply of the Services during the Term shall be fully to <b><span t-esc="o.partner_id.name" /> </b>account and will be charged to <b><span t-esc="o.partner_id.name" /> </b>forthwith.</p>
+                                </h6>
+                                <h6>
+                                    <p>17) The above quoted price, if accepted, is applicable and valid for the period of <b> <span t-esc="o.min_contract" /></b>. The prices are subjected to renewal thereafter.</p>
+                                </h6>
+                                <h6>
+                                    <p>18) For termination of any employee the following process has to be followed :</p>
+                                </h6>
+                                <h6>
+                                    <ul>i. Verbal warning</ul>
+                                </h6>
+                                <h6>
+                                    <ul>ii. Written warning </ul>
+                                </h6>
+                                <h6>
+                                    <ul>iii. Temporary suspension </ul>
+                                </h6>
+                                <h6>
+                                    <p>After taking the above-mentioned disciplinary measures, one month notice period has to be provided prior to termination, and all this needs to be communicated in writing to DULSCO by <span t-esc="o.partner_id.name" />.</p>
+                                </h6>
+                                <h6>
+                                    <p>19) Minimum written notice of <b>
+                                            <span t-esc="o.off_hire_notice_period" /></b> is required to off hire the personnel deployed failing which DULSCO will charge <b>
+                                            <span t-esc="o.off_hire_notice_period" /></b> billing amount.</p>
+                                </h6>
+                                <h6>
+                                    <p>20) <b><span t-esc="o.partner_id.name" /> </b>guarantees to utilize the services of the personnel for a minimum period of <b> <span t-esc="o.min_contract" /></b> from the date of hire of the personnel, failing which DULSCO will charge QAR 3500 per personnel against early termination of the contract.</p>
+                                </h6>
+                                <h6>
+                                    <p>21) For termination of this contract, a minimum notice period of<b> <span t-esc="o.notice_period" /></b> have to be provided to DULSCO and all this needs to be communicated in writing to DULSCO by <b><span t-esc="o.partner_id.name" /></b>.</p>
+                                </h6>
+                                <h6>
+                                    <p>22) This agreement is effective from the date it is signed and shall continue for a period of <b><span t-esc="o.min_contract" /> </b>, and shall stand renewed automatically thereafter unless and until it is terminated by either party with prior written notice of not less than 30 days.</p>
+                                </h6>
+                                <h6>
+                                    <p>23) This proposal is valid til <span t-esc="o.validity_date" t-options='{"widget": "date","format": "dd/MM/yyyy"}' />.</p>
+                                </h6>
+                                <br />
+                            </t>
+                            <t t-if="o.sale_type == 'cost_plus'">
+                                <p><b><u>Covenants :</u></b></p>
+                                <p><b>1) <u>Payment Terms &amp; Conditions </u></b></p>
+                                <h6> <span t-esc="o.note" /></h6>
+                                <p><b>2) <u>Payment To Employees </u></b></p>
+                                <h6>
+                                    <p> DULSCO will be responsible for the payment of the salary to the employee and payroll will be processed by DULSCO.</p>
+                                </h6>
+                                <h6>
+                                    <p>3) Minimum working hours will be <b><span t-esc="o.order_line.mapped('std_hrs')[0]" /> </b>hrs per day (excluding 1 hr break); <b><span t-esc="7 - o.week_of_no" /> </b> days a week. </p>
+                                </h6>
+                                <h6>
+                                    <p>4) Accommodation, Food and Transportation needs to be arranged by
+                                        <t t-if="o.aft_type_by == 'client'">
+                                            <span t-esc="o.partner_id.name" />
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="dict(o._fields['aft_type_by'].selection).get(o.aft_type_by)" />
+                                        </t>
+                                    </p>
+                                </h6>
+                                <h6>
+                                    <p><b>5) <u>Attendance Records</u></b></p>
+                                    <p>a) Attendance records of all employees need to be maintained by <b> <span t-esc="o.partner_id.name" /> </b>and shall be handed over to DULSCO by 3rd day of subsequent month.</p>
+                                    <p>b) Consolidated leave records will be maintained by DULSCO. All the end of service benefits will be processed by DULSCO. </p>
+                                </h6>
+                                <h6>
+                                    <p><b>6) <u>Over Time Charges</u></b></p>
+                                    <p>Overtime for any extra hours of work and work on Friday/Public Holiday will be charged on actual. </p>
+                                </h6>
+                                <p><b>7) <u>Ramadan Timings and Overtime </u></b></p>
+                                <h6>
+                                    <p> During the Holy Month of Ramadan, normal working hours will be reduced by 2 (two) hours, however the full monthly charge will be applicable. Apart from the monthly charge, overtime rates will be applicable from the 7th hour onwards. </p>
+                                </h6>
+                                <p><b>8) <u>Cash Handling By Employees </u></b></p>
+                                <p>a) In case <b><span t-esc="o.partner_id.name" /> </b>is deploying outsourced employees at work sites / offices where they are handling cash, the same needs to be informed to DULSCO in advance. </p>
+                                <p>b) DULSCO will be getting the employees insured for the average value they will be handling on a daily basis. </p>
+                                <p>C) The insurance cost for the same to be borne by <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                <h6>
+                                    <p>9) <b><span t-esc="o.partner_id.name" /></b> may implement a cash incentive program for DULSCO personnel according to its company policies. All cash incentive payments shall be made through DULSCO, based on the information received from <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                </h6>
+                                <h6>
+                                    <p>The same shall be invoiced to <b><span t-esc="o.partner_id.name" /></b> and <b><span t-esc="o.partner_id.name" /></b> will make payment to DULSCO prior to disbursement of the cash incentives.</p>
+                                </h6>
+                                <h6>
+                                    <p>10) Any special security passes required for the personnel to enter to the assigned worksite &amp; certification of any nature will be the responsibility of <b><span t-esc="o.partner_id.name" /></b>. </p>
+                                </h6>
+                                <h6>
+                                    <p>11) <b><span t-esc="o.partner_id.name" /></b> shall depute Personnel only at <b><span t-esc="o.partner_id.name" /></b> (own, rented, subsidiaries, associated companies &amp; company interest) to perform activities related to <b><span t-esc="o.partner_id.name" /></b> products or services.</p>
+                                </h6>
+                                <h6>
+                                    <p>12) Candidate to submit all required certificate/s for applying visa and DULSCO will take work visa with professions available at the time of applying for the visa.</p>
+                                </h6>
+                                <h6>
+                                    <p>13) The availability of the above personnel (new recruits) depends on the final confirmation at the time of the orderbeing placed. The personnel would start working only on work visa which will take minimum <b><span t-esc="o.get_pass" /> </b>days from the date the candidate complete the joining formalities.</p>
+                                </h6>
+                                <h6>
+                                    <p><b><span t-esc="o.partner_id.name" /></b>has to give confirmation on the final selection of the candidate within two working days from the date of first interview.</p>
+                                </h6>
+                                <h6>
+                                    <p>14) Service Agreement must be signed between <b><span t-esc="o.partner_id.name" /></b> and DULSCO before any personnel can be put on service.</p>
+                                </h6>
+                                <h6>
+                                    <p>15) All visa, insurance and government related fees are subject to change from time to time and DULSCO will keep <b><span t-esc="o.partner_id.name" /></b> informed about the same and revised charges applicable from there on. </p>
+                                </h6>
+                                <h6>
+                                    <p>16) If any government or statutory levy, cess, duties, rates or taxes, including VAT imposed in respect of supply of the Services during the Term shall be fully to <b><span t-esc="o.partner_id.name" /></b> account and will be charged to <b><span t-esc="o.partner_id.name" /></b> forthwith.</p>
+                                </h6>
+                                <h6>
+                                    <p>17) The above quoted price, if accepted, is applicable and valid for the period of <b><span t-esc="o.min_contract" /></b>. The prices are subjected to renewal thereafter.</p>
+                                </h6>
+                                <h6>
+                                    <p>18) For termination of any employee the following process has to be followed :</p>
+                                </h6>
+                                <h6>
+                                    <ul>i. Verbal warning</ul>
+                                </h6>
+                                <h6>
+                                    <ul>ii. Written warning </ul>
+                                </h6>
+                                <h6>
+                                    <ul>iii. Temporary suspension </ul>
+                                </h6>
+                                <h6>
+                                    <p>After taking the above-mentioned disciplinary measures, one month notice period has to be provided prior to termination, and all this needs to be communicated in writing to DULSCO by <b><span t-esc="o.partner_id.name" /></b> .</p>
+                                </h6>
+                                <h6>
+                                    <p>19) Minimum written notice of <b><span t-esc="o.off_hire_notice_period" /></b> is required to off hire the personnel deployed failing which DULSCO will charge <b><span t-esc="o.off_hire_notice_period" /></b> billing amount.</p>
+                                </h6>
+                                <h6>
+                                    <p>20) <b><span t-esc="o.partner_id.name" /></b> guarantees to utilize the services of the personnel for a minimum period of <b><span t-esc="o.min_contract" /></b> from the date of hire of the personnel, failing which DULSCO will charge service fee for rest of the months.</p>
+                                </h6>
+                                <h6>
+                                    <p>21) For termination of this contract, a minimum notice period of <b><span t-esc="o.notice_period" /></b> have to be provided to DULSCO and all this needs to be communicated in writing to DULSCO by <b><span t-esc="o.partner_id.name" /></b> .</p>
+                                </h6>
+                                <h6>
+                                    <p>22) This agreement is effective from the date it is signed and shall continue for a period of <b> <span t-esc="o.min_contract" /></b>, and shall stand renewed automatically thereafter unless and until it is terminated by either party with prior written notice of not less than 30 days.</p>
+                                </h6>
+                                <h6>
+                                    <p>23) This proposal is valid til <span t-esc="o.validity_date" t-options='{"widget": "date","format": "dd/MM/yyyy"}' />.</p>
+                                </h6>
+                            </t>
+                            <p>
+                                <t t-esc="o.term_condition" />
+                            </p>
+                            <h6>
+                                <p>If the above proposal is in line with your requirement kindly forward the duly signed and stamped proposal along with</p>
+                                <ul>
+                                    <p>a) L.P.O.</p>
+                                    <p>b) CFA form (Credit Facility Application).</p>
+                                    <p>c) Commercial registration (CR), Trade License, Computer Card and Tax Card copy for facilitating the Service Agreement.</p>
+                                </ul>
+                            </h6>
+                            <h6>
+                                <p>If you have any further queries, please feel free to contact the undersigned.</p>
+                            </h6>
+                            <h6>
+                                <p>Thanking you and assuring you of our best services at all times.</p>
+                            </h6>
+                            <h6>
+                                <p>Best Regards,</p>
+                            </h6>
+                            <br />
+                            <p>
+                                <h6>Name&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <b><span t-esc="o.user_id.name" /></b></h6>
+                            </p>
+                            <p>
+                                <h6>Designation&#160;&#160;: <span t-esc="o.user_id.employee_id.job_title" /></h6>
+                            </p>
+                            <p>
+                                <h6>Mail&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <span t-esc="o.user_id.login" /></h6>
+                            </p>
+                            <p>
+                                <h6>Tel&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <span t-esc="o.user_id.employee_id.mobile_phone" /></h6>
+                            </p>
+                            <p>
+                                <h6>Log on to www.dulsco.qa to find out more about us.</h6>
+                            </p><br /><br />
+                            <p style="page-break-before:always;"> </p>
+                            <center style="background-color:darkgray;border:1px solid grey;padding:10px;margin:10px;text-align:center;"><b>Client Acceptance</b></center>
+                            <br />
+                            <br />
+                            <p>
+                                <h6>We hereby accept the above-mentioned rates and other terms and conditions on the proposal <b><span t-esc="o.name" /></b></h6>
+                            </p>
+                            <h6><b>Confirmed by</b></h6>
+                            <br />
+                            <h6>
+                                <h6>For Company Name &#160;: <u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6><br />
+                                <h6>Name&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6><br />
+                                <h6>Designation&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6><br /><br />
+                            </h6>
+                            <div class="row" style="margin-top:0px;">
+                                <div class="col-6">
+                                    <h6>Signature&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6>
+                                </div>
+                                <div class="col-6" style="text-align: right;">
+                                    <h6><u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6><br />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:0px;">
+                                <div class="col-8">
+                                    <h6>Date&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: <u><span style="color:white;">asddwertrtrtrterwerrqwerwerwer</span></u></h6>
+                                </div>
+                                <div class="col-4">
+                                    <center>
+                                        <h6><b>Company Seal </b></h6>
+                                    </center><br />
+                                </div>
+                            </div>
+                            <center style="background-color:darkgray;padding:10px;margin:10px;border:1px solid grey;text-align:center;"><b></b></center>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

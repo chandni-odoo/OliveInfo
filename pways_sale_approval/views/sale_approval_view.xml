@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sale_approval_tree_view" model="ir.ui.view">
+        <field name="name">sale.approval.tree.view</field>
+        <field name="model">sale.approval</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="branch_id"/>
+                <field name="document_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sale_approval_form_view" model="ir.ui.view">
+        <field name="name">sale.approval.form.view</field>
+        <field name="model">sale.approval</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="branch_id"/>
+                        </group>
+                        <group>
+                            <field name="document_type"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval Lines">
+                            <field name="approval_line_ids" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="limit"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sale_approval" model="ir.actions.act_window">
+        <field name="name">Sale Approval</field>
+        <field name="res_model">sale.approval</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem 
+        id="menu_purchase_approval"
+        name="Sale Approval"
+        action="action_sale_approval"
+        parent="base.menu_users"
+        sequence="15"
+        />
+</odoo>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_schedule_report_form_view" model="ir.ui.view">
+        <field name="name">Employee Schedule</field>
+        <field name="model">employee.schedule.report</field>
+        <field name="arch" type="xml">
+            <form string="Employee Schedule">
+                <sheet>
+                    <group>
+                        <!-- Employees filter -->
+                        <field name="select_date" required="1"/>
+                        <field name="category_ids" widget="many2many_tags"/>
+                        <field name="company_ids" widget="many2many_tags"/>
+                        <field name="branch_ids" widget="many2many_tags"/>
+                        <field name="hr_employee_type" />
+                        <!-- Employee/Task/Customer filter-->
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <!-- <field name="supervisor_user_ids" widget="many2many_tags"/> -->
+                        <field name="sale_order_ids" widget="many2many_tags"/>
+                        <field name="task_ids" widget="many2many_tags"/>
+                        <field name="supervisors_ids" widget="many2many_tags"/>
+                        <field name="customer_location_ids" widget="many2many_tags"/>
+                    </group>
+                    <footer>
+                       <button string="Employee Schedule" class="oe_highlight" type="object" name="button_get_categ"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_employee_schedule_reports">
+        <field name="name">Employee Schedule</field>
+        <field name="res_model">employee.schedule.report</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_hr_schedule_report"
+        name="Employee Schedule"
+        action="action_employee_schedule_reports"
+        parent="hr.menu_hr_root"
+        sequence="3"/>
+
+   <!-- Employee -->
+    <record id="view_employee_task_schedule_history_form" model="ir.ui.view">
+        <field name="name">hr.employee.task.schedule.history.form</field>
+        <field name="model">task.resource.history</field>
+        <field name="arch" type="xml">
+            <form string="Employee Deployed" create="false">
+                <group>
+                    <field name="emp_no"/>
+                    <field name="employee_id"/>
+                    <field name="hr_employee_type"/>
+                    <field name="product_ids" string="Skill/Category" widget="many2many_tags"/>
+                    <field name="branch_id"/>
+                    <field name="company_id"/>
+                    <field name="task_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="customer_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="emp_id"/>
+                    <!-- <field name="supervisor_emp_id"/> -->
+                    <field name="partner_location_id"/>
+                   
+                </group>  
+            </form>
+        </field>
+    </record>
+    <record id="view_employee_task_schedule_history_tree" model="ir.ui.view">
+        <field name="name">hr.employee.task.schedule.history.tree</field>
+        <field name="model">task.resource.history</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Deployed" create="false">
+                <field name="emp_no"/>
+                <field name="employee_id"/>
+                <field name="hr_employee_type"/>
+                <field name="product_ids" string="Skill/Category" widget="many2many_tags"/>
+                <field name="branch_id"/>
+                <field name="company_id"/>
+                <field name="task_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="customer_id"/>
+                <field name="sale_order_id"/>
+                <!-- <field name="supervisor_emp_id"/>  -->
+                <field name="emp_id"/>
+                <field name="partner_location_id"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_task_schedule_history_search" model="ir.ui.view">
+    <field name="name">hr.employee.task.schedule.history.search</field>
+    <field name="model">task.resource.history</field>
+    <field name="arch" type="xml">
+        <search string="Search Employee Deployed">
+            <field name="customer_id" string="Customer" widget="many2one"/>
+            <field name="sale_order_id"/>
+            <field name="task_id"/>
+            <field name="partner_location_id"/>
+            <field name="product_ids" string="Skill/Category" widget="many2many_tags"/>
+            <field name="branch_id"/>
+            <field name="emp_id"/>
+            <field name="hr_employee_type"/>
+            <separator/>
+            <group expand="0" string="Group By">
+                <filter name="group_customer_id" string="Customer" domain="[]" context="{'group_by':'customer_id'}"/>
+                <filter name="group_sale_order_id" string="Sale Order" domain="[]" context="{'group_by':'sale_order_id'}"/>
+                <filter name="group_task_id" string="Task" domain="[]" context="{'group_by':'task_id'}"/>
+                <filter name="group_partner_location_id" string="Location" domain="[]" context="{'group_by':'partner_location_id'}"/>
+                <filter name="group_product_ids" string="Skill/Category" domain="[]" context="{'group_by':'product_ids'}"/>
+                <filter name="group_branch_id" string="Branch" domain="[]" context="{'group_by':'branch_id'}"/>
+                <filter name="group_emp_id" string="Supervisor" domain="[]" context="{'group_by':'emp_id'}"/>
+                <filter name="group_hr_employee_type" string="Employee Type" domain="[]" context="{'group_by':'hr_employee_type'}"/>
+            </group>
+        </search>
+    </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_employee_task_schedule_history_reports">
+        <field name="name">Employee Deployed</field>
+        <field name="res_model">task.resource.history</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_ap_ar_from_view" model="ir.ui.view">
+        <field name="name">custom.ap.ar</field>
+        <field name="model">custom.ap.ar</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="aged_state" widget="radio" options="{'horizontal': true}"/>
+                            <field name="as_on_date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="due_range_ids" widget="many2many_tags" required="1"/>
+                            <field name="based_on" required="1"/>
+                        </group>
+                        <group colspan="6">
+                            <field name="customer_ids"  domain="[('is_customer', '=', True)]"  attrs="{'invisible': [('aged_state', '=', 'ap')]}" widget="many2many_tags"/>
+                            <field name="vendors_ids"  attrs="{'invisible': [('aged_state', '=', 'ar')]}" domain="[('is_supplier', '=', True)]" widget="many2many_tags"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generate XLS" name="action_aged_xls_report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_custom_ap_ar_from_view" model="ir.actions.act_window">
+        <field name="name">Custom AP/AR</field>
+        <field name="res_model">custom.ap.ar</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="custom_ap_ar_from_view"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem 
+        id="select_customer_ap_ar_wizard" 
+        action="action_custom_ap_ar_from_view" 
+        parent="account.account_reports_management_menu"
+        name="Custom AP/AR"
+        sequence="100"/>
+</odoo>

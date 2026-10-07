@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_hr_employee_deduction_user" model="res.groups">
+        <field name="name">Employee Deduction User</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+</odoo>

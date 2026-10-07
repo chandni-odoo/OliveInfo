@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="closing_ticket_corrective_preventive" model="mail.template">
+            <field name="name">Corrective and Preventive</field>
+            <field name="model_id" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>
+            <field name="subject">Resolution of Your Complaint {{ object.display_name }}</field>
+            <!--            <field name="email_from">{{ (object.employee_id.user_id.email_formatted or user.email_formatted) }}</field>-->
+                        <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear
+                        <!--                        <span t-esc="object"/>-->
+                        <span t-esc="object.partner_name"/>,
+                    </p>
+                    <p>
+                        <t t-if="object.check_description() == True">
+                            I hope this message finds you well. After investigating your
+                            recent complaint, we've addressed the issue concerning
+                            <t t-out="object.description"/>
+                        </t>
+                    </p>
+
+                    <p>Furthermore, we have taken corrective actions to enhance our processes, ensuring a more
+                        seamless experience for you and future customers. These corrective measures involve
+                        <t t-out="object.corrective_action"/>
+                    </p>
+
+                    <p>In addition to resolving the immediate concern, we want to assure you that your feedback is
+                        invaluable. To prevent similar issues in the future, we have implemented preventive
+                        measures. These include--
+                        <t t-out="object.preventive_action"/>
+                    </p>
+
+
+                    <p>Your input is vital to our commitment to improvement. If you have any further questions or
+                        feedback, contact me directly at
+                        <t t-out="object.user_id.phone"/>
+
+                    </p>
+                    <p>Thank you for your understanding, and we value your continued trust.</p>
+                    <p>Sincerely,</p>
+                    <p>
+                        <t t-out="object.user_id.name"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.function"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.phone"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.mobile"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.company_id.name"/>
+                    </p>
+                </div>
+            </field>
+            <!--            <field name="report_template" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>-->
+            <field name="report_name">{{ (object.name or '') }}</field>
+            <field name="lang">{{ object.emp_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

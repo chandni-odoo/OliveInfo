@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_payroll_wizard_wizard_form_view" model="ir.ui.view">
+        <field name="name">Emplopyee Payroll Form View</field>
+        <field name="model">emplopyee.payroll.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="based_on" widget="radio"/>
+                            <field name="employee_ids" widget="many2many_tags" attrs="{'invisible': [('based_on', '!=', 'employees')], 'required': [('based_on', '=', 'employees')]}"/>
+                            <field name="branch_ids" widget="many2many_tags" attrs="{'invisible': [('based_on', '!=', 'branch')], 'required': [('based_on', '=', 'branch')]}"/>
+                            <field name="batch_ids" widget="many2many_tags" attrs="{'invisible': [('based_on', '!=', 'batch')], 'required': [('based_on', '=', 'batch')]}"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generate Report" name="button_generate_report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_for_select_employees_Report" model="ir.actions.act_window">
+        <field name="name">Employee Payslip Summary</field>
+        <field name="res_model">emplopyee.payroll.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="employee_payroll_wizard_wizard_form_view"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem 
+        id="select_employee_wizard" 
+        action="action_for_select_employees_Report" 
+        parent="hr_payroll.menu_hr_payroll_report"
+        name="Employees Payrolls"
+        sequence="100"/>
+</odoo>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_task_view_list_inherit" model="ir.ui.view">
+        <field name="name">project.task.tree.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="seq_code" readonly="1" string="Task Number" optional="show"/>
+            </xpath>
+        </field>
+    </record>   
+
+    <record id="project_task_view_list_inherit_job" model="ir.ui.view">
+        <field name="name">project.task.tree.inherit.job</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="mtech_vehicle_extended.view_project_task_tree_mtech"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="seq_code" readonly="1" string="Task" optional="show"/>
+                <field name="last_planned_date" string="Last Planned Date" optional="show" widget="date"/>
+                <field name="collection_mode" />
+            </xpath>
+        </field>
+    </record>  
+
+    <record id="project_task_view_search" model="ir.ui.view">
+        <field name="name">project.task.search</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <search>
+                <field name="seq_code" string="Task code"/>
+            </search>
+        </field>
+    </record>  
+
+    <record id='action_project_task' model='ir.actions.act_window'>
+        <field name="name">Project Task</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">search,kanban,tree,form</field>
+        <field name="search_view_id" ref="project_task_view_search"/>
+    </record>
+
+
+    <record id="duty_resumption_view_search" model="ir.ui.view">
+        <field name="name">duty.resumption.search</field>
+        <field name="model">duty.resumption</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id" string="Employee"/>
+            </search>
+        </field>
+    </record>
+
+    <record id='action_duty_resumption' model='ir.actions.act_window'>
+        <field name="name">Duty Resumption</field>
+        <field name="res_model">duty.resumption</field>
+        <field name="view_mode">search,kanban,tree,form</field>
+        <field name="search_view_id" ref="duty_resumption_view_search"/>
+    </record>
+
+    <record id="customer_onboarding_request_tree_view_inherit" model="ir.ui.view">
+        <field name="name">customer.onboarding.request.tree.inherit</field>
+        <field name="model">customer.onboarding.request</field>
+        <field name="inherit_id" ref="sale_extended.customer_onboarding_request_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="create_uid" string="Requested By"/>
+                <field name="create_date" string="Requested On"/> 
+            </xpath>
+        </field>
+    </record>
+
+    <record id="customer_onboarding_request_search_view" model="ir.ui.view">
+        <field name="name">customer.onboarding.request.search.view</field>
+        <field name="model">customer.onboarding.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Request Name"/>
+                <field name="partner_id" string="Customer"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_customer_onboarding_request" model="ir.actions.act_window">
+        <field name="name">Customer Onboarding Request</field>
+        <field name="res_model">customer.onboarding.request</field>
+        <field name="view_mode">search,tree,form</field>
+        <field name="search_view_id" ref="customer_onboarding_request_search_view"/>
+        <field name="view_id" ref="customer_onboarding_request_tree_view_inherit"/>
+    </record>
+
+    <record id="supplier_onboarding_request_tree_view_inherit" model="ir.ui.view">
+        <field name="name">supplier.onboarding.request.tree.inherit</field>
+        <field name="model">supplier.onboarding.request</field>
+        <field name="inherit_id" ref="sale_extended.supplier_onboarding_request_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="partner_id" string="Supplier"/>
+                <field name="create_uid" string="Requested By"/>
+                <field name="create_date" string="Requested On"/> 
+                <field name="state"/> 
+            </xpath>
+        </field>
+    </record>
+
+    <record id="supplier_onboarding_request_search_view" model="ir.ui.view">
+        <field name="name">supplier.onboarding.request.search.view</field>
+        <field name="model">supplier.onboarding.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Request Name"/>
+                <field name="partner_id" string="Supplier"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_supplier_onboarding_request" model="ir.actions.act_window">
+        <field name="name">Supplier Onboarding Request</field>
+        <field name="res_model">supplier.onboarding.request</field>
+        <field name="view_mode">search,tree,form</field>
+        <field name="search_view_id" ref="supplier_onboarding_request_search_view"/>
+        <field name="view_id" ref="supplier_onboarding_request_tree_view_inherit"/>
+    </record>
+
+    <record id="hr_gratuity_search_view" model="ir.ui.view">
+        <field name="name">hr.gratuity.search</field>
+        <field name="model">hr.gratuity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_name" string="Employee"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_employee_gratuity" model="ir.actions.act_window">
+        <field name="name">Gratuity Settlement</field>
+        <field name="res_model">hr.gratuity</field>
+        <field name="view_mode">search,tree,form</field>
+        <field name="search_view_id" ref="hr_gratuity_search_view"/>
+    </record>
+
+    <record model="ir.ui.view" id="hr_request_search_view">
+        <field name="name">request.request.search.view</field>
+        <field name="model">request.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id" string="Employee"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_request">
+        <field name="name">Employee Requests</field>
+        <field name="res_model">request.request</field>
+        <field name="view_mode">search,tree,form</field>
+        <field name="search_view_id" ref="hr_request_search_view"/>
+    </record>
+
+</odoo>

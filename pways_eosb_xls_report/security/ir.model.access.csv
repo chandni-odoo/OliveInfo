@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+pways_eosb_xls_report.access_employee_eosb_wizard,access_employee_eosb_wizard,pways_eosb_xls_report.model_employee_eosb_wizard,base.group_user,1,1,1,1

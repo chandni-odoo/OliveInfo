@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="leave_settlement_tree_view">
+        <field name="name">leave.settlement.tree.view</field>
+        <field name="model">leave.settlement</field>
+        <field name="arch" type="xml">
+            <tree default_order="id desc">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="leave_type_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="accrued_leaves"/>
+                <field name="amount_total" invisible="1"/>
+                <field name="pending_salary" invisible="0"/>
+                <field name="net_payable"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="leave_settlement_form_view" model="ir.ui.view">
+        <field name="name">leave.settlement.form.view</field>
+        <field name="model">leave.settlement</field>
+        <field name="arch" type="xml">
+            <form string="Leave Settlement">
+                <header>
+                    <!-- <button name="action_create_advance_payment" type="object" attrs="{'invisible': [('state','in', 'cancel')]}" string="Create Advance Payment"/> -->
+                    <button name="action_compute" type="object" string="Compute" states="draft,confirm" class="oe_highlight"/>
+                    <button name="action_confirm" type="object" string="Submit" class="oe_highlight" states="draft"/>
+                    <button name="action_done" type="object" string="Done" states="confirm" class="oe_highlight"/>
+                    <button name="action_draft" type="object" string="Set to Draft" states="confirm,cancel,done" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" attrs="{'invisible': ['|', ('state','in', 'cancel'), ('journal_count','>', 0)]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_journal_entries" type="object" icon="fa-usd" attrs="{'invisible': [('journal_count','=', 0)]}">
+                            <field name="journal_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_open_loan" type="object" icon="fa-usd" attrs="{'invisible': [('loan_count','=', 0)]}">
+                            <field name="loan_count" widget="statinfo" string="Advance Payment"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_open_payslip" type="object" icon="fa-usd" attrs="{'invisible': [('payslip_count','=', 0)]}">
+                            <field name="payslip_count" widget="statinfo" string="Pending Payment"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <label for="employee_id" string="Employee"/>
+                        <h1>
+                            <field name="employee_id" required="1" domain="[('id', 'in', employee_ids)]"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="job_title"/>
+                            <field name="branch_id"/>
+<!--                            <field name="leave_type_id"/>-->
+                            <field name="date_from" force_save="1"/>
+                            <field name="basic_salary" force_save="1"/>
+                            <field name="gross_salary" force_save="1"/>
+                            <field name="net_salary" force_save="1"/>
+                            <field name="unpaid_days" attrs="{'readonly': [('state','=','confirm')]}"/>
+                        </group>
+                        <group>
+                            <field name="employee_ids" invisible="1"/>
+                            <field name="journal_id" required='1'/>
+                            <field name="date"/>
+                            <field name="per_based_on" required="1"/>
+                            <field name="date_to" force_save="1"/>
+                            <field name="total_leaves" invisible="1"/>
+                            <field name="accrued_leaves" force_save="1"/>
+                            <field name="amount" invisible="1"/>
+                            <field name="extra_unpaid"/>
+                            <field name="pending_salary" invisible="0"/>
+                            <field name="hr_payslip_info" invisible="0"/>
+                            <field name="unpaid_days_amount" attrs="{'readonly': [('state','=','confirm')]}"/>
+                            <field name="unpaid_month_amount" invisible="1"/>
+                            <field name="unpaid_month" invisible="1"/>
+                            <field name="unpaid_prev_month_amount" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Leave Settlement Lines">
+                            <field name="settlement_ids">
+                                <tree editable="bottom">
+                                    <field name="code"/>
+                                    <field name="payslip_inout_type_id"/>
+                                    <field name="remarks"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="qty" invisible="1"/>
+                                    <field name="duration_qty"/>
+                                    <field name="amount" force_save="1"/>
+                                    <field name="sub_total"/>
+                                    <!-- <field name="levae_type_id"/> -->
+                                    <field name="is_compute" invisible="1"/>
+                                    <field name="is_encashment" invisible="1"/>
+                                    <field name="is_paid" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group colspan="4">
+                                    <field name="remarks_of_leave" class="oe-bordered-editor" nolabel="1" placeholder="Remarks..."/>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="leave_total">
+                                    <field name="amount_total" colspan="2" t-options='{"widget": "float", "precision": 2}'/>
+                                    <field name="advance_salary" colspan="2" t-options='{"widget": "float", "precision": 2}'/>
+                                    <field name="net_payable" colspan="2" t-options='{"widget": "float", "precision": 2}'/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_leave_settlement">
+        <field name="name">Leave Settlement</field>
+        <field name="res_model">leave.settlement</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+            id="menu_leave_settlement_root"
+            name="Leave Settlement"
+            parent="hr_holidays.menu_hr_holidays_root"
+            sequence="4"/>
+
+    <menuitem
+            id="menu_leave_settlement"
+            name="Leave Settlement"
+            action="action_leave_settlement"
+            parent="menu_leave_settlement_root"
+            sequence="11"/>
+
+    <record id="hr_leave_view_form_sattlement_manager_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
+        <field name="arch" type="xml">
+            <field name="department_id" position="after">
+                <field name="is_leave_sattlement"/>
+                <field name="encashment_days" attrs="{'invisible': [('is_leave_sattlement', '!=', True)], 'readonly': [('state','in', ['validate', 'validate1'])]}"/>
+                <field name="is_additional_leave"/>
+                <field name="paid_days" attrs="{'invisible': [('is_additional_leave', '!=', True)]}"/>
+                <field name="unpaid_days" attrs="{'invisible': [('is_additional_leave', '!=', True)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_form_manager_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <!-- <field name="employee_id" position="after"> -->
+                <field name="leave_sattlement_done"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_journal_form_sattlement_inherit" model="ir.ui.view">
+        <field name="name">account.journal.form.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="is_salary_wages"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="edit_holiday_status_form_inherit_additional_day" model="ir.ui.view">
+        <field name="name">hr.leave.type.form.inherit</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <field name="allocation_validation_type" position="after">
+                <field name="is_additional_leave"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_leave_allocation_inherit_view" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.inherit</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Encasements">
+                        <field name="enchasement_line_ids" readonly="1">
+                            <tree editable="bottom">
+                                <field name="allocation_id" invisible="1"/>
+                                <field name="user_id"/>
+                                <field name="description"/>
+                                <field name="holiday_status_id"/>
+                                <field name="date"/>
+                                <field name="leave_id"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="leave_days"/>
+                                <field name="encashment_days"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

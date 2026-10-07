@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Vehicle Extended",
+    'summary': "Vehicle Extended",
+    'description': "Vehicle Extended",
+    'category': 'Fleet',
+    'version': '15.0.1.0',
+    'license': 'LGPL-3',
+    'author': 'Mastermoon Technology LLP',
+    'website': "",
+    'depends': ['fleet', 'account_extended', 'custom_trip', 'maintenance', 'project', 'sale_extended', 'pways_hr_shift_allocation'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/demo_data.xml',
+        'data/decimal_precision.xml',
+        'data/ir_server_action.xml',
+        'data/job_order_stage_data.xml',
+        'views/view_shift_type.xml',
+        'views/view_permit.xml',
+        'views/view_landfill.xml',
+        'views/view_vehicle.xml',
+        'views/view_task.xml',
+        'views/view_trip_sheet.xml',
+        'views/view_equipment.xml',
+        'views/view_assign_shift.xml',
+        'views/view_job_order.xml',
+        'views/view_operation_scheduling.xml',
+        'views/view_job_order_stage.xml',
+        'wizard/change_scheduled_date_order_views.xml',
+        'wizard/change_scheduled_date_views.xml',
+        'wizard/shift_schedule_wizard.xml',
+        'views/menuitems.xml',
+        # 'views/operation_dashboard_views.xml',
+        # 'views/dashboard.xml'
+    ],
+    # 'assets': {
+    #     'web.assets_backend': [
+    #         'mtech_vehicle_extended/static/src/js/dashboard.js',
+    #     ],
+    #     'web.assets_qweb': [
+    #         'mtech_vehicle_extended/static/src/xml/operation_dashboard_template.xml',
+    #     ],
+    # },
+    'installable': True,
+    'application': True,
+}

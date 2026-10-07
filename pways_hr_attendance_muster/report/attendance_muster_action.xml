@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="attendance_muster_report_xlsx" model="ir.actions.report">
+            <field name="name">Attendances Muster Report</field>
+            <field name="model">hr.attendance.muster</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">pways_hr_attendance_muster.attendance_muster_report_xlsx</field>
+            <field name="report_file">pways_hr_attendance_muster.attendance_muster_report_xlsx</field>
+            <field name="binding_model_id" ref="model_hr_attendance_muster"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

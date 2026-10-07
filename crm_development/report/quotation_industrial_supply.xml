@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_quotation_industrial_supply">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="crm_development.external_layout_template">
+                    <div class="page">
+                        <style>
+                            .custom-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                font-size: 9pt;
+                            }
+                            .custom-table th, .custom-table td {
+                                border: 1px solid black;
+                                padding: 4px;
+                                text-align: left;
+                                vertical-align: top;
+                            }
+                            .custom-table th {
+                                background-color: #f0f0f0;
+                                font-weight: bold;
+                                text-align: center;
+                            }
+                            .header-info {
+                                font-size: 10pt;
+                                margin-bottom: 10px;
+                            }
+                            .title-section {
+                                text-align: center;
+                                margin-bottom: 20px;
+                            }
+                            .note-section {
+                                background-color: #f0f0f0;
+                                padding: 5px;
+                                margin-top: 10px;
+                                font-size: 9pt;
+                            }
+                            .footer-note {
+                                margin-top: 15px;
+                                font-size: 9pt;
+                            }
+                            .bank-details {
+                                margin-top: 15px;
+                                font-size: 9pt;
+                            }
+                        </style>
+
+                        <!-- Title -->
+                        <div class="title-section">
+                            <h2 style="margin: 0;"><b>SALES QUOTATION</b></h2>
+                        </div>
+
+                        <!-- Header Information -->
+                        <div class="row header-info">
+                            <div class="col-6">
+                                <div><b>Customer Name:</b></div>
+                                <div><span t-field="o.partner_id.name"/></div>
+                                <div style="margin-top: 10px;"><b>SHIPPED FROM:</b></div>
+                                <div><span t-field="o.warehouse_id.partner_id.name"/></div>
+                                <div><span t-field="o.warehouse_id.partner_id.street"/></div>
+                                <div><span t-field="o.warehouse_id.partner_id.city"/></div>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                                <div><b>Quotation No: </b><span t-field="o.name"/></div>
+                                <div><b>Date: </b><span t-field="o.date_order" t-options='{"format": "dd-MMM-yyyy"}'/></div>
+                                <div style="margin-top: 10px;"><b>Payment Term: </b><span t-field="o.payment_term_id.name"/></div>
+                                <div><b>Valid From: </b><span t-field="o.start_date" t-options='{"format": "dd-MMM-yyyy"}'/></div>
+                                <div><b>Valid To: </b><span t-field="o.end_date" t-options='{"format": "dd-MMM-yyyy"}'/></div>
+                            </div>
+                        </div>
+
+                        <!-- Order Lines Table -->
+                        <table class="custom-table" style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;">SR<br/>NO.</th>
+                                    <th style="width: 20%;">DESCRIPTION</th>
+                                    <th style="width: 20%;">MANUFACTURER<br/>DESCRIPTION</th>
+                                    <th style="width: 7%;">UOM</th>
+                                    <th style="width: 7%;">QTY.</th>
+                                    <th style="width: 10%;">UNIT<br/>PRICE<br/>(QAR)</th>
+                                    <th style="width: 13%;">TOTAL PRICE<br/>(QAR)</th>
+                                    <th style="width: 10%;">DELIVERY<br/>TERMS</th>
+                                    <th style="width: 10%;">DELIVERY TIME</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="line_number" t-value="0"/>
+                                <t t-foreach="o.order_line" t-as="line">
+                                    <t t-set="line_number" t-value="line_number + 1"/>
+                                    <tr>
+                                        <!-- SR NO -->
+                                        <td style="text-align: center;">
+                                            <span t-esc="'%02d' % line_number"/>
+                                        </td>
+                                        
+                                        <!-- DESCRIPTION (from sale order line name) -->
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        
+                                        <!-- MANUFACTURER DESCRIPTION (from product's Internal Notes/Specification field) -->
+                                        <td>
+                                            <span t-field="line.product_id.description"/>
+                                        </td>
+                                        
+                                        <!-- UOM -->
+                                        <td style="text-align: center;">
+                                            <span t-field="line.product_uom.name"/>
+                                        </td>
+                                        
+                                        <!-- QTY -->
+                                        <td style="text-align: center;">
+                                            <span t-esc="'%.0f' % line.product_uom_qty"/>
+                                        </td>
+                                        
+                                        <!-- UNIT PRICE (from sales_price field) -->
+                                        <td style="text-align: right;">
+                                            <span t-esc="'%.2f' % line.sales_price"/>
+                                        </td>
+                                        
+                                        <!-- TOTAL PRICE (from total_price field) -->
+                                        <td style="text-align: right;">
+                                            <span t-esc="'%.2f' % line.total_price"/>
+                                        </td>
+                                        
+                                        <!-- DELIVERY TERMS (from incoterm_ids Many2many) -->
+                                        <td style="text-align: center;">
+                                            <t t-foreach="line.incoterm_ids" t-as="incoterm">
+                                                <span t-field="incoterm.code"/>
+                                                <t t-if="not incoterm_last">, </t>
+                                            </t>
+                                        </td>
+                                        
+                                        <!-- DELIVERY TIME (from delivery_time field) -->
+                                        <td style="text-align: center;">
+                                            <span t-field="line.delivery_time"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                
+                                <!-- Total Amount Row -->
+                                <tr>
+                                    <td colspan="6" style="text-align: right;"><b>TOTAL AMOUNT</b></td>
+                                    <td style="text-align: right;">
+                                        <b><span t-esc="'%.2f' % sum(line.total_price for line in o.order_line)"/></b>
+                                    </td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Note Section with Yellow Background (Terms and Conditions) -->
+                        <t t-if="o.note">
+                            <div class="note-section">
+                                <b>NOTE / COMMENT:</b><br/>
+                                <span t-field="o.note"/>
+                            </div>
+                        </t>
+
+                        <!-- Bank Details -->
+                        <div class="bank-details">
+                            <div><b>Bank Name: </b><span t-field="o.company_id.bank_ids[0].bank_id.name" t-if="o.company_id.bank_ids"/></div>
+                            <div><b>Beneficialy Name: </b><span t-field="o.company_id.name"/></div>
+                            <div><b>Branch Name: </b><span t-field="o.company_id.bank_ids[0].bank_id.street" t-if="o.company_id.bank_ids"/></div>
+                            <div><b>Bank Address: </b><span t-field="o.company_id.bank_ids[0].bank_id.street" t-if="o.company_id.bank_ids"/></div>
+                            <div><b>Bank Account No: </b><span t-field="o.company_id.bank_ids[0].acc_number" t-if="o.company_id.bank_ids"/></div>
+                            <div><b>Swift Code: </b><span t-field="o.company_id.bank_ids[0].bank_id.bic" t-if="o.company_id.bank_ids"/></div>
+                            <div><b>IBAN No: </b><span t-field="o.company_id.bank_ids[0].acc_number" t-if="o.company_id.bank_ids"/></div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

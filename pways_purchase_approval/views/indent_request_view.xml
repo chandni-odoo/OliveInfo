@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_indent_request_form_inherit" model="ir.ui.view">
+        <field name="name">indent.request.view</field>
+        <field name="model">indent.request</field>
+        <field name="inherit_id" ref="purchase_indent_request.view_indent_request_from"/>
+        <field name="arch" type="xml">
+            <field name="department_id" position="after">
+                <field name="no_approval" invisible="1"/>
+                <field name="has_approval" invisible="1"/>
+            </field>
+            <xpath expr="//button[@name='check_availability']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('state', 'in', ('draft', 'cancel', 'done')), ('no_approval', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_tender']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('state', 'in', ('draft', 'cancel','done')), ('no_approval', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                <button string="Approval" name="action_approval" type="object" attrs="{'invisible': [('has_approval', '=', False)]}" class="oe_highlight"/>
+                <button string="Reject" name="%(pways_purchase_approval.approval_rejected_action)d" type="action" attrs="{'invisible': [('has_approval', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Approver History">
+                    <field name="approval_history_ids" mode="tree">
+                        <tree editable="bottom">
+                            <field name="user_id"/>
+                            <field name="status"/>
+                            <field name="date_done"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <field name="reject_reason" label="Reject Reason" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

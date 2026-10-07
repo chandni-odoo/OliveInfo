@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="terms_condition_tree_view" model="ir.ui.view">
+        <field name="name">terms.condition.tree.view</field>
+        <field name="model">terms.condition</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="condition_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="terms_condition_form_view" model="ir.ui.view">
+        <field name="name">terms.condition.form.view</field>
+        <field name="model">terms.condition</field>
+        <field name="arch" type="xml">
+            <form string="Terms and Conditions">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="condition_type"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_terms_condition" model="ir.actions.act_window">
+        <field name="name">Terms Condition</field>
+        <field name="res_model">terms.condition</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_terms_condition"
+        name="Terms and Conditions"
+        action="action_terms_condition"
+        parent="base.menu_users"
+        sequence="14"
+        />
+</odoo>

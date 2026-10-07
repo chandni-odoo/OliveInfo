@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="hr_accident_tree_view">
+        <field name="name">hr.accident.tree.view</field>
+        <field name="model">hr.accident</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee_id"/>           
+                <field name="incident_type" string='Type'/>
+                <field name="date_of_reporting"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_accident_form_view">
+            <field name="name">hr.accident.form.view</field>
+            <field name="model">hr.accident</field>
+            <field name="arch" type="xml">
+                <form string="Hr Details">
+                     <header>
+                        <button name="button_confirm"  string="Confirm" type="object" class="oe_highlight" states='draft'/>
+                        <button name="button_set_to_draft"  string="Set to Draft" type="object" class="oe_highlight" states='confirm'/>
+                        <button name="button_cancel"  string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['cancel'])]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>   
+                        <group>
+                            <group>               
+                                <field name="incident_type" widget="radio"/> 
+                                <field name="employee_id" required='1'/> 
+                                <field name="department_id"/> 
+                                <field name="job_id"/> 
+                                <field name="occupation"/>               
+                                <field name="date_of_accident" attrs="{'invisible': [('incident_type', '=', 'incident')]}"/>
+                                <field name="date_of_incident" attrs="{'invisible': [('incident_type', '=', 'accident')]}"/>               
+                                <field name="time_location"/>               
+                                <field name="date_of_reporting" required='1'/>               
+                            </group>
+                            <group> 
+                                <field name="type_of_injury" widget="radio"/>
+                                <field name="hospital" required='1'/>
+                                <field name="date_of_resumption"/>
+                                <field name="sick"/>
+                                <field name="wiba"/>
+                                <field name="witnesses"/> 
+                            </group> 
+                        </group>
+                        <notebook>
+                            <page string="Medical Reports">
+                                <field name="hr_lines">
+                                    <tree editable="bottom">
+                                        <field name="name" required='1'/>
+                                        <field name="file"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attachments">
+                                <field name="attachment_ids" widget='many2many_binary'>
+                                </field>
+                            </page>
+                       </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_accident_employee_view" model="ir.ui.view">
+            <field name="name">hr.accident.search.view</field>
+             <field name="model">hr.accident</field>
+             <field name="arch" type="xml">
+                <search string="HR Accidents">
+                     <filter string="Employee" name="employee_id" context="{'group_by': 'employee_id'}"/>
+                     <filter string="Type" name="incident_type" context="{'group_by': 'incident_type'}"/>
+                     <filter string="Department" name="employee_id" context="{'group_by': 'department_id'}"/>
+                </search>
+             </field>
+        </record>
+
+        <!-- Action -->
+        <record model="ir.actions.act_window" id="action_view_of_hr_tea_accident">
+                <field name="name">Employee Accidents</field>
+                <field name="res_model">hr.accident</field>
+                <field name="view_mode">search,tree,form</field>
+        </record>
+            
+
+         <menuitem
+            id="menu_hr_tea_accident"
+            name="Accident Details"
+            action="action_view_of_hr_tea_accident"
+            parent="hr.menu_hr_employee_payroll"
+            sequence="3"
+        />             
+    
+</odoo>
+
+
+
+
+
+
+<!-- <record id="view_res_partner_filter" model="ir.ui.view">
+<field name="name">res.partner.inherit</field>
+<field name="model">res.partner</field>
+<field name="inherit_id" ref="base.view_res_partner_filter"/>
+<field name="arch" type="xml">
+
+<xpath expr="//filter[@name='type_person']" position="before">
+<filter string="Is Partner Category" name="is_partner_category_id" domain="[('is_partner_category_id', '=', True)]"/>
+</xpath>
+<xpath expr="//filter[@name='salesperson']" position="before">
+<filter name="partner_category_id" string="Partner Category" context="{'group_by': 'partner_category_id'}"/>
+</xpath> -->

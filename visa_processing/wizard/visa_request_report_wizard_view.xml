@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_visa_request_report_wizard_form" model="ir.ui.view">
+        <field name="name">visa.request.report.wizard.form</field>
+        <field name="model">visa.request.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Visa Request Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="visa_process_type"/>
+                        </group>
+                        <group>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print_report" string="Generate Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_request_report_wizard" model="ir.actions.act_window">
+        <field name="name">Visa Request Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">visa.request.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_visa_request_report"
+        name="Visa Request Report"
+        parent="menu_visa_reports"
+        action="action_visa_request_report_wizard"
+        sequence="1"/>
+</odoo>

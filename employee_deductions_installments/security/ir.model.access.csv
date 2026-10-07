@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_deduction,hr.employee.deduction,model_hr_employee_deduction,base.group_user,1,1,1,1
+access_hr_employee_deduction_type,hr.employee.deduction.type,model_hr_employee_deduction_type,base.group_user,1,1,1,1
+access_hr_employee_deduction_installment,hr.employee.deduction.installment,model_hr_employee_deduction_installment,base.group_user,1,1,1,1

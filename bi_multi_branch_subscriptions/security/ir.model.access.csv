@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_subscription_user,subscription_user,sale_subscription.model_sale_subscription,branch.group_branch_user,1,1,0,0
+access_subscription_manager,subscription_manager,sale_subscription.model_sale_subscription,branch.group_branch_user_manager,1,1,1,1

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_contacts_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sale_extended.view_contacts_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ava_credit_bal']" position="after">
+                <field name="unbilled_amount" readonly="1"/>
+                <field name="current_outstanding" readonly="1"/>
+                <field name="unposted_invoices" readonly="1"/>
+                <field name="credit_bal_negative" invisible="1"/>
+                <field name="total_exposure" readonly="1"/>
+                <field name="is_customer_black_list"/>
+                <field name="blacklist_reason"/>
+                <field name="first_approval_request"/>
+                <field name="second_approval_request"/>
+                <field name="third_approval_request"/>
+            </xpath>
+            <xpath expr="//field[@name='credit_manager']" position="after">
+                <field name="credit_control_exception"/>
+                <field name="hold_position"/>
+                <field name="approver_1"/>
+                <field name="approver_2"/>
+                <field name="approver_3"/>
+                <field name="last_approver"/>
+                <field name="approver_comment"/>
+                <field name="release_until"/>
+                <field name="hold_date"/>
+            </xpath>
+            <xpath expr="//field[@name='ava_credit_bal']" position="replace">
+                <field name="ava_credit_bal" decoration-danger="credit_bal_negative == True"/>
+            </xpath>
+            <xpath expr="//field[@name='hold_reason']" position="replace">
+                <field name="hold_reason"/>
+            </xpath>
+            <xpath expr="//field[@name='credit_block']" position="replace">
+                <field name="credit_block"/>
+            </xpath>
+            <xpath expr="//field[@name='hold_option']" position="replace">
+                <field name="hold_option"/>
+            </xpath>
+            <xpath expr="//sheet" position="after">
+        </xpath>
+        </field>
+    </record>
+</odoo>

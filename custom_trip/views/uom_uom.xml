@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="uom_form_view" model="ir.ui.view">
+        <field name="name">Unit of Measure</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+<!--            <xpath expr="//group/group[@name='uom_details']/field[@name='umo_type']" position="after">-->
+            <xpath expr="//field[@name='name']" position="after">
+                <group>
+                    <field name="lumpsum_check"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+     <record id="uom_category_form_view" model="ir.ui.view">
+        <field name="name">Unit of Measure Category</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='uom_lines']/field[@name='uom_ids']/tree/field[@name='active']" position="after">
+                    <field name="lumpsum_check"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contacts_form_inherit_legal_case" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.legal.case</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sale_extended.view_contacts_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='customer_master']//field[@name='address_no']" position="after">
+                <field name="legal_case"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

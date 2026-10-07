@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accommodation_check_out_form" model="ir.ui.view">
+        <field name="name">accommodation.check.out.form</field>
+        <field name="model">accommodation.check.out</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="check_out_id"/>
+                            <field name="employee_id"/>
+                            <field name="checkin_id"/>
+                            <field name="checklist_id"/>
+                            <field name="camp_id" readonly="1"/>
+                            <field name="floor_id" readonly="1"/>
+                            <field name="room_id" readonly="1"/>
+                            <field name="bed_id" readonly="1"/>   
+                        </group>
+                        <group>
+                            <field name="check_out_date"/>
+                            <field name="returned_items"/>
+                            <field name="status"/>
+                            <field name="checkout_reason"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_confirm_checkout" string="Confirm Check-out" type="object" class="btn-primary"/>
+                    </footer>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_accommodation_check_out_tree" model="ir.ui.view">
+        <field name="name">accommodation.check.out.tree</field>
+        <field name="model">accommodation.check.out</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="check_out_id"/>
+                <field name="checkin_id" readonly="1"/>
+                <field name="employee_id"/>
+                <field name="camp_id" readonly="1"/>
+                <field name="floor_id" readonly="1"/>
+                <field name="room_id" readonly="1"/>
+                <field name="bed_id" readonly="1"/>
+                <field name="check_out_date"/>
+                <field name="returned_items"/>
+                <field name="status"/>
+                <field name="checkout_reason"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_check_out" model="ir.actions.act_window">
+        <field name="name">Check-Out</field>
+        <field name="res_model">accommodation.check.out</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

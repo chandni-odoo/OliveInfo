@@ -1,0 +1,47 @@
+<odoo>
+
+    <data>
+
+        <record id="stop_warning_view_form" model="ir.ui.view">
+            <field name="name">stop.warning.view.form</field>
+            <field name="model">stop.warning</field>
+            <field name="arch" type="xml">
+                <form create="0">
+                    <sheet>
+                        <group>
+                            <field name="stop_check"/>
+                            <field name="warning_check"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="stop_warning_view_tree" model="ir.ui.view">
+            <field name="name">stop.warning.view.tree</field>
+            <field name="model">stop.warning</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="stop_check"/>
+                    <field name="warning_check"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stop_warning_action" model="ir.actions.act_window">
+            <field name="name">Stop Warning</field>
+            <field name="res_model">stop.warning</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="stop_warning_view_tree"/>
+        </record>
+
+        <menuitem
+                id="menu_stop_warning"
+                name="Stop Warning"
+                parent="planning.planning_menu_settings"
+                sequence="0"
+                action="stop_warning_action"/>
+
+    </data>
+
+</odoo>

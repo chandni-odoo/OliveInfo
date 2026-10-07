@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_monthly_variance_report_xlsx" model="ir.actions.report">
+        <field name="name">Monthly Variance Report</field>
+        <field name="model">budget.monthly.variance.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">budget_customizations.monthly_variance_xlsx</field>
+        <field name="report_file">budget_customizations.monthly_variance_xlsx</field>
+    </record>
+</odoo>

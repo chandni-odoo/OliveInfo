@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_trip_sheet_view_form_inherit_recyclables" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.form.inherit.recyclables</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="inherit_id" ref="custom_trip.custom_trip_sheet_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='skip_load_ids']/tree/field[@name='haz_material']"
+                   position="after">
+                <field name="recyclables_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_waste_recyclables_tree" model="ir.ui.view">
+        <field name="name">waste.recyclables.tree</field>
+        <field name="model">waste.recyclables</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_waste_recyclables_form" model="ir.ui.view">
+        <field name="name">waste.recyclables.form</field>
+        <field name="model">waste.recyclables</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_waste_recyclables" model="ir.actions.act_window">
+        <field name="name">Recyclables</field>
+        <field name="res_model">waste.recyclables</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_waste_recyclables"
+        name="Recyclables"
+        parent="mtech_vehicle_extended.menu_operation_configuration"
+        action="action_waste_recyclables"
+        sequence="20"/>
+
+</odoo>

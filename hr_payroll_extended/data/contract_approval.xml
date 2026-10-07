@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Activities -->
+        <record id="contract_approval_process_data" model="contract.approval.process">
+            <field name="name">Contract Approval</field>
+        </record>
+    </data>
+</odoo>

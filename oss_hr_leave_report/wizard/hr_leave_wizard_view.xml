@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view for the HR Leave Wizard -->
+    <record id="view_hr_leave_wizard_form" model="ir.ui.view">
+        <field name="name">hr.leave.wizard.form</field>
+        <field name="model">hr.leave.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="HR Leave Wizard">
+                <group>
+                    <group string="Employee Details">
+                        <field name="branch_ids" widget="many2many_tags"/>
+                        <field name="employee_ids" domain="[('branch_id', 'in', branch_ids)]" widget="many2many_tags"/>
+                    </group>
+                    <group string="Leave Date Range">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="export_leave_data_to_excel" string="Export to Excel" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+                <field name="file_data" invisible="1"/>
+                <field name="file_name" invisible="1"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the wizard -->
+    <record id="action_hr_leave_wizard" model="ir.actions.act_window">
+        <field name="name">HR Leave Wizard</field>
+        <field name="res_model">hr.leave.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu item to trigger the wizard -->
+    <menuitem id="menu_hr_leave_wizard"
+              name="Leave Wizard"
+              parent="hr.menu_hr_root"
+              action="action_hr_leave_wizard"/>
+</odoo>

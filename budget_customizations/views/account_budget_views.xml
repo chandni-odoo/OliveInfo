@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Modify the budget form view to add branch field -->
+    <record id="crossovered_budget_view_form_inherit" model="ir.ui.view">
+        <field name="name">crossovered.budget.view.form.inherit</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Modify the tree view inside form view to add new fields -->
+            <xpath expr="//field[@name='crossovered_budget_line']/tree/field[@name='is_above_budget']" position="before">
+                <field name="remark"/>
+                <field name="working_details"/>
+            </xpath>
+            <xpath expr="//field[@name='paid_date']" position="replace"/>
+            <!-- Modify the form view inside form view to add new fields -->
+            <xpath expr="//field[@name='crossovered_budget_line']/form//field[@name='company_id']" position="after">
+                <field name="remark"/>
+                <field name="working_details"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Modify analytic account form view to add new fields -->
+    <record id="view_account_analytic_account_form_inherit_budget_custom" model="ir.ui.view">
+        <field name="name">account.analytic.account.form.inherit.budget.custom</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="account_budget.view_account_analytic_account_form_inherit_budget"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='crossovered_budget_line']/tree/field[@name='currency_id']" position="before">
+                <field name="remark"/>
+                <field name="working_details"/>
+            </xpath>
+            <xpath expr="//field[@name='crossovered_budget_line']/form//field[@name='currency_id']" position="after">
+                <field name="remark"/>
+                <field name="working_details"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_budget_post_form_inherit" model="ir.ui.view">
+        <field name="name">account.budget.post.form.inherit</field>
+        <field name="model">account.budget.post</field>
+        <field name="inherit_id" ref="account_budget.view_budget_post_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="main_group_id"/>
+                <field name="sub_group_id"/>
+                <field name="sequence"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_budget_post_tree_inherit" model="ir.ui.view">
+        <field name="name">account.budget.post.tree.inherit</field>
+        <field name="model">account.budget.post</field>
+        <field name="inherit_id" ref="account_budget.view_budget_post_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="main_group_id"/>
+                <field name="sub_group_id"/>
+                 <field name="sequence"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_budget_main_form">
+        <field name="name">budget.main.group.form</field>
+        <field name="model">budget.main.group</field>
+        <field name="arch" type="xml">
+            <form string="Budget Main Group">
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="budget_type" widget="radio" options="{'horizontal': true}"/>
+                    <!-- <field name="sequence"/> -->
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_budget_sub_form">
+        <field name="name">budget.sub.group.form</field>
+        <field name="model">budget.sub.group</field>
+        <field name="arch" type="xml">
+            <form string="Budget sub Group">
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <!-- <field name="sequence"/> -->
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_budget_main_tree" model="ir.ui.view">
+        <field name="name">budget.main.group.tree</field>
+        <field name="model">budget.main.group</field>
+        <field name="arch" type="xml">
+            <tree string="Budgetary Position">
+                <field name="name"/>
+                <field name="code"/>
+                <!-- <field name="sequence"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_budget_sub_tree" model="ir.ui.view">
+        <field name="name">budget.sub.group.tree</field>
+        <field name="model">budget.sub.group</field>
+        <field name="arch" type="xml">
+            <tree string="Budgetary Position">
+                <field name="name"/>
+                <field name="code"/>
+                <!-- <field name="sequence"/> -->
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_budget_main_group" model="ir.actions.act_window">
+        <field name="name">Budget Main Groups</field>
+        <field name="res_model">budget.main.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <record id="action_budget_sub_group" model="ir.actions.act_window">
+        <field name="name">Budget Sub Groups</field>
+        <field name="res_model">budget.sub.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem id="menu_budget_main_group" name="Main Groups" parent="account.account_management_menu" action="action_budget_main_group" sequence="20" groups="budget_customizations.group_account_admin"/>
+    <menuitem id="menu_budget_sub_group" name="Sub Groups" parent="account.account_management_menu" action="action_budget_sub_group" sequence="21" groups="budget_customizations.group_account_admin"/>
+    
+</odoo>

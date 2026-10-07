@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Shift -->
+    <menuitem id="menu_shift_scheduling"
+        name="Shift Scheduling"
+        web_icon="mtech_vehicle_extended,static/description/icon2.png"
+        sequence="10" />
+    <!-- Assign Shift -->
+    <menuitem id="menu_assign_shift"
+        name="Assign Shift"
+        parent="menu_shift_scheduling"
+        action="action_view_assign_shift"
+        sequence="11" />
+
+    <!-- Opration Schedule -->
+    <menuitem id="menu_operation_schedules"
+        name="Shift Schedule"
+        parent="menu_shift_scheduling"
+        action="action_operation_schedules"
+        sequence="12" />
+    <!-- Oprations -->
+    <menuitem id="menu_operation_schedule"
+        name="Operation Schedules" 
+        web_icon="mtech_vehicle_extended,static/description/icon.png" 
+        sequence="15" />
+    <!-- Job ORder -->
+    <menuitem id="menu_job_order_task"
+        name="Job Orders" 
+        parent="menu_operation_schedule"
+        action="action_project_task_job_order"
+        sequence="2" />
+    <!-- Trip Sheet -->
+    <menuitem id="menu_opration_trip"
+        name="Trip Sheet" 
+        parent="menu_operation_schedule"
+        action="custom_trip.action_trip_sheet"
+        sequence="3" />
+    <!-- Vehicle -->
+    <menuitem id="menu_opration_vehicle"
+        name="Vehicle" 
+        parent="menu_operation_schedule"
+        action="fleet.fleet_vehicle_action"
+        sequence="3" />
+    <!-- Maintanance -->
+    <menuitem id="menu_opration_maintenance"
+        name="Equipment" 
+        parent="menu_operation_schedule"
+        action="maintenance.hr_equipment_action"
+        sequence="4" />
+    <!-- Opration Action -->
+    <!-- <menuitem id="menu_change_scheduled_date"
+        name="Change Scheduled Date"
+        parent="menu_operation_schedule"
+        action="action_change_scheduled_date"
+        sequence="5" /> -->
+    <menuitem id="menu_change_scheduled_date_order"
+        name="Change Scheduled Date Order"
+        parent="menu_operation_schedule"
+        action="action_change_scheduled_date_order"
+        sequence="6" />
+    <menuitem id="menu_operation_configuration"
+        name="Configuration"
+        parent="menu_operation_schedule"
+        sequence="10" />
+    <menuitem id="menu_job_order_stage"
+        name="Job Order Stages"
+        parent="menu_operation_configuration"
+        action="mtech_vehicle_extended.action_job_order_stage"
+        sequence="15" />
+
+</odoo>

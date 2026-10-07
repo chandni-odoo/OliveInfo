@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="vehicle_permit_tree" model="ir.ui.view">
+        <field name="name">vehicle.permit.tree</field>
+        <field name="model">vehicle.permit</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <!-- Form View -->
+    <record id="view_permit_form" model="ir.ui.view">
+        <field name="name">vehicle.permit.form</field>
+        <field name="model">vehicle.permit</field>
+        <field name="arch" type="xml">
+            <form string="Permits">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Action -->
+    <record id="action_vehicle_permit" model="ir.actions.act_window">
+        <field name="name">Permits</field>
+        <field name="res_model">vehicle.permit</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- Menuitem -->
+    <menuitem id="menu_pemits" name="Permits" parent="fleet.fleet_configuration" action="action_vehicle_permit" />
+</odoo>

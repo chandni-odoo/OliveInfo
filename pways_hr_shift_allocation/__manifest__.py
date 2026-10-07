@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "HR Shift Allocation",
+    'summary': "HR Shift Allocation",
+    'description': "HR Shift Allocation",
+    'category': 'Human Resources',
+    'version': '15.0.0',
+    'author':'Preciseways',
+    'website': "http://www.preciseways.com",
+    'depends': ['hr', 'hr_extended'],
+    'data': [
+                'security/ir.model.access.csv',
+                'data/data.xml',
+                'views/hr_shift.xml',
+                'views/sub_type_view.xml',             
+                'views/hr_employee.xml',                  
+                'views/shift_allocation_view.xml',
+                'views/day_of_week.xml',
+                'wizard/bulk_allocation.xml',            
+            ],
+    'installable': True,
+    'application': True,
+    'price': 15.0,
+    'currency': 'EUR',
+    'images':['static/description/banner.png'],
+    'license': 'LGPL-3',
+}   

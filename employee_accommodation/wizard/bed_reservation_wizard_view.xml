@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bed_reservation_wizard_form" model="ir.ui.view">
+        <field name="name">bed.reservation.wizard.form</field>
+        <field name="model">bed.reservation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reserve Beds">
+                <group>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                    <field name="reason"/>
+                    <field name="requested_by"/>
+                </group>
+                <footer>
+                    <button string="Reserve" type="object" class="btn-primary" name="action_reserve_beds"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bed_reservation_wizard" model="ir.actions.act_window">
+        <field name="name">Reserve Beds</field>
+        <field name="res_model">bed.reservation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

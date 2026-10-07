@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="so_frequency_tree_view" model="ir.ui.view">
+        <field name="name">so.frequency.tree.view</field>
+        <field name="model">so.frequency</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="so_frequency_form_view" model="ir.ui.view">
+        <field name="name">so.frequency.form.view</field>
+        <field name="model">so.frequency</field>
+        <field name="arch" type="xml">
+            <form string="Frequency">
+               <group>
+                    <group>
+                        <field name="name"/>
+                    </group>    
+                </group>
+                    
+            </form>
+        </field>
+    </record>
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_view_of_so_frequency">
+        <field name="name">Frequency</field>
+        <field name="res_model">so.frequency</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="so_frequency_tree_view"/>
+    </record>
+    <menuitem
+        id="menu_so_frequency"
+        name="Frequency "
+        action="action_view_of_so_frequency"
+        parent="sale.menu_sale_config"
+        sequence="15"/>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="report_room_summary_pdf" model="ir.actions.report">
+            <field name="name">Camp Availability &amp; Occupancy Percentage</field>
+            <field name="model">room.summary.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">employee_accommodation.room_summary_report</field>
+            <field name="report_file">employee_accommodation.room_summary_report</field>
+            <field name="print_report_name">'Summary Report.pdf'</field>
+            <field name="binding_model_id" ref="employee_accommodation.model_accommodation_room"/>
+            <field name="paperformat_id" ref="employee_accommodation.paperformat_employee_accommodation"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+
+
+    <template id="room_summary_report">
+        <t t-call="web.html_container">
+            <div class="page">
+                <div class="article o_report_layout_standard">
+                    <div class="row mt-0" style="margin-top: 0 !important; padding-top: 0 !important;">
+                        <div class="col-6">
+                            <img t-if="company.logo" 
+                                t-att-src="image_data_uri(company.logo)" 
+                                style="max-height: 100px; max-width: 200px;"/>
+                        </div>
+                        <div class="col-6 text-right">
+                            <img t-if="company.top_right" 
+                                t-att-src="image_data_uri(company.top_right)" 
+                                style="max-height: 100px; max-width: 200px;"/>
+                        </div>
+                    </div>
+                    <h2 class="text-center">Camp Availability &amp; Occupancy Percentage</h2>
+                    <t t-foreach="grouped_rooms" t-as="camp">
+                        <h3>Camp: <t t-esc="camp['camp_name']"/></h3>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Floor</th>
+                                    <th>Room</th>
+                                    <th>Beds Capacity</th>
+                                    <th>Beds Available</th>
+                                    <th>Availability (%)</th>
+                                    <th>Occupancy</th>
+                                    <th>Occupancy (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="camp['rooms']" t-as="room">
+                                    <tr>
+                                        <td><t t-esc="room.floor_id.name or 'N/A'"/></td>
+                                        <td><t t-esc="room.name"/></td>
+                                        <td><t t-esc="room.capacity"/></td>
+                                        <td><t t-esc="room.available_bed_count"/></td>
+                                        <td>
+                                            <t t-esc="round((room.available_bed_count / room.capacity * 100), 2) if room.capacity else 0"/>%
+                                        </td>
+                                        <td><t t-esc="room.allocated_bed_count"/></td>
+                                        <td>
+                                            <t t-esc="round((room.allocated_bed_count / room.capacity * 100), 2) if room.capacity else 0"/>%
+                                        </td>
+                                    </tr>
+                                </t>
+        
+                                <tr style="font-weight: bold;">
+                                    <td colspan="2">Total</td>
+                                    <td><t t-esc="camp['total_capacity']"/></td>
+                                    <td><t t-esc="camp['total_available_beds']"/></td>
+                                    <td>
+                                        <t t-esc="round((camp['total_available_beds'] / camp['total_capacity'] * 100), 2) if camp['total_capacity'] else 0"/>%
+                                    </td>
+                                    <td><t t-esc="camp['total_allocated_beds']"/></td>
+                                    <td>
+                                        <t t-esc="round((camp['total_allocated_beds'] / camp['total_capacity'] * 100), 2) if camp['total_capacity'] else 0"/>%
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_other_settlements,access_other_settlements,model_other_settlements,base.group_user,1,1,1,1
+access_hr_leave_balance,access_hr_leave_balance,model_hr_leave_balance,base.group_user,1,1,1,1
+access_hr_other_gratuity,access_hr_other_gratuity,model_hr_other_gratuity,base.group_user,1,1,1,1
+hr_resignation_settlement.access_hr_other_statement,access_hr_other_statement,hr_resignation_settlement.model_hr_other_statement,base.group_user,1,1,1,1
+

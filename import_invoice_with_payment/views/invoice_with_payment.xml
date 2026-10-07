@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    	<record id="gen_inv_wizard_view_form_inherit" model="ir.ui.view">
+            <field name="name">wizard for import invoice with payment </field>
+            <field name="model">gen.invoice</field>
+            <field name="inherit_id" ref="import_invoice.gen_inv_wizard_view_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="/form/group[3]" position="replace">
+            		<group>
+            			<group>
+            				<field name="import_prod_option" widget='radio'/>
+            			</group>
+            			<group>
+            				<field name="partial_payment" widget='radio' attrs="{'invisible': [('stage','not in','payment')],}"/>
+                            <field name="writeoff_account" attrs="{'invisible': [('partial_payment','not in','writeoff')],}"/>
+            			</group>
+            		</group>             
+            	</xpath>
+                <xpath expr="/form/group[5]" position="inside">
+                    <group>
+                        <field name="allow_payment" attrs="{'invisible': [('stage','not in','payment')],}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="account_move_view_form_inherit" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="multiple_payment_amount" invisible="1"/>        
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

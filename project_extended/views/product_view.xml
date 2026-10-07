@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hr_ramadan_tree_view">
+            <field name="name">ramadan.tree.view</field>
+            <field name="model">timeoff.ramadan</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date_from"/> 
+                    <field name="date_to"/>
+                </tree>
+            </field>
+        </record>
+<!-- 
+        <record id="timeoff_ramadan_form_view" model="ir.ui.view">
+            <field name="name">timeoff.ramadan.form.view</field>
+            <field name="model">timeoff.ramadan</field>
+            <field name="arch" type="xml">
+                <form string="Ramadan">
+                    <sheet>  
+                        <group>
+                            <group>               
+                                <field name="date_from"/>               
+                                <field name="hours"/> 
+                            </group>
+                            <group> 
+                                <field name="date_to"/>
+                            </group> 
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+ -->
+        <!-- Action -->
+        <record id="action1_timeoff_ramadan" model="ir.actions.act_window">
+            <field name="name">Ramadan Leaves</field>
+            <field name="res_model">timeoff.ramadan</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+         <menuitem
+            id="menu_timeoff_ramadan"
+            name="Ramadan Leaves"
+            action="action1_timeoff_ramadan"
+            parent="hr_holidays.menu_hr_holidays_configuration"
+            sequence = "5"
+            />
+
+
+        <record id="product_template_form_view_inherits" model="ir.ui.view">
+            <field name="name">product.template.form.inherits</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//div[@name='options']" position='inside'>
+                <div>
+                  <field name="is_overtime_product"/>
+                  <label for="is_overtime_product"/>
+                </div>
+              </xpath>
+              <xpath expr="//field[@name='uom_po_id']" position="after">
+                  <field name="based_cost"/>
+                  <field name="recurring"/>
+              </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

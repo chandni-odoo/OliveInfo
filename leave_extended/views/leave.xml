@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_leave_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.view.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+
+            <!--            point no 8-->
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="groups">leave_extended.leave_approval_group</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="groups">leave_extended.validate_leave_approved_group</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="groups">leave_extended.leave_approval_group</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="air_ticket"/>
+                <field name="emergency_contact_number"/>
+                <field name="address"/>
+                <field name="check_leave_view"/>
+                <field name="recycle_planning"/>
+                <field name="duty_resumption_leave"/>
+                <field name="is_calender_day"/>
+            </xpath>
+
+
+            <xpath expr="//sheet/group/group[@name='col_left']/div[1]" position="after">
+                <field name="cal_custom_duration"
+                       attrs="{'invisible': [('cal_custom_duration', '=', 0.0)]}"/>
+            </xpath>
+
+            <xpath expr="//sheet/group/group[@name='col_left']/label[2]" position="replace">
+                <label for="number_of_days" string="Duration"
+                       attrs="{'invisible': [('request_unit_half', '=', True), ('leave_type_request_unit', '!=', 'hour')]}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--    <record id="hr_leave_tree_new_inherit" model="ir.ui.view">-->
+    <!--        <field name="name">hr.leave.view.tree.new.inherit</field>-->
+    <!--        <field name="model">hr.leave</field>-->
+    <!--        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>-->
+    <!--        <field name="arch" type="xml">-->
+
+    <!--            <xpath expr="//button[@name='action_approve']" position="replace">-->
+    <!--                <button string="Approve1" name="action_approve" type="object"-->
+    <!--                        icon="fa-thumbs-up"-->
+    <!--                        states="confirm"-->
+    <!--                        />-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//button[@name='action_validate']" position="attributes">-->
+    <!--                <attribute name="groups">leave_extended.leave_approval_group</attribute>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//button[@name='action_refuse']" position="attributes">-->
+    <!--                <attribute name="groups">leave_extended.leave_approval_group</attribute>-->
+    <!--            </xpath>-->
+
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <record id="hr_leave_type_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.type.view.form.inherit</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allocation_validation_type']" position="after">
+                <field name="is_calender_day"/>
+            </xpath>
+            <xpath expr="//field[@name='requires_allocation']" position="before">
+                <field name="allow_duty_resumption"/>
+                <field name="adjust_leave_bal"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="hr_leave_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.view.tree.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree_my"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="air_ticket"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_employee_form_inherit_extend" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="week_off_id"/>
+            </xpath>
+            <xpath expr="//field[@name='mobile_phone']" position="before">
+                <div>
+                    <field name="emp_seq" string="code"/>
+                </div>
+            </xpath>
+            <!--             <xpath expr="//field[@name='passport_id']" position="replace">
+                            <field field name="passport_id" groups="hr.group_hr_user" attrs="{'required': [('hr_employee_type', '=',  'own')]}"/>
+                        </xpath> -->
+        </field>
+    </record>
+
+
+    <record id="duty_resumption_view_form" model="ir.ui.view">
+        <field name="name">duty.resumption.form</field>
+        <field name="model">duty.resumption</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve"
+                            groups="leave_extended.duty_approval_group"
+                            attrs="{'invisible':[('state', '=', 'approved')]}"/>
+                    <button name="action_cancel" type="object" string="Cancel"/>
+                    <!--                    <button name="action_create_leave" type="object" string="Create leave"/>-->
+                    <field name="state" widget="statusbar" statusbar_visible="new,approved,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="leave_id"
+                                   domain="[('employee_ids', 'in', [employee_id]),('state', 'in', ['validate']), ('check_leave_view','=',False), ('holiday_status_id.allow_duty_resumption','=',True)]"/>
+                            <field name="leave_type_id"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="reporting_date"/>
+                            <field name="duty_resumption_date"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="early_late_text"/>
+                            <field name="remaining_leaves"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="duty_resumption_view_tree" model="ir.ui.view">
+        <field name="name">duty.resumption.tree</field>
+        <field name="model">duty.resumption</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="reporting_date"/>
+                <field name="reason"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="duty_resumption_view_kanban" model="ir.ui.view">
+        <field name="name">duty.resumption.kanban</field>
+        <field name="model">duty.resumption</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="employee_id"/>
+                <field name="leave_type_id"/>
+                <field name="date_to"/>
+                <field name="reporting_date"/>
+                <field name="reason"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <div class="float-left">
+                                                <field name="employee_id"/>
+                                            </div>
+                                        </strong>
+                                        <br/>
+                                        <div class="float-left">
+                                            <span>End Date:
+                                                <field name="date_to"/>
+                                            </span>
+                                            <br/>
+                                            <span>Reporting Date:
+                                                <field name="reporting_date"/>
+                                            </span>
+                                            <br/>
+                                            <span>Reason:
+                                                <field name="reason"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <record id='action_duty_resumption' model='ir.actions.act_window'>
+        <field name="name">Duty Resumption</field>
+        <field name="res_model">duty.resumption</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_duty_resumption"
+              name="Duty Resumption"
+              parent="hr_holidays.menu_hr_holidays_approvals"
+              action="action_duty_resumption"
+              sequence="50"
+    />
+
+    <record id="week_selection_view_tree" model="ir.ui.view">
+        <field name="name">no.week.selection.tree</field>
+        <field name="model">no.week.selection</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="week_selection_view_form" model="ir.ui.view">
+        <field name="name">no.week.selection.form</field>
+        <field name="model">no.week.selection</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='action_week_selection' model='ir.actions.act_window'>
+        <field name="name">No Of Week Selection</field>
+        <field name="res_model">no.week.selection</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_week_selection"
+              name="No Of Week Selection"
+              parent="pways_hr_shift_allocation.menu_hr_shift_main"
+              action="action_week_selection"
+              sequence="50"
+    />
+
+    <record id="hr_holidays.action_hr_approval" model="ir.actions.server">
+        <field name="groups_id" eval="[(6, False, [ref('leave_extended.leave_approval_group')])]"/>
+    </record>
+
+    <record id="hr_holidays.action_manager_approval" model="ir.actions.server">
+        <field name="groups_id" eval="[(6, False, [ref('leave_extended.leave_approval_group')])]"/>
+    </record>
+
+
+</odoo>

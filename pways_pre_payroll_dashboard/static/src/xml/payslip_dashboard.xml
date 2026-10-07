@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="PayslipDashboard">
+        <div class="o_dashboards" style="background-color: #c7cbce;">
+            <div class="o_employee_dashboard"/>
+        </div>
+    </t>
+    <t t-name="EmpPayslip">
+        <div>
+            <div style="background-color: #c7cbce">
+                <h3 style="text-align: center;padding: 10px;font-size: 20px; ">
+                   <strong><span t-esc="header.start_date"/></strong> To
+                   <strong><span t-esc="header.end_date"/></strong>
+                   <br/>
+                   <t t-if="header.pay_batch_id">
+                   Payroll Batch:- <strong><span t-esc="header.pay_batch_id"/></strong>
+                   </t>
+                </h3>
+                <div class="col-sm-3">
+                    <br/><input type="search" class="form-control searchInput" id="o-export-search-filter" placeholder="Search" style="border-radius: 2px;" t-att-value="search_text" name="search_input"/>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-12 pways-table-wrapper">
+            <table class="table pways-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" style="vertical-align: middle;">Sr</th>
+                        <th scope="col" style="vertical-align: middle;">Emp Code</th>
+                        <th scope="col" style="vertical-align: middle;">Employee</th>
+                        <th scope="col" style="vertical-align: middle;">Employee Status</th>
+                        <th scope="col" style="vertical-align: middle;">Contract Status</th>
+                        <th scope="col" style="vertical-align: middle;">Working Hours</th>
+                        <th scope="col" style="vertical-align: middle;">Overtime Eligibility</th>
+                        <th scope="col" style="vertical-align: middle; min-width: 86px;">Contract Start Date</th>
+                        <th scope="col" style="vertical-align: middle; min-width: 86px;">Contract End Date</th>
+                        <th scope="col" style="vertical-align: middle;">Attendence Days</th>
+                        <th scope="col" style="vertical-align: middle;">Week Offs</th>
+                        <th scope="col" style="vertical-align: middle;">Public Holidays</th>
+                        <th scope="col" style="vertical-align: middle;">Paid Leaves</th>
+                        <th scope="col" style="vertical-align: middle;">Unpaid Leaves</th>
+                        <th scope="col" style="vertical-align: middle;">Sick Leaves</th>
+                        <th scope="col" style="vertical-align: middle;">Absent Days</th>
+                        <th scope="col" style="vertical-align: middle;">Total Days</th>
+                        <th scope="col" style="vertical-align: middle;">Normal Overtime</th>
+                        <th scope="col" style="vertical-align: middle;">Special Overtime</th>
+                        <th scope="col" style="vertical-align: middle;">Branch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="sr_no" t-value="0"/>
+                    <t t-foreach="employee_ids" t-as="emp">
+                        <t t-set="sr_no" t-value="sr_no + 1"/>
+                        <tr style="text-align: center;">
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="sr_no"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.emp_code"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.employee"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.emp_status"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.contract_status"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.working_hours"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.ot_eligibility"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.contract_start"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.contract_end"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.attendence_day"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.weekoff_days"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.public_holiday"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.paid_leave"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.un_paid_leave"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.sick_leave"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.absent_days"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.total_days"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.normal_ot"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.special_ot"/></strong>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <strong><span t-esc="emp.branch"/></strong>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>

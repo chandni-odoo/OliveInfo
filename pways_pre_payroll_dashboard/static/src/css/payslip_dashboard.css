@@ -1,0 +1,19 @@
+div.pways-table-wrapper {
+    border: 1px solid #ccc;
+    height: 100px;
+    width: 100%;
+    overflow-y: auto;
+    position: fixed;
+    height: 75%;
+}
+ 
+.pways-table {
+    width: 100%;
+}
+.pways-table thead tr th {
+    text-align: left;
+    position: sticky;
+    top: 0px;
+    background-color: #666;
+    color: #fff;
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_maintenance_equipment_form_inherit" model="ir.ui.view">
+        <field name="name">maintenance.equipment.form.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <field name="status" widget="statusbar" />
+                </header>
+            </xpath>
+            <field name="location" position="after">
+                <field name="permit_ids" widget="many2many_tags" />
+            </field>
+            <xpath expr="//field[@name='scrap_date']" position="after">
+                <field name="color" />
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="job_order" />
+                <field name="customer_id" />
+                <field name="aging" />
+                <field name="latitude" />
+                <field name="longitude" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

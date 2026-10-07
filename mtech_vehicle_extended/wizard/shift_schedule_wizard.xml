@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shift_schedule_form" model="ir.ui.view">
+        <field name="name">shift.schedule.form</field>
+        <field name="model">shift.schedule</field>
+        <field name="arch" type="xml">
+            <form string="DO Scheduling and Planing">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="collection_mode" />
+                            <field name="task_id" />
+                            <field name="vehicle_type" />
+                            <field name="permits_ids" widget="many2many_tags" />
+                            <field name="last_schedule_data" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="frequency" />
+                            <field name="number_of_skips" invisible="1"/>
+                            <field name="minimum_trips_per_month" invisible="1" />
+                            <field name="minimum_skips_per_do" invisible="1" />
+                            <field name="no_do_week" invisible="1" />
+                            <field name="no_do_day" invisible="1" />
+                            <field name="no_do_month" invisible="1" />
+                            <field name="plan_by" class="oe_inline" widget="radio" attrs="{'invisible': [('frequency', '!=', 'monthly')]}" />
+                        </group>
+                    </group>
+                    <!-- Daily Planning Section -->
+                    <notebook>
+                        <page string="Daily Collection Planning" attrs="{'invisible': [('frequency', '!=', 'daily')]}">
+                            <group>
+                                <group>
+                                    <field name="start_date" />
+                                </group>
+                                <group>
+                                    <field name="end_date" />
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Advanced Details Daily Planning" attrs="{'invisible': [('frequency', '!=', 'daily')]}">
+                            <field name="daily_advanced_details_ids">
+                                <tree editable="bottom">
+                                    <field name="shift_type" />
+                                    <field name="vehicle_id" domain="[('active', '=', True), ('vehicle_type_id', '=', parent.vehicle_type)]"/>
+                                    <field name="no_trips" invisible="1"/>
+                                    <field name="start_time" widget="float_time" />
+                                    <field name="interval_hours" widget="float_time" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!-- Weekly Planning Section -->
+                        <page string="Weekly Collection Planning" attrs="{'invisible': [('frequency', '!=', 'weekly')]}">
+                            <group>
+                                <group>
+                                    <field name="start_date" />
+                                </group>
+                                <group>
+                                    <field name="end_date" />
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Advanced Details Weekly Planning" attrs="{'invisible': [('frequency', '!=', 'weekly')]}">
+                            <field name="weekly_advanced_details_ids">
+                                <tree editable="bottom">
+                                    <field name="shift_type" />
+                                    <field name="day_name" />
+                                    <field name="vehicle_id" domain="[('active', '=', True), ('vehicle_type_id', '=', parent.vehicle_type)]"/>
+                                    <field name="no_trips" invisible="1"/>
+                                    <field name="start_time" widget="float_time" />
+                                    <field name="interval_hours" widget="float_time" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!-- Monthly Planning Section -->
+                        <page string="Monthly Collection Planning" attrs="{'invisible': [('frequency', '!=', 'monthly')]}">
+                            <group>
+                                <group>
+                                    <field name="start_date" />
+                                    <!-- <field name="manual_trip_first_month"/> -->
+                                     <!-- attrs="{'invisible': [('plan_by', 'in', ['day_wise', 'date_wise'])]}" -->
+                                    <!-- <field name="remaining_days_first_month"/> -->
+                                     <!-- attrs="{'invisible': [('plan_by', 'in', ['day_wise', 'date_wise'])]}" -->
+                                </group>
+                                <group>
+                                    <field name="end_date" />
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Advanced Details Monthly by Dates Planning" attrs="{'invisible': [('frequency', '!=', 'monthly')]}">
+                            <field name="monthly_advanced_details_ids">
+                                <tree editable="bottom">
+                                    <field name="shift_type" />
+                                    <field name="monthly_date" attrs="{'column_invisible': [('parent.plan_by', '!=', 'date_wise')]}" />
+                                    <field name="day_name" attrs="{'column_invisible': [('parent.plan_by', '!=', 'day_wise')]}" />
+                                    <field name="vehicle_id" domain="[('active', '=', True), ('vehicle_type_id', '=', parent.vehicle_type)]"/>
+                                    <field name="no_trips" invisible="1"/>
+                                    <field name="start_time" widget="float_time" />
+                                    <field name="interval_hours" widget="float_time" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_load_last_schedule" type="object" string="Last Schedule details" 
+                            class="btn-secondary" attrs="{'invisible': [('last_schedule_data', '=', False)]}"/>
+                        <button name="generate_schedule" type="object" string="Generate Schedule" class="btn-primary" />
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_shift_schedule_tree" model="ir.ui.view">
+        <field name="name">shift.schedule.tree</field>
+        <field name="model">shift.schedule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="collection_mode" />
+                <field name="task_id" />
+                <field name="vehicle_type" />
+                <field name="permits_ids" />
+                <field name="frequency" />
+                <field name="number_of_skips" />
+                <field name="minimum_trips_per_month" />
+                <field name="minimum_skips_per_do" />
+                <field name="start_date" />
+                <field name="end_date" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_schedling_and_planing" model="ir.actions.act_window">
+        <field name="name">Scheduling &amp; Planing</field>
+        <field name="res_model">shift.schedule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

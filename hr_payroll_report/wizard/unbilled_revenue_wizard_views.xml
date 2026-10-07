@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_unbilled_revenue_report_wizard" model="ir.ui.view">
+        <field name="name">unbilled.revenue.report.wizard.form</field>
+        <field name="model">unbilled.revenue.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Unbilled Revenue Report">
+                <sheet>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="branch_ids" widget="many2many_tags"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_unbilled_revenue_report_wizard" model="ir.actions.act_window">
+        <field name="name">Unbilled Revenue Report</field>
+        <field name="res_model">unbilled.revenue.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_unbilled_revenue_report_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_unbilled_revenue_report"
+              name="Unbilled Revenue Report"
+              parent="menu_mis_report_main"
+              action="action_unbilled_revenue_report_wizard"
+              sequence="6"/>
+</odoo>

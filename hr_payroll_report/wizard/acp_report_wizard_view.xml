@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_acp_report_wizard" model="ir.ui.view">
+        <field name="name">acp.report.wizard.form</field>
+        <field name="model">acp.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="ACP Report">
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="branch_ids" widget="many2many_tags"/>
+                    <field name="customer_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object"
+                            string="Print Report" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_acp_report" model="ir.actions.act_window">
+        <field name="name">ACP Report</field>
+        <field name="res_model">acp.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_acp_report"
+              name="ACP Report"
+              parent="menu_mis_report_main"
+              action="action_acp_report"
+              sequence="7"/>
+</odoo>

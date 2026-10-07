@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+peoplesol_ot_rule_configuration.access_ot_rule_line_wizard,access_ot_rule_line_wizard,peoplesol_ot_rule_configuration.model_ot_rule_line_wizard,base.group_user,1,1,1,1
+peoplesol_ot_rule_configuration.access_ot_rule_wizard,access_ot_rule_wizard,peoplesol_ot_rule_configuration.model_ot_rule_wizard,base.group_user,1,1,1,1

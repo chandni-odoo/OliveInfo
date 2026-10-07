@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="product_template_view_form_inherited_costing_sheet" model="ir.ui.view">
+        <field name="name">product.template.form.costing.sheetinherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Costing Sheet">
+                    <field name="costing_line_ids" widget="section_and_note_one2many" mode="tree" >
+                        <tree editable="bottom">
+                            <control>
+                                <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                                <create name="add_line_control" string="Add a line"/>
+                            </control>
+                            <field name="sequence" widget="handle" />
+                            <field name="display_type" invisible="1"/>
+                            <field name="name" widget="section_and_note_text" optional="show"/>
+                            <field name="qty_price"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

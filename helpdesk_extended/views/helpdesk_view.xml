@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="helpdesk_ticket_branch_inherit" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.branch.inherit</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email_cc']" position="after">
+                    <field name="task_name" context="{'show_extra_fields': True}"/>
+                    <field name="project_id"/>
+                    <field name="emp_id"/>
+                    <field name="equipment_id"/>
+                </xpath>
+                <xpath expr="//field[@name='ticket_type_id']" position="after">
+                    <field name="sub_desk_type"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="helpdesk_ticket_branch_inherit_tree" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.branch.inherit.tree</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="task_name" context="{'show_extra_fields': True}"/>
+                    <field name="project_id"/>
+                    <field name="emp_id"/>
+                    <field name="equipment_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="helpdesk_sub_menu_tree_view" model="ir.ui.view">
+            <field name="name">helpdesk.sub.menu.tree.view</field>
+            <field name="model">helpdesk.ticket.sub.type</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ticket_type_id"/>
+                    <field name="sub_type_name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="helpdesk_sub_menu_form_view" model="ir.ui.view">
+            <field name="name">helpdesk.sub.menu.form.view</field>
+            <field name="model">helpdesk.ticket.sub.type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="ticket_type_id"/>
+                            </group>
+                            <group>
+                                <field name="sub_type_name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        
+
+        <!-- Action -->
+        <record id="action_view_of_helpdesk_sub_menu" model="ir.actions.act_window">
+            <field name="name">Helpdesk sub Menu</field>
+            <field name="res_model">helpdesk.ticket.sub.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="helpdesk_sub_menu"
+            name="Sub Types"
+            action="action_view_of_helpdesk_sub_menu"
+            parent="helpdesk.helpdesk_menu_config"
+            sequence="2"
+            />
+        
+    </data>
+</odoo>

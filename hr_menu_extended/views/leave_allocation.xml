@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_allocation_tree_view" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.tree</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="manager_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="employee_joining_date"/>
+                <field name="employee_status" string="Status"/>
+                <field name="holiday_status_id"/>
+                <field name="allocation_type"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="duration_display" string="Total Accrued"/>
+                <field name="leaves_taken"/>
+                <field name="remaining_leaves"/>
+                <field name="state" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_leave_allocation" model="ir.actions.act_window">
+        <field name="name">Leave Accrual</field>
+        <field name="res_model">hr.leave.allocation</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_leave_allocation_tree_view"/>
+    </record>
+
+    <menuitem id="menu_hr_employee_reports"
+              name="Employee Reports"
+              parent="hr.menu_hr_root"
+              sequence="7"/>
+
+    <menuitem id="menu_hr_leave_accrual"
+              name="Leave Accrual Report"
+              parent="menu_hr_employee_reports"
+              action="action_hr_leave_allocation"
+              sequence="5"/>
+</odoo>

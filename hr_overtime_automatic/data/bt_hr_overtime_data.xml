@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   	<record id="ir_cron_scheduler_overtime" model="ir.cron">
+        <field name="name">Run Overtime Scheduler</field>
+        <field name="model_id" ref="model_bt_hr_overtime" />
+        <field name="state">code</field>
+        <field name="code">model.run_overtime_scheduler()</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True" />
+    </record>
+    <record id="ir_cron_scheduler_overtime_manually" model="ir.cron">
+        <field name="name">Run Overtime Scheduler(Manually)</field>
+        <field name="model_id" ref="model_bt_hr_overtime" />
+        <field name="state">code</field>
+        <field name="code">model.run_overtime_scheduler_manually()</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True" />
+        <field name="active">False</field>
+    </record>
+
+      <record id="ot_type_normal_days" model="hr.ot.type">
+          <field name="name">Weekday Days</field>
+          <field name="code">NOD</field>
+      </record>
+
+      <record id="ot_type_weekday_days" model="hr.ot.type">
+          <field name="name">Weekend Days</field>
+          <field name="code">WDS</field>
+      </record>
+
+      <record id="ot_type_holidays" model="hr.ot.type">
+          <field name="name">Normal Holidays</field>
+          <field name="code">HDS</field>
+      </record>
+
+      <record id="ot_type_special_holidays" model="hr.ot.type">
+          <field name="name">Special Holidays</field>
+          <field name="code">SPHD</field>
+      </record>
+
+    <!-- <record id="hr_salary_rule_overtime_condition" model="hr.salary.rule">
+        <field name="name">Overtime</field>
+        <field name="code">OT100</field>
+        <field name="sequence" eval="99"/>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = inputs.OT100.amount</field>
+     </record> -->
+
+     <record id="hr_payslip_input_type_input" model="hr.payslip.input.type">
+        <field name="name">Overtime</field>
+        <field name="code">OT100</field>
+        <field name="country_id" ref="base.us"/>
+     </record>
+
+      <record id="action_run_overtime_scheduler_mail" model="ir.actions.server" >
+            <field name="name">Run Overtime Scheduler</field>
+            <field name="model_id" ref="model_bt_hr_overtime"/>
+            <field name="binding_model_id" ref="hr_overtime_automatic.model_bt_hr_overtime"/>
+            <field name="state">code</field>
+            <field name="code">   
+    if records:
+        records.run_overtime_scheduler()
+            </field>
+        </record>
+
+</odoo>

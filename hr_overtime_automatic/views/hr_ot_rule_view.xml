@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_ot_type_tree" model="ir.ui.view">
+            <field name="name">hr.ot.type.tree</field>
+            <field name="model">hr.ot.type</field>
+            <field name="arch" type="xml">
+                <tree string="Type">
+                	<field name="name"/>
+                	<field name="code"/>
+                </tree>
+            </field>
+         </record>
+         
+	    <record id="hr_ot_type_form" model="ir.ui.view">
+	        <field name="name">hr.ot.type.form</field>
+	        <field name="model">hr.ot.type</field>
+	        <field name="arch" type="xml">
+	            <form string="Type">
+	           	<sheet>
+	            	<group>
+	                	<group>
+	                		<field name="name"/>
+	                		<field name="code"/>
+	                	</group>
+	                </group>
+	           	</sheet>
+	           </form>
+	        </field>
+	    </record> 
+          
+      	<record id="action_bt_ot_type" model="ir.actions.act_window">
+            <field name="name">OT Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.ot.type</field>	            
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Overtime Type
+                </p>
+            </field>
+        </record>
+
+	    <menuitem
+            id= "overtime_managment_main_configuration"
+            parent= "overtime_management_main_menu"
+            sequence= "2"
+            name= "Configuration"
+            /> 
+	        
+	    <menuitem action="action_bt_ot_type" name="Overtime Type" id="menu_bt_ot_type" parent="overtime_managment_main_configuration" sequence="2"/>
+
+	    <!-- HR OT Type -->
+
+	    <record id="hr_ot_rule_tree" model="ir.ui.view">
+            <field name="name">hr.ot.rule.tree</field>
+            <field name="model">hr.ot.rule</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime Rule">
+                	<field name="name"/>
+                	<field name="ot_type_id"/>
+                </tree>
+            </field>
+         </record>
+         
+	    <record id="hr_ot_rule_tree_form" model="ir.ui.view">
+	        <field name="name">hr.ot.rule.form</field>
+	        <field name="model">hr.ot.rule</field>
+	        <field name="arch" type="xml">
+	            <form string="Overtime Rule">
+	           	<sheet>
+	            	<group>
+	                	<group>
+	                		<field name="name"/>
+	                	</group>
+	                	<group>
+	                		<field name="ot_type_id" required="1"/>
+	                	</group>
+	                </group>
+	           	</sheet>
+	           </form>
+	        </field>
+	    </record> 
+          
+      	<record id="action_ot_type_rule" model="ir.actions.act_window">
+            <field name="name">Overtime Rule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.ot.rule</field>	            
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Overtime Rule
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_ot_type_rule" name="Overtime Rule" id="menu_ot_type_rule" parent="overtime_managment_main_configuration" sequence="3"/>
+
+        <!-- HR OT Rule Line -->
+
+	    <record id="hr_ot_rule_line_tree" model="ir.ui.view">
+            <field name="name">hr.ot.rule.line.tree</field>
+            <field name="model">hr.ot.rule.line</field>
+            <field name="arch" type="xml">
+                <tree string="Rule Line">
+                	<field name="ot_rule_id"/>
+                	<field name="contract_id"/>
+                	<field name="ot_type"/>
+                </tree>
+            </field>
+         </record>
+         
+	    <record id="hr_ot_rule_line_form" model="ir.ui.view">
+	        <field name="name">hr.ot.rule.line.tree</field>
+            <field name="model">hr.ot.rule.line</field>
+	        <field name="arch" type="xml">
+	            <form string="Rule Line">
+		           	<sheet>
+		            	<group>
+		                	<group>
+		                		<field name="ot_rule_id"/>
+		                		<field name="ot_type"/>
+		                	</group>
+		                	<group>
+		                		<field name="contract_id"/>
+		                		<field name="fix_amount" attrs="{'invisible': [('ot_type', '!=', 'fix')]}"/>
+		                		<field name="per_amount" attrs="{'invisible' : [('ot_type', '!=', 'percentage')]}"/>
+		                		<field name="per_based_on" attrs="{'invisible' : [('ot_type', '!=', 'percentage')]}"/>
+		                	</group>
+		                </group>
+		           	</sheet>
+	           </form>
+	        </field>
+	    </record> 
+          
+      	<record id="action_ot_rule_line" model="ir.actions.act_window">
+            <field name="name">Overtime Rule Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.ot.rule.line</field>	            
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Overtime Rule Line
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_ot_rule_line" name="Overtime Rule Lines" id="menu_ot_rule_line" parent="overtime_managment_main_configuration" sequence="4"/>
+
+        <record id="hr_contract_view_form2" model="ir.ui.view">
+            <field name="name">hr.contract.form2</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+            	<data>
+            		<field name="job_id" position="before">
+            			<field name="work_hours" attrs="{'readonly': [('has_payslip', '=', True)]}"/>
+            		</field>
+            		<xpath expr="//page[last()]" position="after">
+		                <page string="OT Rule Lines">
+		                    <field name="rule_line_ids" attrs="{'readonly': [('has_payslip', '=', True)]}">
+		                        <tree editable="bottom">
+		                            <field name="ot_rule_id"/>
+		                            <field name="ot_type_id"/>
+		                            <field name="contract_id" invisible="1"/>
+		                            <field name="ot_type"/>
+		                            <field name="fix_amount" attrs="{'invisible': [('ot_type', '!=', 'fix')]}"/>
+		                			<field name="per_amount" attrs="{'invisible' : [('ot_type', '!=', 'percentage')]}"/>
+		                			<field name="per_based_on" attrs="{'invisible' : [('ot_type', '!=', 'percentage')]}"/>
+		                        </tree>
+                    		</field>
+		                </page>
+		            </xpath>
+            	</data>
+            </field>
+        </record>
+
+        <record id="hr_contract_view_calendar" model="ir.ui.view">
+            <field name="name">resource.calendar.leaves.form2</field>
+            <field name="model">resource.calendar.leaves</field>
+            <field name="inherit_id" ref="resource.resource_calendar_leave_tree"/>
+            <field name="arch" type="xml">
+            	<field name="date_to" position="after">
+            		<field name="special_holidays" />
+            	</field>
+           	</field>
+        </record>  
+	</data>
+</odoo>

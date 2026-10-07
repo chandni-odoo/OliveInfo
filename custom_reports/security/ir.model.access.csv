@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_project_task_wizard,project.task.wizard,custom_reports.model_project_task_wizard,,1,1,1,1
+custom_reports.access_project_task_wizard,access_project_task_wizard,custom_reports.model_project_task_wizard,base.group_user,1,1,1,1

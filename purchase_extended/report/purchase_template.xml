@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_purchase_order">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="purchase_extended.external_layout_template">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                                <div>
+                                    <div class="text-center">
+                                        <span style="font-size:30px;">PURCHASE ORDER</span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-4" style="width:40%;">
+                                        <strong>VENDOR NO:</strong>
+                                        <span t-esc="o.partner_id.id"/><br/>
+                                        <span style="text-decoration: underline;">SHIPPED FROM:</span><br/>
+                                        <strong t-esc="o.partner_id.name"/><br/>
+                                        <span>PO Box :</span>
+                                        <span t-esc="o.partner_id.zip"/>
+                                        <span t-esc="o.partner_id.city"/>
+                                        <span t-esc="o.partner_id.state_id.name"/>
+                                        <span t-esc="o.partner_id.country_id.name"/><br/>
+                                        <span>Tel :</span>
+                                        <span t-esc="o.partner_id.mobile"/><br/>
+                                        <span>Email Addres :</span>
+                                        <span t-esc="o.partner_id.email"/><br/>
+                                    </div>
+                                    <div class="col-4" style="width:30%;">
+                                        <strong>Department:</strong>
+                                        <strong t-esc="o.branch_id.code"/><br/>
+                                        <span style="text-decoration: underline;">SHIPPED TO:</span><br/>
+                                        <span t-esc="o.branch_id.name"/><br/>
+                                        PO Box :
+                                        <span t-esc="o.branch_id.address"/><br/>
+                                        Tel :
+                                        <span t-esc="o.branch_id.telephone"/><br/>
+                                    </div>
+                                    <div class="col-4" style="width:30%;">
+                                        <span>Date:</span>
+                                        <span t-esc="o.date_order.date()"   t-options='{"widget": "date","format": "dd/MM/yyyy"}'/><br/>
+                                        <strong>PO No:</strong>
+                                        <strong t-esc="o.purchase_type.code"/> -
+                                        <strong t-esc="o.name"/><br/>
+                                        <span>Order Taken By:</span>
+                                        <span t-esc="o.order_by"/><br/>
+                                        <span>Delivery By:</span>
+                                        <span t-esc="o.date_planned.date()" t-options='{"widget": "date","format": "dd/MM/yyyy"}'/><br/>
+                                        <span>Delivery Location:</span>
+                                        <span t-esc="o.picking_type_id.warehouse_id.name"/>
+                                        <br/>
+                                        <span>Payment Terms:</span>
+                                        <span t-esc="o.payment_term_id.name"/><br/>
+                                        <span>Currency:</span>
+                                        <span t-esc="o.currency_id.name"/><br/>
+                                    </div>
+                                </div>
+                                <div class="row zero_min_height">
+                                    <div class="col-12">
+                                        <div style="border-bottom: 1px solid black;"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr style="padding:0px;">
+                                            <th style="font-size:13px;"><strong>SR No</strong></th>
+                                            <th style="font-size:13px; width: 40%;"><strong>DESCRIPTION</strong></th>
+                                            <th style="font-size:13px;text-align:right; width: 10%;"><strong>ORDERED QTY.</strong></th>
+                                            <th style="font-size:13px;text-align:right; width: 10%;"><strong>UOM</strong></th>
+                                            <th style="font-size:13px;text-align:right; width: 20%;"><strong>UNIT PRICE</strong></th>
+                                            <th style="font-size:13px; text-align:right;width: 20%;"><strong>TOTAL AMOUNT</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="price_subtotal" t-value="o.order_line.mapped('price_subtotal')"/>
+                                        <t t-set="sr_no" t-value="0"/>
+                                        <t t-foreach="o.order_line" t-as="line">
+                                        <t t-if="line.product_id">
+                                            <t t-set="sr_no" t-value="sr_no + 1"/>
+                                        </t>
+                                        <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                        <t t-if="not line.display_type">
+                                            <td style="font-size:13px;">
+                                                <span t-esc="sr_no"/>
+                                            </td>
+                                            <td  style="font-size:13px; text-align:left;">
+                                                <span t-esc="line.product_id.name"/> -<span t-esc="line.name"/>
+                                            </td>
+                                            <td style="font-size:13px; text-align:right;">
+                                                <span t-esc="line.product_qty"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                            <td  style="font-size:13px;" class="text-center">
+                                                <span t-esc="line.product_uom.name"/>
+                                            </td>
+                                            <td style="font-size:13px; text-align:right;">
+                                                <span t-esc="line.price_unit" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                            <td  style="font-size:13px; text-align:right;">
+                                                <span t-esc="line.price_subtotal" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_section'">
+                                            <td colspan="99" id="section">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        <t t-set="current_section" t-value="line"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_note'">
+                                            <td colspan="99" id="note">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                    <td colspan="5">
+                                        <b><span style="font-size:15px;" t-esc="o.convert_num_to_word()"></span> Only</b>
+                                        <strong style="float:right;">Total Order:</strong>
+                                        <td class="text-right">
+                                            <strong t-esc="sum(price_subtotal)" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </td>
+                                    </tbody>
+                            </table>
+                            <div style="line-height:2px;">
+                                <span t-esc="o.notes"/>
+                            </div>
+                        </div>
+
+                        <!-- SECOND PAGE - TERMS AND CONDITIONS (Two-Column Layout) -->
+                        <div class="page">
+                            <div style="page-break-before: always;"></div>
+                            
+                            <!-- HEADER SECTION -->
+                            <div style="margin-top: 5px; margin-bottom: 8px;">
+                                <h2 style="text-align: center; font-size: 14px; font-weight: bold; margin-bottom: 5px;">
+                                    DULSCO STANDARD TERMS &amp; CONDITIONS OF PURCHASE
+                                </h2>
+                            </div>
+                            <!-- MAIN CONTENT - TWO COLUMNS -->
+                            <div style="font-size: 8.4px; line-height: 1.15;">
+                                <!-- LEFT COLUMN -->
+                                <div style="width: 49%; float: left; padding-right: 1%;">
+                                    <!-- INTRODUCTION TEXT -->
+                                    <div style="margin-bottom: 6px; text-align: justify;">
+                                        We, the Company, only purchase goods, rights, and services ("Deliverables") on these terms and conditions ("the Terms"). If you accept our order, it will be on these Terms and no other standard terms. If you act in a manner calculated to appear as an acceptance of our order, that will act as an acceptance and you will be bound by our Terms, regardless of any inconsistency in your own small print. If you wish to reject our order and make a counteroffer you MUST therefore reply to our order in words explicitly and clearly indicating rejection. Equally, if you make a counteroffer which is not clearly labeled as such (or as a rejection of our order) no subsequent behavior of ours, in accepting Performance, can be taken to imply any acceptance by us of that counter-offer. These Terms can only be changed, or other terms agreed, in written correspondence signed by a director or other senior officer of the Company.
+                                    </div>
+                                    
+                                    <!-- SECTION 1 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>1. The Contract</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>1.1</strong> Our contract with you, our supplier, will comprise our express written order, these Terms, anything else we expressly agree under section 1.2, any content imposed by law, but nothing else.</p>
+                                            <p style="margin-bottom: 2px;"><strong>1.2</strong> If you want us to accept a term of yours, or accept a particular responsibility, or if you wish to rely on a representation we have made, you must therefore obtain our express agreement to that. That means express written agreement, signed by a director or other senior officer of the Company and referring expressly to these Terms. We will deal with you in reliance on these Terms, so be aware that our acceptance of contractual performance by you does not imply acceptance of any terms that are different to our Terms. You must indemnify us against any consequence of your seeking to rely on any contractual terms, or any statement, understanding or representation which is not contractually agreed as set out in this section 1.</p>
+                                            <p style="margin-bottom: 2px;"><strong>1.3</strong> If any of the terms of the contract conflict with or contradict each other those terms will over-ride each other in the following order of priority: (1) any express written agreement from us; (2) our order; (3) these Terms.</p>
+                                            <p style="margin-bottom: 2px;"><strong>1.4</strong> We are only contractually bound to you when you accept our order with a formal order acknowledgement in writing or (if later) when we accept Performance by you, then only to the extent of the issue specifically covered by that order or in writing signed by a director.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 2 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>2. Price</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>2.1</strong> The price of the Deliverables will be as stated in our order and, unless otherwise stated, will be:</p>
+                                            <div style="margin-left: 8px;">
+                                                <p style="margin-bottom: 1px;"><strong>2.1.1</strong> Exclusive of VAT, which is currently not applicable in the State of Qatar. Should VAT or any similar tax become applicable in the future, it will be addressed in accordance with prevailing Qatari tax laws.</p>
+                                                <p style="margin-bottom: 1px;"><strong>2.1.2</strong> Fixed for the duration of the Contract.</p>
+                                            </div>
+                                            <p style="margin-bottom: 2px;"><strong>2.2</strong> If we will be reliant on you for any supplies of maintenance, training, spare parts, consumables or other goods, rights or services to benefit fully from the Deliverables ("Follow-on Deliverables") then you will provide those Follow-on Deliverables or procure them to be provided, for at least 36 months following full Performance, at fair and reasonable prices which take no advantage of our dependence on you for their supply.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 3 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>3. Payment</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>3.1</strong> Invoices for the Deliverables may be sent to us on, or after, completion of Performance. Each invoice must quote the number of our order. No sum may be invoiced more than six months late.</p>
+                                            <p style="margin-bottom: 2px;"><strong>3.2</strong> Unless otherwise stated in the order, you will receive the contract price in accordance with the payment terms set out in the contract, subject to submission of a valid and undisputed invoice.</p>
+                                            <p style="margin-bottom: 2px;"><strong>3.3</strong> We will be entitled to set off against the price any money owed to us by you.</p>
+                                            <p style="margin-bottom: 2px;"><strong>3.4</strong> Any applicable withholding tax, as required under Qatari tax laws, shall be deducted from payments and remitted to the Qatar Tax Authority. A withholding tax certificate will be provided to the Supplier.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 4 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>4. Specifications</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>4.1</strong> If we order goods, then unless otherwise stated the order is deemed to include the supply of all relevant documentation and certification, and of any commissioning of those goods, necessary to enable the Company to use them for their intended purposes. If we order services then, unless otherwise stated, our order includes the complete performance of those services including any employee instruction, manuals, explanations or certifications necessary to enable the Company to benefit from them for their intended purposes. If we order goods or services then, unless otherwise stated, our order includes any legal rights necessary to use those goods or services for their intended purposes. References in these Terms to “Performance” are to complete performance of all your contract obligations as described in these Terms.</p>
+                                            <p style="margin-bottom: 2px;"><strong>4.2</strong> The quantity, quality and description of Deliverables will be as specified in our order and these Terms or as agreed by us in writing, subject to which then in full accordance with your representations.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 5 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>5. Delivery and Risk</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>5.1</strong> Any goods will be delivered to, and any services performed at, the address and on the date stated in the order, or else under section 5.2, during usual business hours. If no address is specified, then delivery will be at our usual or head office in Qatar.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.2</strong> If we specify the date or delivery address after ordering, we will give you reasonable notice of the details. Failing a date, supply will be as soon as reasonably possible.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.3</strong> The date of delivery of any goods or rights, and the performance of any services, will be of the essence of this contract.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.4</strong> A packing note quoting the number of the order must accompany each delivery or consignment of goods and must be displayed prominently.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.5</strong> Where Deliverables are to be supplied in installments, the contract is still to be treated as a single contract. If you fail to deliver or perform any installment, we may treat the whole contract as repudiated.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.6</strong> We may reject any Deliverables which are not in full accordance with the contract. Acceptance does not occur until we have had a reasonable time to inspect or consider the relevant Deliverables. We may reject Deliverables within 30 days of delivery or within 30 days of discovery of a latent defect.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.7</strong> Risk of damage to or loss of any goods passes to us on delivery.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.8</strong> Property and ownership of any goods will pass to us on delivery unless we have paid in whole or in part for the goods in advance. In that case, it will pass to us as soon as the goods leave, or each successive component has been appropriated to the contract.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.9</strong> If we supply any articles to you (e.g., for modification or copying), they remain our property at all times. Those articles must be kept confidential and secure, and we can enter your premises at any time on reasonable notice to ensure this is so. While those articles are in your custody, you must not use them, copy them, or disclose them except in the performance of our contract.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.10</strong> If any performance occurs on our premises, you will ensure that best industry standards are adopted for the health and safety of your personnel and any individuals affected by your actions. We may refuse or terminate access to any individual whom we reasonably consider endangers our operations. Your personnel must comply with our health and safety requirements, and you will be responsible for any damage caused by your staff.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.11</strong> If the contract terms refer to Incoterms, those defined meanings will apply unless expressly agreed otherwise.</p>
+                                            <p style="margin-bottom: 2px;"><strong>5.12</strong> Any goods provided by you must be free from any lien, charge, or other encumbrance. You must also retain title and risk while goods remain in your temporary possession unless otherwise agreed.</p>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>6. Warranties and Liability</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>6.1</strong> You promise that:</p>
+                                            <div style="margin-left: 8px;">
+                                                <p style="margin-bottom: 1px;"><strong>6.1.1</strong> The quantity, quality, description and specification for the Deliverables will be those set out in our order, apart from which then of the best standards reasonably to be expected in the market for that kind of Deliverable.</p>
+                                                <p style="margin-bottom: 1px;"><strong>6.1.2</strong> Any goods will be free from defects in materials and workmanship.</p>
+                                                <p style="margin-bottom: 1px;"><strong>6.1.3</strong> Any Deliverables will comply with all statutory requirements and regulations, and with all normally applicable Quality standards relating to their sale or supply.</p>
+                                                <p style="margin-bottom: 1px;"><strong>6.1.4</strong> All claims made by you about any Deliverables, and all serious claims in your advertising and promotional material, are correct and can be relied upon.</p>
+                                                <p style="margin-bottom: 1px;"><strong>6.1.5</strong> Any services will be performed by appropriately qualified and trained personnel.</p>
+                                                <p style="margin-bottom: 1px;"><strong>6.1.6</strong> Neither the sale and supply of any Deliverable, nor its proper use by us for an intended purpose, will breach any property rights, including intellectual property rights, of any other person.</p>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            
+                            <!-- SECOND ROW OF COLUMNS -->
+                            <div style="font-size: 8.4px; line-height: 1.15; margin-top: 3px;">
+                                <!-- RIGHT COLUMN -->
+                                <div style="width: 49%; float: right; padding-left: 1%;">
+                                    <div style="margin-bottom: 5px;">
+                                        <p style="margin-bottom: 2px;"><strong>6.2</strong> All warranties, conditions and other terms implied by statute or common law in our favor will apply.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.3</strong> It is your responsibility to find out from us the purposes that we intend the Deliverables to be put to. You promise that they will be suitable for those intended purposes, save only for any unsuitability which you have expressly notified to us before starting performance.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.4</strong> You will indemnify us and keep us indemnified against any cost, claim, expense or liability arising from any risk for which you are responsible under this contract.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.5</strong> If you fail to comply with any obligation under the contract we may reject any Deliverable and you will not be entitled to receive payment for that Deliverable.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.6</strong> If any contract goods do not comply with all contract requirements we can demand that you repair them or supply replacement goods within seven days or, at our sole discretion, we can reject the goods and demand repayment of any sum already paid.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.7</strong> We will not be liable to you for any delay or failure to perform any of our obligations if the delay or failure was due to a cause beyond our reasonable control.</p>
+                                        <p style="margin-bottom: 2px;"><strong>6.8</strong> You will insure yourselves, and keep insured until Performance is complete, against all normal insurance risks relevant to your work for or with us, on terms and for amounts consistent with Qatar laws and normal business prudence. You will demonstrate the terms and currency of such insurance on request.</p>
+                                    </div>
+                                    <!-- SECTION 7 CONTINUED -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>7. Rights</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>7.1</strong> Any rights which you are contracted to supply must be provided to us in accordance with sections 7.2 or 7.3 as applicable.</p>
+                                            <p style="margin-bottom: 2px;"><strong>7.2</strong> Where rights are not unique to our Deliverable or derive from a third party, you will license those rights to us on assignable, royalty-free terms covering usage for any intended purpose.</p>
+                                            <p style="margin-bottom: 2px;"><strong>7.3</strong> For all other rights, you will transfer ownership to us with full title guarantee for our intended purposes and execute any required documents.</p>
+                                            <p style="margin-bottom: 2px;"><strong>7.4</strong> If you carry out development work at our request and at our expense, we will own all intellectual property rights generated.</p>
+                                            <p style="margin-bottom: 2px;"><strong>7.5</strong> You will do anything reasonably required by us to perfect any transfer or license of rights.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 8 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>8. Termination</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>8.1</strong> We may suspend the performance of, or cancel, or suspend and then cancel, the contract without any liability to you if you breach its terms, or if your business fails.</p>
+                                            <p style="margin-bottom: 2px;"><strong>8.2</strong> Your business will be treated as having failed if:</p>
+                                            <div style="margin-left: 8px;">
+                                                <p style="margin-bottom: 1px;"><strong>8.2.1</strong> you make any voluntary arrangement with your creditors;</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.2</strong> you become bankrupt (individual or firm);</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.3</strong> you become subject to administration or liquidation (company);</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.4</strong> any third party takes possession of any of your assets under security;</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.5</strong> you stop or threaten to stop carrying on business;</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.6</strong> you suffer any equivalent process in any jurisdiction;</p>
+                                                <p style="margin-bottom: 1px;"><strong>8.2.7</strong> we reasonably believe such events are about to occur.</p>
+                                            </div>
+                                            <p style="margin-bottom: 2px;"><strong>8.3</strong> Any right of cancellation or suspension under this section is additional to any rights available to us under law.</p>
+                                            <p style="margin-bottom: 2px;"><strong>8.4</strong> The Company may terminate the contract, in whole or in part, for convenience with immediate written notice, without liability other than for Deliverables accepted prior to termination.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SECTION 9 -->
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>9. Enforcement</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>9.1</strong> You will keep strictly confidential all information which you learn about us or our customers, and use that information only for performance of your obligations.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.2</strong> Our relationship is as independent contractors only, not as partners or agents. The contract is non-assignable by you and assignable by us only to a group company.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.3</strong> You will procure that none of your associates behaves in a way which would have breached the contract had the behaviour been yours.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.4</strong> No waiver by us of any breach will be considered as a waiver of any subsequent breach.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.5</strong> If any provision of these Terms is held invalid, the remainder will not be affected.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.6</strong> Any written notice will be deemed served if posted, faxed with successful answerback, or sent by e-mail with evidence of transmission.</p>
+                                            <p style="margin-bottom: 2px;"><strong>9.7</strong> The contract will be governed by the law of Qatar, and you submit to the non-exclusive jurisdiction of the Qatar courts.</p>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>10. Dulsco Integrated Management System requirements</strong>
+                                        <div style="margin-left: 5px;">
+                                            <p style="margin-bottom: 2px;"><strong>10.1</strong> Seller shall comply and shall ensure that the Goods and/or Services comply with all applicable Environmental Laws. Seller shall inform Dulsco promptly of any significant adverse event affecting the Goods/Services or any Dulsco facility; any allegations or findings of violations of Applicable Law; and shall implement corrective actions requested by Dulsco.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.2</strong> Seller represents and warrants that any and all equipment, machinery, and vehicles used are properly licensed in compliance with all Applicable Laws and that Seller will obtain and pay for all permits, licenses, and inspections necessary unless agreed otherwise.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.3</strong> Seller represents and warrants that its employees, agents, and Sub-Contractors have all training, medical surveillance, permits, certifications, and approvals required by Applicable Laws and Dulsco standards.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.4</strong> Seller shall be responsible to collect, properly handle, profile, characterize, safely containerize, and properly transport or dispose all waste generated during any Services performed on-site at a Dulsco facility in accordance with all Environmental Laws.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.5</strong> In the event of any unauthorized release or spill on-site at a Dulsco facility of any Hazardous Materials or waste under the control of Seller, Seller shall immediately contain, clean up and dispose of the material and be solely responsible for all remedial action.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.6</strong> Seller shall not bring any Hazardous Materials to a Dulsco site except as required to provide the Goods/Services and as approved by Dulsco. Seller shall remove any Hazardous Materials brought onsite upon completion of the Services.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.7</strong> Seller shall be responsible for the health and safety of its employees and independent contractors and comply with all safety, security, and site requirements. Seller shall notify Dulsco of any health and safety incidents or violations.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.8</strong> Any other health, safety and environment requirement highlighted by Dulsco will be described in the PO description section.</p>
+                                            <p style="margin-bottom: 2px;"><strong>10.9</strong> Repeated non-compliance with HSE requirements shall constitute a material breach permitting immediate termination.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

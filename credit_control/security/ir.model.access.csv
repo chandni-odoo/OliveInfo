@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_release_credit_hold_wizard,access.release.credit.hold.wizard,model_release_credit_hold_wizard,base.group_user,1,1,1,1
+access_accrued_revenue_wizard,accrued.revenue.wizard,model_accrued_revenue_wizard,base.group_user,1,1,1,1
+access_accrued_revenue_wizard_line,accrued.revenue.wizard.line,model_accrued_revenue_wizard_line,base.group_user,1,1,1,1
+access_credit_request,credit.request,model_credit_request,base.group_user,1,1,1,1
+access_credit_approval_history,credit.approval.history,model_credit_approval_history,base.group_user,1,1,1,1
+access_credit_branch_approvers,credit.branch.approvers,model_credit_branch_approvers,base.group_user,1,1,1,1
+access_credit_branch_approver_line,credit.branch.approver.line,model_credit_branch_approver_line,base.group_user,1,1,1,1
+access_pdc_cheque,pdc.cheque,model_pdc_cheque,base.group_user,1,1,1,1
+access_receipt_book,receipt.book,model_receipt_book,base.group_user,1,1,1,1
+access_receipt_book_line,receipt.book.line,model_receipt_book_line,base.group_user,1,1,1,1

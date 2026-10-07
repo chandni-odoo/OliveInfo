@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data  noupdate="1">
+		<record id="sequence_hr_accident" model="ir.sequence">
+			<field name="name">Seq</field>
+			<field name="code">hr.shift.allocation</field>	
+			<field name="padding">3</field>
+		    <field name="number_increment">1</field>
+			<field name="prefix">ESA/</field>
+		</record>
+
+		<record id="ntfl_monday" model="week.week">
+        <field name="name">Monday</field>
+        <field name="code">0</field>
+        <field name="l_code">F</field>
+    	</record>
+        <record id="ntfl_monday_half" model="week.week">
+          <field name="name">Monday-half</field>
+          <field name="code">0</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_tuesday" model="week.week">
+          <field name="name">Tuesday</field>
+          <field name="code">1</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_tuesday_half" model="week.week">
+          <field name="name">Tuesday-half</field>
+          <field name="code">1</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_wednesday" model="week.week">
+          <field name="name">Wednesday</field>
+          <field name="code">2</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_wednesday_half" model="week.week">
+          <field name="name">Wednesday-half</field>
+          <field name="code">2</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_thursday" model="week.week">
+          <field name="name">Thursday</field>
+          <field name="code">3</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_thursday_half" model="week.week">
+          <field name="name">Thursday-half</field>
+          <field name="code">3</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_friday" model="week.week">
+          <field name="name">Friday</field>
+          <field name="code">4</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_friday_half" model="week.week">
+          <field name="name">Friday-half</field>
+          <field name="code">4</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_saturday" model="week.week">
+          <field name="name">Saturday</field>
+          <field name="code">5</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_saturday_half" model="week.week">
+          <field name="name">Saturday-half</field>
+          <field name="code">5</field>
+          <field name="l_code">H</field>
+        </record>
+      	<record id="ntfl_sunday" model="week.week">
+          <field name="name">Sunday</field>
+          <field name="code">6</field>
+          <field name="l_code">F</field>
+      	</record>
+        <record id="ntfl_sunday_half" model="week.week">
+          <field name="name">Sunday-half</field>
+          <field name="code">6</field>
+          <field name="l_code">H</field>
+        </record>
+
+        <record id="ntfl_frist" model="week.selection">
+          <field name="name">First</field>
+          <field name="code">1</field>
+        </record>
+        <record id="ntfl_second" model="week.selection">
+          <field name="name">Second</field>
+          <field name="code">2</field>
+        </record>
+        <record id="ntfl_third" model="week.selection">
+          <field name="name">Third</field>
+          <field name="code">3</field>
+        </record>
+        <record id="ntfl_forth" model="week.selection">
+          <field name="name">Forth</field>
+          <field name="code">4</field>
+        </record>
+        <record id="ntfl_five" model="week.selection">
+          <field name="name">Fifth</field>
+          <field name="code">5</field>
+        </record>
+	</data>
+</odoo>

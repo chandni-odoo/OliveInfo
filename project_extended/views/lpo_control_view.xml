@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="lpo_control_tree_view" model="ir.ui.view">
+            <field name="name">lpo.control.tree.view</field>
+            <field name="model">lpo.control</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="total_qty"/>
+                    <field name="total_amount"/>
+                    <field name="total_no_of_hour"/>
+                </tree>
+            </field>
+        </record>
+        <record id="lpo_control_form_view" model="ir.ui.view">
+            <field name="name">lpo.control.form.view</field>
+            <field name="model">lpo.control</field>
+            <field name="arch" type="xml">
+                <form string="LPO Control">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="attachment_id" widget="binary" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="date" readonly="1"/>
+                                <field name="sale_id" invisible="1"/>
+                                <field name="branch_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Line">
+                                <field name="lpo_control_line_ids" readonly="0">
+                                    <tree editable="bottom"> 
+                                        <field name="sale_order_line_id" invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="no_of_hour"/>
+                                        <field name="quantity"/>
+                                        <field name="amount"/>
+                                        <field name="stop_check"/>
+                                        <field name="warning_check"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2">
+                                <field name="total_qty"/>
+                                <field name="total_amount"/>
+                                <field name="total_no_of_hour"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_of_lpo_control" model="ir.actions.act_window">
+            <field name="name">LPO Control</field>
+            <field name="res_model">lpo.control</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem 
+            id="menu_lpo_control"
+            name="LPO Control"
+            action="action_view_of_lpo_control"
+            parent="sale.menu_sale_config"
+            sequence="20"/>
+    </data>
+</odoo>

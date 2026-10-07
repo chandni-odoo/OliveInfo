@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="visa_profession_tree_view" model="ir.ui.view">
+        <field name="name">visa.profession.tree.view</field>
+        <field name="model">visa.profession</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="visa_profession_form_view" model="ir.ui.view">
+        <field name="name">visa.profession.form.view</field>
+        <field name="model">visa.profession</field>
+        <field name="arch" type="xml">
+            <form string="Visa Profession">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hr_applicant_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.view.form.inherit</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='kanban_state']" position="before">
+                <group>
+                    <group>
+                        <field name="applicant_no" readonly="True"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <separator string="Applicant Details"/>
+                    <field name="app_status"/>
+                    <field name="exp_salary"/>
+                    <field name="first_interview_date"/>
+                    <field name="date_available"/>
+                    <field name="country_id"/>
+                    <field name="visa_profession_id"/>
+                    <field name="passport_no"/>
+                    <field name="passport_expiry_date"/>
+            </xpath>
+            <xpath expr="//field[@name='availability']" position="after">
+                <separator string=""/>
+                    <field name="status_date"/>
+                    <field name="hours_available"/>
+                    <field name="application_date"/>
+                    <field name="attachment"/>
+                    <field name="qid_no"/>
+                    <field name="qid_date"/>
+                    <field name="gender"/>
+                    <field name="metrash_registered_mobile"/>
+            </xpath>
+            <xpath expr="//page" position="after">
+                <page string="Documents">
+                    <field name="ducument_line_ids">
+                        <tree editable="bottom">
+                            <field name="document_line_id"/>
+                            <field name="document_number"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="doc_issue_place"/>
+                            <field name="status"/>
+                            <field name="receipt_no"/>
+                            <field name="receipt_date"/>
+                            <field name="remarks"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath> 
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_view_of_visa_profession" model="ir.actions.act_window">
+        <field name="name">Visa Profession</field>
+        <field name="res_model">visa.profession</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_visa_pofession"
+        name="Visa Profession"
+        action="action_view_of_visa_profession"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+</odoo>

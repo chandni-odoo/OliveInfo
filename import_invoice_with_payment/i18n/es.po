@@ -1,0 +1,178 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* import_invoice_with_payment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-25 12:38+0000\n"
+"PO-Revision-Date: 2021-06-25 12:38+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid " \"%s\" Account is not available."
+msgstr " \"%s\" La cuenta no está disponible."
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid " \"%s\" Product UOM category is not available."
+msgstr " \"%s\" La categoría de UOM de producto no está disponible."
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid ""
+" You can not left blank account field if you select Excel/CSV Account Option"
+msgstr ""
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "\"%s\" Tax not in your system"
+msgstr "\"%s\" Impuestos no en su sistema"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid ""
+"%s product is not found\" .\n"
+" If you want to create product then first select Import Product By Name option ."
+msgstr ""
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields,field_description:import_invoice_with_payment.field_gen_invoice__allow_payment
+msgid "Allow Payment Amount more then Invoice Amount"
+msgstr "Permitir un monto de pago superior al monto de la factura"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields.selection,name:import_invoice_with_payment.selection__gen_invoice__stage__draft
+msgid "Import Draft Invoice"
+msgstr "Importar borrador de factura"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields.selection,name:import_invoice_with_payment.selection__gen_invoice__stage__payment
+msgid "Import Invoice with Payment"
+msgstr "Importar factura con pago"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields,field_description:import_invoice_with_payment.field_gen_invoice__stage
+msgid "Invoice Stage Option"
+msgstr "Opción de etapa de factura"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Journal %s does not exist."
+msgstr "El diario %s no existe."
+
+#. module: import_invoice_with_payment
+#: model:ir.model,name:import_invoice_with_payment.model_account_move_line
+msgid "Journal Item"
+msgstr "Artículo de diario"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields.selection,name:import_invoice_with_payment.selection__gen_invoice__partial_payment__keep
+msgid "Keep Open"
+msgstr "Mantener abierta"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields,field_description:import_invoice_with_payment.field_account_move_line__multiple_payment_amount
+msgid "Multiple Payment Amount"
+msgstr "Monto de pago múltiple"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields,field_description:import_invoice_with_payment.field_gen_invoice__partial_payment
+msgid "Partial Payment"
+msgstr "Pago parcial"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Payment Amount is Bigger then Invoice \"%s\"!"
+msgstr "El monto del pago es mayor que la factura \"%s\"!"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Please Specify Payment Journal and Amount for Invoice %s"
+msgstr "Especifique el diario de pagos y el monto de la factura %s"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Please Use same Journal for Invoice %s"
+msgstr "Utilice el mismo diario para la factura %s"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Please assign a date"
+msgstr "Asigne una fecha"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Please assign a payment date"
+msgstr "Asigne una fecha de pago"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Please select an CSV/XLS file or You have selected invalid file"
+msgstr "Seleccione un archivo CSV / XLS o ha seleccionado un archivo no válido"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields.selection,name:import_invoice_with_payment.selection__gen_invoice__stage__confirm
+msgid "Validate Invoice Automatically With Import"
+msgstr "Validar factura automáticamente con importación"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields.selection,name:import_invoice_with_payment.selection__gen_invoice__partial_payment__writeoff
+msgid "Write-Off"
+msgstr "Pedir por escrito"
+
+#. module: import_invoice_with_payment
+#: model:ir.model.fields,field_description:import_invoice_with_payment.field_gen_invoice__writeoff_account
+msgid "Write-Off Account"
+msgstr "Cuenta de cancelación"
+
+#. module: import_invoice_with_payment
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#: code:addons/import_invoice_with_payment/models/invoice_with_payment.py:0
+#, python-format
+msgid "Wrong Date Format. Date Should be in format YYYY-MM-DD."
+msgstr "Formato de fecha incorrecto. La fecha debe tener el formato AAAA-MM-DD."
+
+#. module: import_invoice_with_payment
+#: model:ir.model,name:import_invoice_with_payment.model_gen_invoice
+msgid "gen.invoice"
+msgstr ""

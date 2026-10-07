@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_task_form_mtech" model="ir.ui.view">
+        <field name="name">project.task.branch.form.mtech</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <field name="project_id" position="before">
+                <field name="branch_id" invisible="1" />
+            </field>
+            <xpath expr="//form//sheet//group" position="after">
+                <group string="Additional Details" attrs="{'invisible': [('branch_for', '!=', 'es')]}">
+                    <group>
+                        <field name="site_contact" />
+                        <field name="site_contact_number" />
+                        <field name="alternate_skip_types_ids" widget="many2many_tags" />
+                        <field name="collection_mode" />
+                    </group>
+                    <group>
+                        <field name="vehicle_permit_ids" widget="many2many_tags" />
+                        <field name="skip_permit_ids" widget="many2many_tags" />
+                        <field name="landfill_id"/>
+                        <field name="latitude" />
+                        <field name="longitude" />
+                        <field name="is_mtech_view" invisible="1" />
+                        <field name="job_stage_id" invisible="1" />
+                        <field name="frequency_value" invisible="1" />
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Header Opration -->
+            <xpath expr="//header/button[@name='action_assign_to_me']" position="after">
+                <button name="action_schedule_and_planning" type="object" string="Schedule" class="oe_highlight" attrs="{'invisible': ['|', ('is_mtech_view', '=', False), ('branch_for', '!=', 'es')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_mtech_view', '=', True), ('branch_for','=','es')]}</attribute>
+            </xpath>
+            <xpath expr="//form//header//field[@name='stage_id']" position="before">
+                <!-- <field name="jobstage_id" options="{'clickable': '1'}" widget="statusbar" attrs="{'invisible': [('is_mtech_view', '=', False)]}"/> -->
+                <field name="jobstage_id" options="{'clickable': '1'}" widget="statusbar" />
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="so_frequency_form_view_mtech" model="ir.ui.view">
+        <field name="name">so.frequency.form.view.mtech</field>
+        <field name="model">so.frequency</field>
+        <field name="inherit_id" ref="sale_extended.so_frequency_form_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="frequency"/>
+            </field>
+        </field>
+    </record>
+</odoo>
+            

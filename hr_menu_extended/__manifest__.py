@@ -1,0 +1,28 @@
+{
+    'name': "HR Extended Insurence,Training and Certification View",
+    'summary': "HR Extended Insurence,Training and Certification",
+    'description': "HR Extended Insurence,Training and Certification",
+    'category': 'Human Resources',
+    'version': '15.0.0',
+    'author': 'Onestone Software LLP',
+    'website': "www.onestonesoftware.in",
+    'depends': ['hr_extended','base','hr_holidays','mail','account','report_xlsx','hr','project','project_extended','leave_extended','branch_extended','sale_extended','hr_gratuity_settlement','hr_request_portal','mtech_vehicle_extended','custom_trip'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/document_expiry_cron.xml',
+        'reports/leave_report.xml',
+        'views/insurence_views.xml',
+        'views/training_views.xml',
+        'views/certification_views.xml',
+        'views/document_views.xml',
+        'views/disciplinary_views.xml',
+        'views/leave_allocation.xml',
+        'views/list_view_extended.xml',
+        'views/custom_trip_sheet_views.xml',
+        'wizard/leave_allocation_wizard.xml',
+
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

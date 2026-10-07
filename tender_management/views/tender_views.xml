@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TREE VIEW -->
+
+    <record id="view_tender_management_tree" model="ir.ui.view">
+        <field name="name">tender.management.tree</field>
+        <field name="model">tender.management</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence_no"/>
+                <field name="tender_no"/>
+                <field name="tender_name"/>
+                <field name="client_id"/>
+                <field name="project_location"/>
+                <field name="contract_start_date"/>
+                <field name="contract_end_date"/>
+                <field name="result_state"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+
+    <record id="view_tender_management_form" model="ir.ui.view">
+        <field name="name">tender.management.form</field>
+        <field name="model">tender.management</field>
+        <field name="arch" type="xml">
+            <form string="Tender">
+                <header>
+                    <field name="current_approver_id" invisible="1"/>
+                    <field name="is_current_approver" invisible="1"/>
+                    <!-- Bid / No Bid buttons — only visible to current approver -->
+                    <button name="action_generate_lead"
+                        string="Generate Lead"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{
+                            'invisible': [('result_state', '!=', 'won')]
+                        }"/>
+                    <button name="action_bid"
+                            string="Bid"
+                            type="object"
+                            class="btn-success"
+                            attrs="{'invisible': [('is_current_approver', '!=', True)]}"/>
+
+                    <button name="action_no_bid"
+                            string="No Bid"
+                            type="object"
+                            class="btn-danger"
+                            attrs="{'invisible': [('is_current_approver', '!=', True)]}"/>
+                    <button name="action_tendering"
+                            string="Tendering"
+                            type="object"
+                            class="btn-primary"
+                            states="bid_submitted,technical,commercial,negotiation,won"/>
+
+                    <button name="action_bid_submitted"
+                            string="Bid Submitted"
+                            type="object"
+                            class="btn-primary"
+                            states="tendering,technical,commercial,negotiation,won"/>
+
+                    <button name="action_technical"
+                            string="Technical"
+                            type="object"
+                            class="btn-primary"
+                            states="tendering,bid_submitted,commercial,negotiation,won"/>
+
+                    <button name="action_commercial"
+                            string="Commercial"
+                            type="object"
+                            class="btn-primary"
+                            states="tendering,bid_submitted,technical,negotiation,won"/>
+
+                    <button name="action_negotiation"
+                            string="Negotiation"
+                            type="object"
+                            class="btn-primary"
+                            states="tendering,bid_submitted,technical,commercial,won"/>
+
+                    <field name="state"
+                        widget="statusbar"
+                        statusbar_visible="tendering,bid_submitted,technical,commercial,negotiation"/>
+
+                </header>
+                <!-- ===================================================== -->
+                <!-- RIBBONS -->
+                <!-- ===================================================== -->
+
+                <field name="result_state" invisible="1"/>
+
+                <widget name="web_ribbon"
+                        title="WON"
+                        bg_color="bg-success"
+                        attrs="{'invisible': [('result_state', '!=', 'won')]}"/>
+
+                <widget name="web_ribbon"
+                        title="LOST"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('result_state', '!=', 'lost')]}"/>
+
+                <widget name="web_ribbon"
+                        title="CANCELLED"
+                        bg_color="bg-secondary"
+                        attrs="{'invisible': [('result_state', '!=', 'cancelled')]}"/>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_leads"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-line-chart">
+
+                            <field name="lead_count"
+                                string="Leads"
+                                widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="alert alert-info" role="alert"
+                         attrs="{'invisible': [('approval_state', 'not in', ['under_review'])]}">
+                        <b>Approval In Progress.</b> Awaiting decision from:
+                        <field name="current_approver_id" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="alert alert-success" role="alert"
+                         attrs="{'invisible': [('approval_state', '!=', 'approved')]}">
+                        <b>Approved — Bid.</b> All approvers selected Bid.
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         attrs="{'invisible': [('approval_state', '!=', 'rejected')]}">
+                        <b>No Bid.</b> The tender was rejected by an approver.
+                    </div>
+
+                    <group>
+                        <group>
+
+                            <field name="sequence_no" readonly="1"/>
+
+                            <field name="tender_no"/>
+
+                            <field name="tender_name"/>
+
+                            <field name="project_location"/>
+
+                            <field name="duration"/>
+
+                            <field name="annual_estimated_value_contract"/>
+
+                            <field name="total_contract_value"/>
+
+                            <field name="sector_id"/>
+                            <field name="tender_branch_id"/>
+
+                            <field name="tender_bond_amount"/>
+
+                            <field name="contract_start_date"/>
+
+                            <field name="contract_end_date"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="client_id"/>
+
+                            <field name="tender_received_date"/>
+
+                            <field name="tender_submission_date"/>
+
+                            <field name="contract_award_date"/>
+
+                            <field name="mobilization_period"/>
+
+                            <field name="tender_bond_expiry"/>
+
+                            <field
+                                name="tender_bond_validity_days"
+                                readonly="1"
+                            />
+                            <field name="partner_ids" widget="many2many_tags"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                            <field name="working_status_id"/>
+                            <field name="approval_state" readonly="1"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                    <page string="Brief Project Summary">
+                        <group>
+                            <field name="summary"/>
+                            <field name="key_risks"/>
+                        </group>
+                    </page>
+                    <page string="Tender Document">
+                        <field name="tender_document_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Working Files">
+                        <field name="working_file_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Tender Bulletin / Clarification">
+                        <field name="tender_bulletin_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Submitted Documents">
+                        <field name="submitted_document_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Post Tender Clarification">
+                        <field name="post_tender_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Signed Contracts">
+                        <field name="signed_contract_line_ids">
+                            <tree editable="bottom">
+                                <field name="file_name"/>
+                                <field name="remarks"/>
+                                <field
+                                    name="attachment"
+                                    filename="attachment_name"
+                                    widget="binary"
+                                />
+                                <field name="attachment_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Point of Contact">
+                        <field name="poc_line_ids">
+                            <tree editable="bottom">
+                                <field name="contact_name"/>
+                                <field name="contact_number"/>
+                                <field name="contact_email"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Approval History">
+                        <field name="approval_history_ids">
+                            <tree decoration-success="status == 'bid'"
+                                    decoration-danger="status in ('no_bid','skipped')"
+                                    decoration-info="status == 'pending'"
+                                    decoration-muted="status == 'waiting'">
+                                <field name="user_id"/>
+                                <field name="status"/>
+                                <field name="date_done"/>
+                                <field name="notes"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+
+    <record id="action_tender_management" model="ir.actions.act_window">
+        <field name="name">Tender</field>
+        <field name="res_model">tender.management</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- WON -->
+
+    <record id="action_tender_mark_won" model="ir.actions.server">
+        <field name="name">Mark as Won</field>
+        <field name="model_id" ref="model_tender_management"/>
+        <field name="binding_model_id" ref="model_tender_management"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+    records.action_mark_won()
+        </field>
+    </record>
+
+    <!-- LOST -->
+
+    <record id="action_tender_mark_lost" model="ir.actions.server">
+        <field name="name">Mark as Lost</field>
+        <field name="model_id" ref="model_tender_management"/>
+        <field name="binding_model_id" ref="model_tender_management"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+    records.action_mark_lost()
+        </field>
+    </record>
+
+    <!-- CANCELLED -->
+
+    <record id="action_tender_mark_cancelled" model="ir.actions.server">
+        <field name="name">Mark as Cancelled</field>
+        <field name="model_id" ref="model_tender_management"/>
+        <field name="binding_model_id" ref="model_tender_management"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+    records.action_mark_cancelled()
+        </field>
+    </record>
+
+    <record id="action_server_tender_send_for_approval" model="ir.actions.server">
+        <field name="name">Send for Approval</field>
+        <field name="model_id" ref="model_tender_management"/>
+        <field name="binding_model_id" ref="model_tender_management"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+for record in records:
+    record.action_send_for_approval()
+        </field>
+    </record>
+
+    <record id="view_tender_management_search" model="ir.ui.view">
+        <field name="name">tender.management.search</field>
+        <field name="model">tender.management</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sequence_no"/>
+                <field name="tender_no"/>
+                <field name="tender_name"/>
+                <field name="state"/>
+                <!-- Filter to show archived records -->
+                <filter
+                    string="Archived"
+                    name="archived"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

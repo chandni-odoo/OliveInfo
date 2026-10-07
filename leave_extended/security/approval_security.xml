@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <data>
+
+        <record id="leave_approval_group" model="res.groups">
+            <field name="name">Time Off Approval Users Group (GT)</field>
+            <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        </record>
+
+        <record id="duty_approval_group" model="res.groups">
+            <field name="name">Duty Resumption Approval Users Group (GT)</field>
+            <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        </record>
+
+        <record id="create_employee_group" model="res.groups">
+            <field name="name">Create Employee Group (GT)</field>
+            <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        </record>
+
+        <record id="validate_leave_approved_group" model="res.groups">
+            <field name="name">Validate Approved Group (GT)</field>
+            <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        </record>
+    </data>
+</odoo>

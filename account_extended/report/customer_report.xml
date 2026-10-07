@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customer_report_details_templete">
+        <t t-call="web.html_container">
+            <div class="page">
+                <t t-foreach="lines" t-as="rec">
+                    <div class="header_custom">
+                        <div class="row">
+                            <div class="col-3 mw-100 mb-2" style="width:70%;float:left;">
+                                <span style=" margin-left= 1px;">Customer Code:</span><t t-esc="rec['customer_id'].address_no"/><br/>
+                                <b><t t-esc="rec['customer_id'].name"/></b><br/>
+                            </div>
+                            <div class="col-3 mw-100 mb-2" style="width:30%; float:right; text-align:right;">
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-height:70px;"/>
+                            </div>
+                        </div><br/>
+                        <div class="row">
+                            <div style="width:20%;float:left; text-align:left;">
+                                <t t-esc="rec['customer_id'].zip"/><br/>
+                                <t t-esc="rec['customer_id'].city"/><br/>
+                                <t t-esc="rec['customer_id'].country_id.name"/><br/>
+                            </div>
+                            <div style="width:auto; margin: 0 auto; padding-top:10px;">
+                                <br/>
+                                <br/>
+                                <span >STATEMENT OF ACCOUNT AS OF: </span><t t-esc="rec['current_date']" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/><br/>
+                            </div>
+                            <div style="width:50%; float:right; text-align:right; margin-left:100px; padding-top:10px;">
+                                <span>Credit Limit : </span><t t-esc="rec['customer_id'].credit_limit"/><br/>
+                                <span>Credit Terms : </span><t t-esc="rec['customer_id'].credit_days"/><span> Days</span><br/>
+                            </div>
+                        </div>
+                        <div class="row zero_min_height" style="padding-top:70px;">
+                            <div class="col-12">
+                                <div style="border-bottom: 1px solid black;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <table class="table table-sm" style="width:100%; border:none;">
+                            <thead style="border-bottom: 1px solid black;">
+                                <tr>
+                                    <th class="text-left"><strong>Doc No.</strong></th>
+                                    <th class="text-left"><strong>Type</strong></th>
+                                    <th class="text-center"><strong>Date</strong></th>
+                                    <th class="text-center"><strong>Due Date</strong></th>
+                                    <th class="text-center"><strong>Due Days</strong></th>
+                                    <th class="text-center"><strong>Comments</strong></th>
+                                    <th class="text-right"><strong>Original Amount</strong></th>
+                                    <th class="text-right"><strong>Balance Amount</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="original_final_total" t-value="0"/>
+                                <t t-set="balance_final_total" t-value="0"/>
+                                <t t-set="original_invoice_total" t-value="0"/>
+                                <t t-set="balance_invoice_total" t-value="0"/>
+                                <t t-set="original_paymnt_total" t-value="0"/>
+                                <t t-set="balance_paymnt_total" t-value="0"/>
+                                <t t-set="original_credit_total" t-value="0"/>
+                                <t t-set="balance_credit_total" t-value="0"/>
+                                <t t-set="payment_ids" t-value=""/>
+                                <t t-set="fil_payment_ids" t-value=""/>
+
+                                <!-- Invoice line -->
+                                <t t-foreach="rec['invoice_ids']" t-as="invoice_id">
+                                    <tr>
+                                        <t t-set="original_invoice_total" t-value="original_invoice_total + invoice_id.amount_total"/>
+                                        <t t-set="balance_invoice_total" t-value="balance_invoice_total + invoice_id.amount_residual"/>
+                                        <td style='text-align:left;'><t t-esc="invoice_id.name"/></td>
+                                        <td style='text-align:left;'><span>INV</span></td>
+                                        <td style='text-align:center; width:15%;'>
+                                            <t t-esc="invoice_id.invoice_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                        <td style='text-align:center; width:15%;'>
+                                            <t t-esc="invoice_id.invoice_date_due" t-options='{"widget": "date","format": "dd-MM-yyyy"}' />
+                                        </td>
+                                        <td style='text-align:right;'>
+                                            <t t-esc="(rec.get('current_date') - invoice_id.invoice_date).days"/>
+                                        </td>
+                                        <td style='text-align:center;'><t t-esc='invoice_id.comment'/> </td>
+                                        <td style='text-align:right;'><t t-esc="'{:,.2f}'.format(invoice_id.amount_total)"/></td>
+                                        <td style='text-align:right;'><t t-esc="'{:,.2f}'.format(invoice_id.amount_residual)"/></td>
+                                    </tr>
+                                </t>
+                                <!-- Credit line -->
+                                <t t-foreach="rec['credit_note_ids']" t-as="credit_note_id">
+                                   <tr>
+                                        <t t-set="original_credit_total" t-value="original_credit_total + credit_note_id.amount_total"/>
+                                        <t t-set="balance_credit_total" t-value="balance_credit_total + credit_note_id.amount_residual"/>
+                                        <td style='text-align:left;'><t t-esc="credit_note_id.name"/></td>
+                                        <td style='text-align:left;'><span>CRN</span></td>
+                                        <td style='text-align:center; width:15%;'>
+                                            <t t-esc="credit_note_id.invoice_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                        <td style='text-align:center; width:15%;'>
+                                            <t t-esc="credit_note_id.invoice_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                        <td style='text-align:right;'>
+                                            <t t-esc="(rec.get('current_date') - credit_note_id.invoice_date).days"/>
+                                        </td>
+                                        <td style='text-align:center;'><t t-esc='credit_note_id.comment'/></td>
+                                        <td style='text-align:right;'><t t-esc="'{:,.2f}'.format( -credit_note_id.amount_total)"/></td>
+                                        <td style='text-align:right;'><t t-esc="'{:,.2f}'.format(-credit_note_id.amount_residual)"/></td>
+                                    </tr>
+                                </t>
+
+                                <!-- Payment line -->
+                                <!-- <t t-set="payment_ids" t-value="rec['payment_ids'].filtered(lambda x: x.reconciled_invoice_ids and x.residual_amount &lt; 0"/>
+                                <t t-set="fil_payment_ids" t-value="payment_ids + rec['payment_ids'].filtered(lambda x: not x.reconciled_invoice_ids"/> -->
+
+                                <t t-foreach="rec['payment_ids']" t-as="payment_id">
+                                    <t>
+                                        <tr>
+                                            <t t-set="original_paymnt_total" t-value="original_paymnt_total + payment_id.amount"/>
+                                            <t t-set="balance_paymnt_total" t-value="balance_paymnt_total + payment_id.residual_amount"/>
+                                            <td style='text-align:left;'><t t-esc="payment_id.name"/></td>
+                                            <td style='text-align:left;'><span>PMT</span></td>
+                                            <td style='text-align:center; width:15%;'>
+                                                <t t-esc="payment_id.date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                            </td>
+                                            <td style='text-align:center;'>
+                                                 <t t-esc="payment_id.date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                            </td>
+                                             <td style='text-align:right;'>
+                                                <t t-esc="(rec.get('current_date') - payment_id.date).days"/>
+                                            </td>
+                                            <td style='text-align:center;'><t t-esc="payment_id.ref"/></td>
+                                            <td style='text-align:right;'><t t-esc="'{:,.2f}'.format(-payment_id.amount)"/></td>
+                                            <td style='text-align:right;'>
+                                                <t t-esc="'{:,.2f}'.format(payment_id.residual_amount)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: right;">Total:</td>
+                                    <t t-set="original_final_total" t-value="original_invoice_total - original_paymnt_total - original_credit_total"/>
+                                    <t t-set="balance_final_total" t-value="balance_invoice_total + balance_paymnt_total - balance_credit_total"/>
+                                    <td style="border-top: 1px solid #000; text-align: right;"><t t-out="'{:,.2f}'.format(original_final_total)"/></td>
+                                    <td style="border-top: 1px solid #000; text-align: right;"><t t-out="'{:,.2f}'.format(balance_final_total)"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr style="height:3px; border-top:1px solid black; border-bottom:1px solid black;"/>
+                        <table class="table" style="width: 100%">
+                            <thead>
+                                <!-- <tr style="border-bottom: 2px solid black; text-align: left;">
+                                    <th>Aging Days</th>
+                                    <th>0 - 30</th>
+                                    <th>31 - 60</th>
+                                    <th>61 - 90</th>
+                                    <th>91 - 120</th>
+                                    <th>121 - 180</th>
+                                    <th>181 - 360</th>
+                                    <th>Over 360</th>
+                                </tr> -->
+                                <tr style="border-bottom: 2px solid black; text-align: left;">
+                                    <th>Aging Days</th>
+                                    <th>0 - 30</th>
+                                    <th>31 - 60</th>
+                                    <th>61 - 90</th>
+                                    <th>91 - 120</th>
+                                    <th>121 - 180</th>
+                                    <th>181 - 360</th>
+                                    <th>Over 360</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr style="border-bottom: 2px solid black; text-align: left;">
+                                    <td>Amount:</td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['current'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['row_1'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['row_2'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['row_3'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['row_4'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue'].get('row_5', 0.0))"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue'].get('row_6', 0.0))"/></td>
+                                </tr> -->
+                                <tr style="border-bottom: 2px solid black; text-align: left;">
+                                    <td>Amount:</td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_0_30'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_31_60'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_61_90'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_91_120'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_121_180'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_181_360'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(rec['overdue']['bucket_over_360'])"/></td>
+                                </tr>
+                            </tbody>
+                        </table><br/>
+                        <span>Please transfer the payment as mentioned in below account: </span><br/><br/>
+                        <span></span>
+                        <div class="row">
+                                <strong>Bank Name: </strong>
+                                <strong t-esc="company.bank_id.name"/><br/>
+                                <span>Beneficialy Name: </span>
+                                <span t-esc="company.bank_id.beneficiary_name"/><br/>
+                                <span>Branch Name: </span>
+                                <span t-esc="company.bank_id.branch_name"/><br/>
+                                <span>Bank Address: </span>
+                                <span t-esc="company.bank_id.street"/><br/>
+                                <span>Bank Account No: </span>
+                                <span t-esc="company.bank_id.account_no"/><br/>
+                                <span>Swift Code: </span>
+                                <span t-esc="company.bank_id.swift_code"/><br/>
+                                <span>IBAN No: </span>
+                                <span t-esc="company.bank_id.iban_no"/><br/>
+                        </div>
+                    </div>
+                    <p style="page-break-before:always;"></p>
+                </t>
+                <div class="footer o_standard_footer" style="font-size:10px;">
+                    <hr style="height:3px; border-top:1px solid black;"/>
+                    <div style="width:40%; float:left; text-align:left;">
+                        <span>CORPORATE OFFICE:</span><br/>
+                        <t t-esc="company.street"/>
+                        <t t-esc="company.city"/>
+                        <t t-esc="company.state_id.name"/><br/>
+                        <span>Tel:</span><t t-esc="company.phone"/>
+                        <span>Fax:</span><t t-esc="company.mobile"/>
+                        <span>E-mail:</span><t t-esc="company.email"/>
+                    </div>
+                    <div style="width:20%; float:left; margin-top:30px; text-align:center;">
+                        <span><t t-esc="company.website"/></span>
+                    </div>
+                    <div style="width:40%; float:right;">
+                        <strong><t t-esc="company.name"/></strong><br/>
+                        <t t-esc="company.street"/>
+                        <t t-esc="company.city"/>
+                        <t t-esc="company.state_id.name"/><br/>
+                        <span>Tel:</span><t t-esc="company.phone"/>
+                        <span>Fax:</span><t t-esc="company.mobile"/>
+                        <span>E-mail:</span><t t-esc="company.email"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>        

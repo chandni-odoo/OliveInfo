@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_budget_spread_report_xlsx" model="ir.actions.report">
+        <field name="name">Budget Spread Report</field>
+        <field name="model">budget.spread.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">budget_customizations.report_budget_spread_report_xlsx</field>
+        <field name="report_file">budget_spread_report</field>
+        <field name="binding_model_id" ref="model_budget_spread_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

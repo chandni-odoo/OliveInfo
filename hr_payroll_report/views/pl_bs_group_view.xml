@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pl_group_tree" model="ir.ui.view">
+        <field name="name">pl.group.tree</field>
+        <field name="model">pl.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_net_revenue"/>
+                <field name="is_grand_total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_pl_group_form" model="ir.ui.view">
+        <field name="name">pl.group.form</field>
+        <field name="model">pl.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <group>
+                        <field name="is_net_revenue"/>
+                        <field name="is_grand_total"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
+    <record id="view_bs_group_tree" model="ir.ui.view">
+        <field name="name">bs.group.tree</field>
+        <field name="model">bs.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_subtotal"/>
+                <field name="is_section_total"/>
+                <field name="is_grand_total"/>
+                <field name="is_retained_earnings"/>
+                <field name="reverse_sign"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_bs_group_form" model="ir.ui.view">
+        <field name="name">bs.group.form</field>
+        <field name="model">bs.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <group>
+                        <field name="is_subtotal"/>
+                        <field name="is_section_total"/>
+                        <field name="is_grand_total"/>
+                        <field name="is_retained_earnings"/>
+                        <field name="reverse_sign"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pl_group" model="ir.actions.act_window">
+        <field name="name">P&amp;L Grouping</field>
+        <field name="res_model">pl.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_bs_group" model="ir.actions.act_window">
+        <field name="name">Balance Sheet Grouping</field>
+        <field name="res_model">bs.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_pl_group"
+              name="P&amp;L Grouping"
+              parent="account.menu_finance_configuration"
+              action="action_pl_group"
+              groups="budget_customizations.group_account_admin"/>
+
+    <!-- Menu -->
+    <menuitem id="menu_bs_group"
+              name="BS Grouping"
+              parent="account.menu_finance_configuration"
+              action="action_bs_group"
+              groups="budget_customizations.group_account_admin"/>
+</odoo>

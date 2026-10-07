@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bt_hr_overtime,bt.hr.overtime,model_bt_hr_overtime,,1,1,1,1
+access_hr_ot_type,access_hr_ot_type,model_hr_ot_type,base.group_user,1,1,1,1
+access_hr_ot_rule,access_hr_ot_rule,model_hr_ot_rule,base.group_user,1,1,1,1
+access_hr_ot_rule_line,access_hr_ot_rule_line,model_hr_ot_rule_line,base.group_user,1,1,1,1
+
+access_run_overtime_wizard,access_run_overtime_wizard,model_run_overtime_wizard,base.group_user,1,1,1,1
+
+hr_overtime_automatic.access_ot_approval,access_ot_approval,hr_overtime_automatic.model_ot_approval,base.group_user,1,1,1,1

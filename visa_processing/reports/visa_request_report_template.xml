@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_landscape" model="report.paperformat">
+        <field name="name">Landscape</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_visa_request_report" model="ir.actions.report">
+        <field name="name">Visa Request Report</field>
+        <field name="model">visa.request.application</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">visa_processing.report_visa_request</field>
+        <field name="report_file">visa_processing.report_visa_request</field>
+        <field name="print_report_name">'Visa Request Report'</field>
+        <field name="paperformat_id" ref="paperformat_landscape"/>
+    </record>
+
+    # Report Template (XML)
+    <template id="report_visa_request">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <style>
+                    .report-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                    }
+                    .report-table th {
+                        background-color: #343a40;
+                        color: white;
+                        padding: 8px;
+                        border: 1px solid #dee2e6;
+                        white-space: normal;
+                        word-wrap: break-word;
+                        text-align: center;
+                    }
+                    .report-table td {
+                        padding: 8px;
+                        border: 1px solid #dee2e6;
+                        word-wrap: break-word;
+                    }
+                    .header-wrap {
+                        display: inline-block;
+                        max-width: 100%;
+                        white-space: normal;
+                        line-height: 1.2;
+                    }
+                </style>
+                
+                <div class="page">
+                    <h2 style="text-align: center; margin-bottom: 20px;">Visa Request Report</h2>
+                    
+                    <!-- Report Filters -->
+                    <div class="row mb-4" style="background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
+                        <div class="col-4">
+                            <strong>Visa Type:</strong> <span t-esc="visa_type"/>
+                        </div>
+                        <div class="col-4">
+                            <t t-if="from_date or to_date">
+                                <strong>Date Range:</strong> 
+                                <span t-if="from_date" t-esc="from_date"/> 
+                                <span t-if="from_date and to_date"> to </span> 
+                                <span t-if="to_date" t-esc="to_date"/>
+                            </t>
+                        </div>
+                    </div>
+                    
+                    <!-- QVC Report -->
+                    <t t-if="visa_process_type == 'qvc'">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><span class="header-wrap">Reference</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Request Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Applicant</span></th>
+                                    <th style="width: 8%;"><span class="header-wrap">Employee Name</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Employee Number</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Number</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QVC Country</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QVC Center</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Visa Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QVC Payment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QVC Appointment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Visa Issue Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">First Entry Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QID Apply Date</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="app">
+                                    <tr>
+                                        <td><span t-field="app.name"/></td>
+                                        <td><span t-field="app.request_date"/></td>
+                                        <td><span t-field="app.recruitment_app_number"/></td>
+                                        <td><span t-field="app.employee_name"/></td>
+                                        <td><span t-field="app.employee_number"/></td>
+                                        <td><span t-field="app.visa_number"/></td>
+                                        <td><span t-field="app.qvc_country_id.name"/></td>
+                                        <td><span t-field="app.qvc_center_id.name"/></td>
+                                        <td><span t-field="app.qvc_visa_application_date"/></td>
+                                        <td><span t-field="app.qvc_payment_date"/></td>
+                                        <td><span t-field="app.qvc_appointment_date"/></td>
+                                        <td><span t-field="app.qvc_visa_issue_date"/></td>
+                                        <td><span t-field="app.qvc_qatar_first_entry_date"/></td>
+                                        <td><span t-field="app.qvc_qid_apply_date"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+                    <!-- NON-QVC Report -->
+                    <t t-elif="visa_process_type == 'non_qvc'">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><span class="header-wrap">Reference</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Request Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Applicant</span></th>
+                                    <th style="width: 8%;"><span class="header-wrap">Employee Name</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Employee Number</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Number</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Visa Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Visa Payment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Visa Issue Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">First Entry Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Medical Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Medical Appointment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Fingerprint Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Fingerprint Appointment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Employment Contract</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QID Payment Date</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="app">
+                                    <tr>
+                                        <td><span t-field="app.name"/></td>
+                                        <td><span t-field="app.request_date"/></td>
+                                        <td><span t-field="app.recruitment_app_number"/></td>
+                                        <td><span t-field="app.employee_name"/></td>
+                                        <td><span t-field="app.employee_number"/></td>
+                                        <td><span t-field="app.visa_number"/></td>
+                                        <td><span t-field="app.non_qvc_visa_application_date"/></td>
+                                        <td><span t-field="app.non_qvc_visa_payment_date"/></td>
+                                        <td><span t-field="app.non_qvc_visa_issue_date"/></td>
+                                        <td><span t-field="app.non_qvc_qatar_first_entry_date"/></td>
+                                        <td><span t-field="app.non_qvc_medical_application_date"/></td>
+                                        <td><span t-field="app.non_qvc_medical_appointment_date"/></td>
+                                        <td><span t-field="app.non_qvc_fingerprint_application_date"/></td>
+                                        <td><span t-field="app.non_qvc_fingerprint_appointment_date"/></td>
+                                        <td><span t-if="app.non_qvc_employment_contract">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-field="app.non_qvc_qid_payment_date"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+                    <!-- Change of Employer/Secondment Report -->
+                    <t t-elif="visa_process_type in ['change_employer', 'secondment']">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><span class="header-wrap">Reference</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Request Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Applicant</span></th>
+                                    <th style="width: 8%;"><span class="header-wrap">Employee Name</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Employee Number</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Number</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">NOC</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Company Documents</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Application No</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Application Status</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Employee Contract</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Transfer Payment Date</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="app">
+                                    <tr>
+                                        <td><span t-field="app.name"/></td>
+                                        <td><span t-field="app.request_date"/></td>
+                                        <td><span t-field="app.recruitment_app_number"/></td>
+                                        <td><span t-field="app.employee_name"/></td>
+                                        <td><span t-field="app.employee_number"/></td>
+                                        <td><span t-field="app.visa_number"/></td>
+                                        <td><span t-if="app.change_employer_noc">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-if="app.change_employer_company_documents">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-field="app.change_employer_application_date"/></td>
+                                        <td><span t-field="app.change_employer_application_no"/></td>
+                                        <td><span t-field="app.change_employer_application_status"/></td>
+                                        <td><span t-if="app.change_employer_employee_contract">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-field="app.change_employer_transfer_payment_date"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+                    <!-- Work Permit Report -->
+                    <t t-elif="visa_process_type == 'work_permit'">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><span class="header-wrap">Reference</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Request Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Applicant</span></th>
+                                    <th style="width: 8%;"><span class="header-wrap">Employee Name</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Employee Number</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Number</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Photo</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">QID</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Sponsor ID</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Education Certificate</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Application No</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Application Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">PCC</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Employee Contract</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Payment Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Validity From</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Expiry Date</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="app">
+                                    <tr>
+                                        <td><span t-field="app.name"/></td>
+                                        <td><span t-field="app.request_date"/></td>
+                                        <td><span t-field="app.recruitment_app_number"/></td>
+                                        <td><span t-field="app.employee_name"/></td>
+                                        <td><span t-field="app.employee_number"/></td>
+                                        <td><span t-field="app.visa_number"/></td>
+                                        <td><span t-if="app.work_permit_photo">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-if="app.work_permit_qid">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-if="app.work_permit_sponsor_id">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-if="app.work_permit_education_certificate_arabic">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-field="app.work_permit_application_no"/></td>
+                                        <td><span t-field="app.work_permit_application_date"/></td>
+                                        <td><span t-if="app.work_permit_pcc">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-if="app.work_permit_employee_contract">Yes</span><span t-else="">No</span></td>
+                                        <td><span t-field="app.work_permit_payment_date"/></td>
+                                        <td><span t-field="app.work_permit_validity_from"/></td>
+                                        <td><span t-field="app.work_permit_expiry_date"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+                    <!-- Default Report - If no specific type selected -->
+                    <t t-else="">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><span class="header-wrap">Reference</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Request Date</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">Applicant</span></th>
+                                    <th style="width: 8%;"><span class="header-wrap">Employee Name</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Employee Number</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Type</span></th>
+                                    <th style="width: 6%;"><span class="header-wrap">Visa Number</span></th>
+                                    <th style="width: 7%;"><span class="header-wrap">VP Number</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="app">
+                                    <tr>
+                                        <td><span t-field="app.name"/></td>
+                                        <td><span t-field="app.request_date"/></td>
+                                        <td><span t-field="app.recruitment_app_number"/></td>
+                                        <td><span t-field="app.employee_name"/></td>
+                                        <td><span t-field="app.employee_number"/></td>
+                                        <td><span t-field="app.visa_process_type"/></td>
+                                        <td><span t-field="app.visa_number"/></td>
+                                        <td><span t-field="app.vp_number_id" t-field-options='{"widget": "char"}'/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+                    <!-- No Records Found Message -->
+                    <t t-if="not docs">
+                        <div class="alert alert-warning text-center" style="padding: 10px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 20px;">
+                            No visa applications found for the selected criteria.
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

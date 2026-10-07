@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pending_details_wizard_form" model="ir.ui.view">
+            <field name="name">Pending Approvals</field>
+            <field name="model">pending.details.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Approval Pending Details">
+                    <group>
+                        <field name="approval_ids" nolabel="1" readonly="1" options="{'no_open': True}">
+                            <tree>
+                                <field name="sequence" widget="handle"/>
+                                <field name="user_id"/>
+                                <field name="status"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button string="Close" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="custom_trip_sheet_view_form_mtech" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.form.mtech</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="inherit_id" ref="custom_trip.custom_trip_sheet_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position="before">
+                <group>
+                    <group>
+                        <field name="schedule_date" />
+                        <field name="shift_id" />
+                        <field name="final_collection" />
+                        <field name="coll_del_status" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="on_call"/>
+                        <field name="call_date"/>
+                        <field name="requested_by"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <field name="compactor" position="after">
+                <field name="frequency_value"/>
+            </field>
+            <xpath expr="//notebook//page[last()]" position="after">
+                <page string="Attachment">
+                    <group>
+                        <field name="delivery_skip_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="name" />
+                                <field name="file_content" filename="name" widget="binary"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+                <page string="Additional Info">
+                    <group>
+                        <group>
+                            <field name="mobile" />
+                            <field name="remark" />
+                            <field name="auth_person" />
+                            <field name="landfill_id" />
+                        </group>
+                        <group>
+                            <field name="signature" />
+                            <field name="attachment_id" />
+                            <field name="invoice_no" />
+                            <field name="latitude" />
+                            <field name="longitude" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="custom_trip_sheet_view_tree_inherit_mtech" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.tree.inherit.mtech</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="inherit_id" ref="custom_trip.custom_trip_sheet_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="replace">
+                <field name="schedule_date"/>
+            </xpath>
+            <xpath expr="//field[@name='customer_id']" position="after">
+                <field name="shift_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

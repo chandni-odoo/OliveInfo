@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_transfer_form" model="ir.ui.view">
+        <field name="name">employee.transfer.form</field>
+        <field name="model">employee.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Employee Transfer">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="employee_id"/>
+                        <field name="checkin_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <group string="Current Details" attrs="{'invisible': [('state', '=', 'done')]}">
+                            <field name="current_camp_id" readonly="1"/>
+                            <field name="current_floor_id" readonly="1"/>
+                            <field name="current_room_id" readonly="1"/>
+                            <field name="current_bed_id" readonly="1"/>
+                            <field name="current_facilities" readonly="1" widget="many2many_tags"/>
+                        </group>
+                        <group string="Current Accommodation" attrs="{'invisible': [('state', '!=', 'done')]}">
+                            <field name="previous_camp_id" readonly="1"/>
+                            <field name="previous_floor_id" readonly="1"/>
+                            <field name="previous_room_id" readonly="1"/>
+                            <field name="previous_bed_id" readonly="1"/>
+                            <field name="previous_facilities" readonly="1" widget="many2many_tags"/>
+                        </group>
+
+                        <group string="New Transfer Details">
+                            <field name="new_camp_id"/>
+                            <field name="new_floor_id"/>
+                            <field name="new_room_id"/>
+                            <field name="new_bed_id"/>
+                            <field name="use_existing_facilities"/>
+                            <field name="facilities" widget="many2many_tags"/>
+                            <field name="transfer_date"/>
+                            <field name="reason"/>
+                            <field name="customer_id"/>
+                        </group>
+                    </group>
+
+                    <field name="state" readonly="1"/>
+
+                    <footer>
+                        <button name="action_approve" type="object" string="Approve" class="btn-primary" states="draft"/>
+                        <button name="action_done" type="object" string="Mark as Done" class="btn-success" states="approved"/>
+                        <button name="action_cancel" type="object" string="Cancel" class="btn-danger" states="draft,approved"/>
+                    </footer>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_transfer_tree" model="ir.ui.view">
+        <field name="name">employee.transfer.tree</field>
+        <field name="model">employee.transfer</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Transfers">
+                <field name="name" readonly="1"/>
+                <field name="employee_id"/>
+                <field name="new_floor_id"/>
+                <field name="new_room_id"/>
+                <field name="new_bed_id"/>
+                <field name="facilities" widget="many2many_tags"/>
+                <field name="transfer_date"/>
+                <field name="state"/>
+                <field name="reason"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_employee_transfer" model="ir.actions.act_window">
+        <field name="name">Employee Transfers</field>
+        <field name="res_model">employee.transfer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

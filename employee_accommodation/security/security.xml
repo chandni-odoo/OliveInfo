@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="notification_alert" model="res.groups">
+        <field name="name">Checkin/checkout Notification Alert</field>
+    </record>
+
+    <record id="disciplinary_notification_alert" model="res.groups">
+        <field name="name">Fine Notification Alert</field>
+    </record>
+
+    <record id="tenancy_contract_notification_alert" model="res.groups">
+        <field name="name">Tenancy Expiry Notification Alert</field>
+    </record>
+
+</odoo>

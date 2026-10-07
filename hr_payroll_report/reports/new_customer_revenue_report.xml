@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_new_customer_revenue_report_xlsx" model="ir.actions.report">
+        <field name="name">New Customer Revenue Report</field>
+        <field name="model">new.customer.revenue.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.new_customer_revenue_report_xlsx</field>
+        <field name="report_file">hr_payroll_report.new_customer_revenue_report_xlsx</field>
+        <field name="print_report_name">'New_Customer_Revenue_Report'</field>
+    </record>
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_leave_pay_journal_wizard" model="ir.ui.view">
+        <field name="name">leave.pay.journal.wizard.form</field>
+        <field name="model">leave.pay.journal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Leave Pay Journal">
+
+                <group>
+                    <!-- Period like Payslip -->
+                    <group col="4">
+                        <label for="date_from" string="Period"/>
+                        <div class="o_row">
+                            <field name="date_from" class="oe_inline"/> -
+                            <field name="date_to" class="oe_inline"/>
+                        </div>
+                    </group>
+
+                    <!-- Other Fields -->
+                    <group>
+                        <field name="company_id"/>
+                        <field name="branch_id"/>
+                        <field name="journal_id"/>
+                        <field name="debit_account_id"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="action_create_journal"
+                            type="object"
+                            string="Create Journal"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_leave_pay_journal_wizard" model="ir.actions.act_window">
+        <field name="name">Create Leave Pay Journal</field>
+        <field name="res_model">leave.pay.journal.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu under Payroll Configuration -->
+    <menuitem id="menu_leave_pay_journal"
+              name="Leave Pay Journal"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
+              action="action_leave_pay_journal_wizard"
+              sequence="50"/>
+</odoo>

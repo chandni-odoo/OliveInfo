@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="vehicle_repair_maintance_form" model="ir.ui.view">
+        <field name="name">repair.order.form</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="string">Maintance Request No</attribute>
+            </field>
+            <field name="product_id" position="before">
+                <field name="vehicle_id" required="1"/>
+                <field name="license_plate"/>
+                <field name="job_no"/>
+            </field>
+            <field name="location_id" position="before">
+                <field name="make"/>
+                <field name="model"/>
+            </field>
+            <xpath expr="//page[@name='parts']" position="before">
+                <page string="Logs" groups="hr.group_hr_manager">
+                    <group>
+                        <group>
+                            <field name="km_in"/>
+                            <field name="km_out"/>
+                        </group>
+                        <group>
+                            <field name="date_in"/>
+                            <field name="date_out"/>
+                            <field name="checked_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>   
+        </field>
+    </record>
+</odoo>

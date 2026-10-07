@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="customer_approve_wizard_sale_form_view" model="ir.ui.view">
+        <field name="name">sale.customer.approve.wizard.from</field>
+        <field name="model">sale.customer.approve</field>
+        <field name="arch" type="xml">
+            <form string="Customer Approval">
+                    <sheet>
+                        <group>
+                            <label for="file_name"/>
+                            <field name="data_file" nolabel="1" file_name="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="remarks"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                         <button string="Approve" name="action_approve" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_customer_approve_action" model="ir.actions.act_window">
+        <field name="name">Customer Approval</field>
+        <field name="res_model">sale.customer.approve</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="customer_approve_wizard_sale_form_view"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

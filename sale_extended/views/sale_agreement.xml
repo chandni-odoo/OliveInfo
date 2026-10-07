@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sale_agreement_tree_view" model="ir.ui.view">
+        <field name="name">sale.agreement.tree.view</field>
+        <field name="model">sale.agreement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="sale_agreement_form_view" model="ir.ui.view">
+        <field name="name">sale.agreement</field>
+        <field name="model">sale.agreement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_of_agreement"/>
+                            <field name="valid_from"/>
+                            <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}" options='{"always_reload": True}'/>
+                            <field name="customer_id"/>
+                            <field name="representative"/>
+                            <field name="valid_to"/>
+                            <field name="attachment_id"/>
+                        </group>
+                        <group>
+                            <field name="sale_id"/>
+                            <field name="branch_id"/>
+                            <field name="company_id"/>
+                            <label for="street" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            <!-- <field name="representative"/> -->
+                            <field name="company_representative"/>
+                            <field name="payment_term_id"/>
+                            <field name="food"/>
+                            <field name="accommodation"/>
+                            <field name="transport"/>
+                            <field name="fat"/>
+                            <field name="sale_type"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order line">
+                            <field name="agreement_line_ids" readonly="1">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="name" widget="section_and_note_text" optional="show"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="period" invisible="1"/>
+                                    <field name="duration"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name ="std_hrs"/>
+                                    <field name="contract_type"/>
+                                    <field name="price_unit"/>
+                                    <field name="agency_fee" attrs="{'column_invisible':['|' ,('parent.sale_type', '=', 'standard'), ('parent.sale_type', '=', 'bundle')]}"/>   
+                                    <field name="sale_amount" attrs="{'column_invisible':['|' ,('parent.sale_type', '=', 'standard'), ('parent.sale_type', '=', 'bundle')]}"/>
+                                    <field name="overtime"/>
+                                    <field name="sp_overtime"/>
+                                    <!-- <field name="tax_id" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="price_subtotal" widget='monetary' options="{'currency_field': 'currency_id'}"/> -->
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <!-- <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <field name="tax_totals_json" widget="account-tax-totals-field" nolabel="1" colspan="2"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group> -->
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_sale_agreement" model="ir.actions.act_window">
+        <field name="name">Agreement</field>
+        <field name="res_model">sale.agreement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="sale_agreement_tree_view"/>
+    </record>
+
+    <record id="agreement_validity_tree_view" model="ir.ui.view">
+        <field name="name">agreement.validity.tree.view</field>
+        <field name="model">agreement.validity</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+     <record id="agreement_validity_form_view" model="ir.ui.view">
+        <field name="name">agreement.validity.form.view</field>
+        <field name="model">agreement.validity</field>
+        <field name="arch" type="xml">
+            <form string="Agreement Validity">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="agreement_year"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_agreement_validity" model="ir.actions.act_window">
+        <field name="name">Agreement Validity</field>
+        <field name="res_model">agreement.validity</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem 
+        id="menu_agreement_validity" name="Agreement Validity"
+        action="action_view_agreement_validity"
+        parent="sale.menu_sale_config"
+        sequence="20"
+        />
+    <menuitem 
+        id="menu_sale_agreement" name="Sale Agreement"
+        action="action_view_of_sale_agreement"
+        parent="sale.menu_sale_config"
+        sequence="15"
+        />
+</odoo>

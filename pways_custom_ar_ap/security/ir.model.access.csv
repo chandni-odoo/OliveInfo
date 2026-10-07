@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+pways_custom_ar_ap.access_custom_ap_ar,access_custom_ap_ar,pways_custom_ar_ap.model_custom_ap_ar,base.group_user,1,1,1,1
+pways_custom_ar_ap.access_account_due_range,access_account_due_range,pways_custom_ar_ap.model_account_due_range,base.group_user,1,1,1,1

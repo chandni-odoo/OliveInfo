@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_employee_billing_summary_report_xlsx" model="ir.actions.report">
+        <field name="name">Employee Billing Summary Report</field>
+        <field name="model">employee.billing.summary.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.employee_billing_summary_report_xlsx</field>
+        <field name="report_file">hr_payroll_report.employee_billing_summary_report_xlsx</field>
+        <field name="print_report_name">'Employee_Billing_Summary_Report'</field>
+    </record>
+</odoo>

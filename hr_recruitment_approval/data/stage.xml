@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add new stage "Offer Approval" after Second Interview -->
+        <record id="stage_offer_approval" model="hr.recruitment.stage">
+            <field name="name">Offer Approval</field>
+            <field name="sequence">4</field>
+            <field name="is_offer_approval_stage">True</field>
+            <field name="fold" eval="False"/>
+        </record>
+        
+        <!-- Update existing stages sequences to accommodate new stage -->
+        <record id="hr_recruitment.stage_job4" model="hr.recruitment.stage">
+            <field name="sequence">5</field>
+        </record>
+        
+        <record id="hr_recruitment.stage_job5" model="hr.recruitment.stage">
+            <field name="sequence">6</field>
+        </record>
+    </data>
+</odoo>

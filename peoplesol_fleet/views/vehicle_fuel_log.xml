@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_vehicle_log_fuel_form" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.fuel.form</field>
+        <field name="model">fleet.vehicle.log.fuel</field>
+        <field name="arch" type="xml">
+            <form string="Fuel Issue">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="lock"/>
+                    <button name="action_lock" states="open" type="object" string="Lock" default_focus="1" class="btn-primary"  confirm="This will Lock the record.No further changes can be make.Are you sure ?."/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                        </button>
+                        <button name="view_picking" type="object" class="oe_stat_button" icon="fa-truck" attrs="{'invisible': [('picking_count', '=', 0)]}">
+                            <field name="picking_count" widget="statinfo" string="Delivery"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Vehicle Details">
+                            <field name="vehicle_id" attrs="{'readonly': [('state','!=','open')]}" />
+                            <field name="driver_id" attrs="{'readonly': [('state','!=','open')]}" />
+                            <field name="user_id" invisible="1" />
+                        </group>
+                        <group string="Odometer Details">
+                            <field name="ini_km_reading" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                            <field name="end_km_reading" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                            <field name="total_km" required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Additional Details">
+                            <field name="date" required="1" attrs="{'readonly': [('state','!=','open')]}"/>
+                            <field invisible="1" name="file_name"/>
+                            <field filename="file_name" name="doc1" string="Invoice Ref."/>
+                        </group>
+                        <group string="Refueling Details" invisible="1">
+                            <field name="expected_fuel_req"/>
+                            <field name="fuel_amount"/>
+                            <field name="amount"/>
+                         </group>
+                    </group>
+                    <notebook>
+                        <page string="Refueling Details" name="refueling_details">
+                            <field name="refueling_ids" >
+                                <tree editable="bottom">
+                                    <field name="product_id" domain="[('is_fuel_product', '=', True)]" required="1"/>
+                                    <!-- <field name="location_id" required="1" domain="[('is_collection_center', '=', False)]"/> -->
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field  name="sub_total"/>
+                                    <field  name="company_id" invisible="1"/>
+                                    <field name="log_fuel_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Fuel Filling History" name="order_lines">
+                            <field name="fuel_purchase_ids" >
+                                <tree editable="bottom">
+                                    <field name="purchase_date" string="Date"/>
+                                    <field name="fuel_type"/>
+                                    <field name="fuel_purchase" string="Ltr" sum="Total Fuel"/>
+                                    <field name="amount"  string="Price" sum="Total"/>
+                                    <field  name="doc" widget="download_link" filename="file_name"/>
+                                    <field name="file_name" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Data">
+                            <group>
+                                <group>
+                                    <field name="location_id"/>
+                                </group>
+                            </group>
+                        </page>
+                </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="fleet_vehicle_log_fuel_tree" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.fuel.tree</field>
+        <field name="model">fleet.vehicle.log.fuel</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="vehicle_id" invisible="1"/>
+                <field name="date"/>
+                <field name="ini_km_reading"/>
+                <field name="end_km_reading"/>
+                <field name="total_km"/>
+                <field name="expected_fuel_req"/>
+                <field name="fuel_amount"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+     <record id="fleet_vehicle_log_fuel_search" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.fuel.search</field>
+        <field name="model">fleet.vehicle.log.fuel</field>
+        <field name="arch" type="xml">
+            <search >
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="fleet_vehicle_log_fuel_list_action" model="ir.actions.act_window">
+        <field name="name">Fuel Logs</field>
+        <field name="res_model">fleet.vehicle.log.fuel</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="fleet_vehicle_log_fuel_tree"/>
+    </record>
+
+    <menuitem action="fleet_vehicle_log_fuel_list_action" id="fleet_vehicle_log_fuel_menu" name="Fuel Logs" parent="fleet.fleet_vehicles" sequence="35"/>
+</odoo>

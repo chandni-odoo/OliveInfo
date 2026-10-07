@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_eosb_wizard_from_view" model="ir.ui.view">
+        <field name="name">employee.eosb.wizard.form</field>
+        <field name="model">employee.eosb.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="as_on_date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id" required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group colspan="6">
+                            <field name="branch_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <separator string="Employee Status"/>
+                    <group>
+                        <group>
+                            <field name="emp_status_active"/>
+                            <field name="emp_status_leave"/>
+                            <field name="emp_status_resigned"/>
+                        </group>
+                        <group>
+                            <field name="emp_status_terminated"/>
+                            <field name="employer_change"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generate XLS" name="print_eosb_report_xls" type="object" class="btn-primary"/>
+                    <button string="Generate XLS Of Branch" name="print_eosb_branch_report_xls" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_eosb_wizard" model="ir.actions.act_window">
+        <field name="name">End of service Report</field>
+        <field name="res_model">employee.eosb.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="employee_eosb_wizard_from_view"/>
+        <field name="target">new</field>
+    </record>
+<!--    <record id="action_employee_eosb_branch_wizard" model="ir.actions.act_window">-->
+<!--        <field name="name">End of service Report By Branch Total</field>-->
+<!--        <field name="res_model">employee.eosb.wizard</field>-->
+<!--        <field name="view_mode">form</field>-->
+<!--        <field name="view_id" ref="employee_eosb_wizard_from_view"/>-->
+<!--        <field name="target">new</field>-->
+<!--    </record>-->
+    <menuitem
+        id="employee_eosb_wizard_menu"
+        action="action_employee_eosb_wizard"
+        parent="hr.hr_menu_hr_reports"
+        name="End of service Report"
+        sequence="100"/>
+<!--    <menuitem-->
+<!--        id="employee_eosb_branch_wizard_menu"-->
+<!--        action="action_employee_eosb_branch_wizard"-->
+<!--        parent="hr.hr_menu_hr_reports"-->
+<!--        name="End of service Report By Branch Total"-->
+<!--        sequence="101"/>-->
+</odoo>

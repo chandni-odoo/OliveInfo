@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="travel_benefit_tree_view" model="ir.ui.view">
+        <field name="name">travel.benefit.tree.view</field>
+        <field name="model">travel.benefit</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="tickets"/>
+                <field name="month"/>
+            </tree>
+        </field>
+    </record>
+    <record id="family_status_tree_view" model="ir.ui.view">
+        <field name="name">family.status.tree.view</field>
+        <field name="model">family.status</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="emplopyee_status_tree_view" model="ir.ui.view">
+        <field name="name">emplopyee.status.tree.view</field>
+        <field name="model">emplopyee.status</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="emplopyee_group_tree_view" model="ir.ui.view">
+        <field name="name">emplopyee.group.tree.view</field>
+        <field name="model">emplopyee.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="emplopyee_group_tree_view" model="ir.ui.view">
+        <field name="name">emplopyee.sub.group.tree.view</field>
+        <field name="model">emplopyee.sub.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="emplopyee_category_tree_view" model="ir.ui.view">
+        <field name="name">emplopyee.category.tree.view</field>
+        <field name="model">emp.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="complete_name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="visa_type_tree_view" model="ir.ui.view">
+        <field name="name">visa.type.tree.view</field>
+        <field name="model">visa.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="travel_sector_tree_view" model="ir.ui.view">
+        <field name="name">travel.sector.tree.view</field>
+        <field name="model">travel.sector</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="amount"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_document_tree_view" model="ir.ui.view">
+        <field name="name">hr.document.tree.view</field>
+        <field name="model">hr.document</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="is_passport"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_passport_control_tree_view" model="ir.ui.view">
+        <field name="name">hr.passport.tree.view</field>
+        <field name="model">hr.passport.control</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_insurance_tree_view" model="ir.ui.view">
+        <field name="name">hr.insurance.tree.view</field>
+        <field name="model">hr.insurance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="driving_licence_tree_view" model="ir.ui.view">
+        <field name="name">driving.licence.tree.view</field>
+        <field name="model">driving.licence</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="disciplinary_action_tree_view" model="ir.ui.view">
+        <field name="name">disciplinary.action.tree.view</field>
+        <field name="model">disciplinary.action</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="contact_type_tree_view" model="ir.ui.view">
+        <field name="name">contact.type.tree.view</field>
+        <field name="model">contact.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="contact_name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ethinic_code_tree_view" model="ir.ui.view">
+        <field name="name">ethinic.code.tree.view</field>
+        <field name="model">ethinic.code</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+    <record id="certificate_type_tree_view" model="ir.ui.view">
+        <field name="name">certificate.type.tree.view</field>
+        <field name="model">certificate.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_reason_tree_view" model="ir.ui.view">
+        <field name="name">action.reason.tree.view</field>
+        <field name="model">action.reason</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Form View -->
+    <record id="travel_benefit_form_view" model="ir.ui.view">
+        <field name="name">travel.benefit.form.view</field>
+        <field name="model">travel.benefit</field>
+        <field name="arch" type="xml">
+            <form string="Travel Benefit">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="tickets"/>
+                            <field name="month"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="family_status_form_view" model="ir.ui.view">
+        <field name="name">family.status.form.view</field>
+        <field name="model">family.status</field>
+        <field name="arch" type="xml">
+            <form string="Family Status">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="emplopyee_status_form_view" model="ir.ui.view">
+        <field name="name">emplopyee.status.form.view</field>
+        <field name="model">emplopyee.status</field>
+        <field name="arch" type="xml">
+            <form string="Emplopyee Status">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_reason_form_view" model="ir.ui.view">
+        <field name="name">action.reason.form.view</field>
+        <field name="model">action.reason</field>
+        <field name="arch" type="xml">
+            <form string="Action Reason">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="emplopyee_group_form_view" model="ir.ui.view">
+        <field name="name">emplopyee.group.form.view</field>
+        <field name="model">emplopyee.group</field>
+        <field name="arch" type="xml">
+            <form string="Emplopyee Group">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="emplopyee_sub_group_form_view" model="ir.ui.view">
+        <field name="name">emplopyee.sub.group.form.view</field>
+        <field name="model">emplopyee.sub.group</field>
+        <field name="arch" type="xml">
+            <form string="Emplopyee Sub Group">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="emplopyee_category_form_view" model="ir.ui.view">
+        <field name="name">emplopyee.category.form.view</field>
+        <field name="model">emp.category</field>
+        <field name="arch" type="xml">
+            <form string="Emplopyee Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="visa_of_type_form_view" model="ir.ui.view">
+        <field name="name">visa_of_type.form.view</field>
+        <field name="model">visa.type</field>
+        <field name="arch" type="xml">
+            <form string="Type Of Visa">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="travel_sector_form_view" model="ir.ui.view">
+        <field name="name">travel_sector.form.view</field>
+        <field name="model">travel.sector</field>
+        <field name="arch" type="xml">
+            <form string="Travel Sector">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hr_document_form_view" model="ir.ui.view">
+        <field name="name">hr.document.form.view</field>
+        <field name="model">hr.document</field>
+        <field name="arch" type="xml">
+            <form string="Document Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="is_passport"/>
+                            <field name="national_id"/>
+                            <field name="visa_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hr_passport_control_form_view" model="ir.ui.view">
+        <field name="name">hr.passport.form.view</field>
+        <field name="model">hr.passport.control</field>
+        <field name="arch" type="xml">
+            <form string="Passport Control">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="hr_insurance_form_view" model="ir.ui.view">
+        <field name="name">hr.insurance.form.view</field>
+        <field name="model">hr.insurance</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="driving_licence_form_view" model="ir.ui.view">
+        <field name="name">driving.licence.form.view</field>
+        <field name="model">driving.licence</field>
+        <field name="arch" type="xml">
+            <form string="Driving Licence Details">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="disciplinary_action_form_view" model="ir.ui.view">
+        <field name="name">disciplinary.action.form.view</field>
+        <field name="model">disciplinary.action</field>
+        <field name="arch" type="xml">
+            <form string="Disciplinary Action">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="contact_type_form_view" model="ir.ui.view">
+        <field name="name">contact.type.form.view</field>
+        <field name="model">contact.type</field>
+        <field name="arch" type="xml">
+            <form string="Contact Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="contact_name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="ethinic_code_view_form" model="ir.ui.view">
+        <field name="name">ethinic.code.form.view</field>
+        <field name="model">ethinic.code</field>
+        <field name="arch" type="xml">
+            <form string="Religion">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="code" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="certificate_type_form_view" model="ir.ui.view">
+        <field name="name">certificate.type.form.view</field>
+        <field name="model">certificate.type</field>
+        <field name="arch" type="xml">
+            <form string="Certificate Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_emplopyee_status" model="ir.actions.act_window">
+        <field name="name">Emplopyee Status</field>
+        <field name="res_model">emplopyee.status</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_family_status" model="ir.actions.act_window">
+        <field name="name">Family Status</field>
+        <field name="res_model">family.status</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_travel_benefit" model="ir.actions.act_window">
+        <field name="name">Travel Benefit</field>
+        <field name="res_model">travel.benefit</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_action_reason" model="ir.actions.act_window">
+        <field name="name">Action Reason</field>
+        <field name="res_model">action.reason</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_emplopyee_group" model="ir.actions.act_window">
+        <field name="name">Emplopyee Group</field>
+        <field name="res_model">emplopyee.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_view_of_emplopyee_sub_group" model="ir.actions.act_window">
+        <field name="name">Emplopyee Sub Group</field>
+        <field name="res_model">emplopyee.sub.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_emplpoyee_category" model="ir.actions.act_window">
+        <field name="name">Emplpoyee Categories</field>
+        <field name="res_model">emp.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_visa_of_type" model="ir.actions.act_window">
+        <field name="name">Visa Type</field>
+        <field name="res_model">visa.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_travel_sector" model="ir.actions.act_window">
+        <field name="name">Travel Sector</field>
+        <field name="res_model">travel.sector</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_hr_document" model="ir.actions.act_window">
+        <field name="name">Document Type</field>
+        <field name="res_model">hr.document</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_hr_passport_control" model="ir.actions.act_window">
+        <field name="name">Passport Control</field>
+        <field name="res_model">hr.passport.control</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_hr_insurance" model="ir.actions.act_window">
+        <field name="name">Insurance</field>
+        <field name="res_model">hr.insurance</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_driving_licence" model="ir.actions.act_window">
+        <field name="name">Driving  licence</field>
+        <field name="res_model">driving.licence</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_disciplinary_action" model="ir.actions.act_window">
+        <field name="name">Disciplinary Action</field>
+        <field name="res_model">disciplinary.action</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_contact_type" model="ir.actions.act_window">
+        <field name="name">Contact Type</field>
+        <field name="res_model">contact.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_view_of_ethinic_code" model="ir.actions.act_window">
+        <field name="name">Ethinic Code</field>
+        <field name="res_model">ethinic.code</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ethinic_code_tree_view"/>
+    </record>
+    <record id="action_view_certificate_type" model="ir.actions.act_window">
+        <field name="name">Certificate Type</field>
+        <field name="res_model">certificate.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- MENU -->
+    <menuitem
+        id="menu_employee_status"
+        name="Status"
+        action="action_emplopyee_status"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+    <menuitem
+        id="menu_family_status"
+        name="Family Status"
+        action="action_family_status"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+    <menuitem
+        id="menu_travel_benefit"
+        name="Travel Benefit"
+        action="action_travel_benefit"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+    <menuitem
+        id="menu_action_reason"
+        name="Action Reason"
+        action="action_action_reason"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+    <menuitem
+        id="menu_ethinic_code"
+        name="Religion"
+        action="action_view_of_ethinic_code"
+        parent="hr.menu_human_resources_configuration"
+        sequence="201"
+        />
+    <menuitem
+        id="menu_employee_group"
+        name="Employee Group"
+        action="action_view_of_emplopyee_group"
+        parent="hr.menu_human_resources_configuration"
+        sequence="202"
+        />
+    <menuitem
+        id="menu_employee_sub_group"
+        name="Employee Sub Group"
+        action="action_view_of_emplopyee_sub_group"
+        parent="hr.menu_human_resources_configuration"
+        sequence="203"
+        />
+    <menuitem
+        id="menu_emplpoyee_category"
+        name="Emplpoyee Categories"
+        action="action_view_of_emplpoyee_category"
+        parent="hr.menu_human_resources_configuration"
+        sequence="204"
+        />
+    <menuitem
+        id="menu_visa_of_type"
+        name="Type Of Visa"
+        action="action_view_of_visa_of_type"
+        parent="hr.menu_human_resources_configuration"
+        sequence="205"
+        />
+
+    <menuitem
+        id="menu_travel_sector"
+        name="Travel Sector"
+        action="action_view_travel_sector"
+        parent="hr.menu_human_resources_configuration"
+        sequence="206"
+        />
+
+    <menuitem
+        id="menu_hr_document"
+        name="Document Type"
+        action="action_view_hr_document"
+        parent="hr.menu_human_resources_configuration"
+        sequence="207"
+        />
+    <menuitem
+        id="menu_hr_passport_control"
+        name="Passport Control"
+        action="action_view_hr_passport_control"
+        parent="hr.menu_human_resources_configuration"
+        sequence="208"
+        />
+    <menuitem
+        id="menu_hr_insurance"
+        name="Insurance Type"
+        action="action_view_hr_insurance"
+        parent="hr.menu_human_resources_configuration"
+        sequence="209"
+        />
+    <menuitem
+        id="menu_disciplinary_action"
+        name="Disciplinary Action"
+        action="action_view_disciplinary_action"
+        parent="hr.menu_human_resources_configuration"
+        sequence="210"
+        />
+
+    <menuitem
+        id="menu_driving_licence"
+        name="Driving Licence"
+        action="action_view_driving_licence"
+        parent="hr.menu_human_resources_configuration"
+        sequence="211"
+        />
+
+    <menuitem
+        id="menu_contact_type"
+        name="Contact Type"
+        action="action_view_contact_type"
+        parent="hr.menu_human_resources_configuration"
+        sequence="212"
+        />
+    <menuitem
+        id="menu_certification_type"
+        name="Certificate Type"
+        action="action_view_certificate_type"
+        parent="hr.menu_human_resources_configuration"
+        sequence="212"
+        />
+</odoo>

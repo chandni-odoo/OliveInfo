@@ -1,0 +1,11 @@
+.bootstrap-datetimepicker-widget{
+	width: 220px !important;
+	height: :200px !important;;
+}
+.datepicker, .table-condensed {
+  	width: 220px;
+        }
+.table-condensed tr td th { 
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}

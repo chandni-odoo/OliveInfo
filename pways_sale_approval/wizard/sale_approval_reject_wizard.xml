@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="reject_reason_wizard_sale_form_view" model="ir.ui.view">
+            <field name="name">sale.reject.reason.wizard.from</field>
+            <field name="model">sale.reject.reason.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Approval Reject Reason">
+                <sheet>
+                    <group>
+                        <field name="reject_reason"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Reject" name="action_reject" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="sale_approval_rejected_action" model="ir.actions.act_window">
+            <field name="name">Approval Rejected Reason</field>
+            <field name="res_model">sale.reject.reason.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="reject_reason_wizard_sale_form_view"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

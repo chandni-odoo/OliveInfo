@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="transfer_template_form_view" model="ir.ui.view">
+        <field name="name">transfer.template.form.view</field>
+        <field name="model">transfer.template</field>
+        <field name="arch" type="xml">
+            <form string="Transfer Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Transfer Name"/>
+                            <field name="branch_id"/>
+                            <field name="origin_account_ids">
+                                <tree editable="bottom">
+                                    <field name="account_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="destination_account_ids">
+                                <tree editable="bottom">
+                                    <field name="branch_id"/>
+                                    <field name="account_id"/>
+                                    <field name="percent"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_transfer_template" model="ir.actions.act_window">
+        <field name="name">Transfer Template</field>
+        <field name="res_model">transfer.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_asset_location"
+        action="action_view_of_transfer_template"
+        parent="account.account_invoicing_menu"
+        name="Transfer Template"
+        sequence="101"/>
+</odoo>

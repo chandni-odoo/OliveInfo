@@ -1,0 +1,17 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="ir_cron_check_credit_control" model="ir.cron">
+            <field name="name">SALE: Credit Control</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.check_credit_control_cron()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+	</data>
+</odoo> -->

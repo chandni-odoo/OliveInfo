@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_leave_accrual_xlsx_report" model="ir.actions.report">
+        <field name="name">Leave Accrual excel Report</field>
+        <field name="model">leave.accrual.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_menu_extended.leave_accrual_xlsx_report</field>
+        <field name="report_file">hr_menu_extended.leave_accrual_xlsx_report</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_avilable_report_form_view" model="ir.ui.view">
+        <field name="name">Employee Availability</field>
+        <field name="model">employee.avilable.report</field>
+        <field name="arch" type="xml">
+            <form string="Employee Availability">
+                <!-- Fields -->
+                <sheet>
+                    <group>
+                        <field name="select_date" required="1"/>
+                        <field name="category_ids" widget="many2many_tags"/>
+                        <field name="company_id" widget="many2many_tags"/>
+                        <field name="branch_id" widget="many2many_tags"/>
+                    </group>
+                    <!-- Button -->
+                   <footer>
+                       <button string="Employee Availability" class="oe_highlight" type="object" name="button_get_categ"/>
+                   </footer>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_employee_avilable_reports">
+        <field name="name">Employee Availability</field>
+        <field name="res_model">employee.avilable.report</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_hr_dashboard"
+        name="Employee Availability"
+        action="action_employee_avilable_reports"
+        parent="hr.menu_hr_root"
+        sequence="3"/>
+
+   <!-- Employee -->
+   <record id="view_employee_availability_tree" model="ir.ui.view">
+        <field name="name">hr.employee.availability.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Availability" create="false">
+                <field name="emp_no" string="Employee#"/>
+                <field name="name"/>
+                <field name="hr_employee_type"/>
+                <field name="product_ids" string="Skill/Category" widget="many2many_tags"/>
+                <field name="job_id" string="Job Position"/>
+                <field name="country_id"/>
+                <field name="emp_status"/>
+                <field name="branch_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+   <record id="view_employee_availability_search" model="ir.ui.view">
+    <field name="name">hr.employee.availability.search</field>
+    <field name="model">hr.employee</field>
+    <field name="arch" type="xml">
+        <search string="Search Employee Availability">
+            <field name="active"/>
+            <field name="billable"/>
+            <field name="job_id" string="Job" />
+            <filter string="Active" name="emp_status" domain="[('emp_status', '=', 'active')]"/>
+            <filter string="Billable" name="billable" domain="[('billable', '=', True)]"/>
+            <separator/>
+            <group expand="0" string="Group By">
+                <filter name="group_job_id" string="Job" domain="[]" context="{'group_by':'job_id'}"/>
+            </group>
+        </search>
+    </field>
+   </record> 
+
+    <record id="action_view_hr_availability_reports" model="ir.actions.act_window">
+        <field name="name">Employee Availability Report</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="project_extended.view_employee_availability_tree"/>
+        <field name="search_view_id" ref="project_extended.view_employee_availability_search"/>
+    </record>
+    
+
+</odoo>

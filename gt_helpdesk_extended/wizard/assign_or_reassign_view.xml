@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="assign_or_reassing_wizard_form_view" model="ir.ui.view">
+        <field name="name">assign.or.reassing.wizard.form</field>
+        <field name="model">assign.or.reassing</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="assigner_id" widget="many2one_avatar_user"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Re-Assign" name="reassign_user" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!--
+
+    <record id="action_employee_task_bulk_reported_wizard" model="ir.actions.act_window">
+        <field name="name">Create Task Bulk Reported</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.task.reported.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="binding_view_types">list,form</field>
+    </record>-->
+
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_type_tree_view" model="ir.ui.view">
+        <field name="name">purchase.type.tree.view</field>
+        <field name="model">purchase.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="purchase_type"/>
+            </tree>
+        </field>
+    </record>
+    <record id="purchase_type_form_view" model="ir.ui.view">
+        <field name="name">purchase.type.form.view</field>
+        <field name="model">purchase.type</field>
+        <field name="arch" type="xml">
+            <form string="Sector">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="purchase_type"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_of_purchase_type" model="ir.actions.act_window">
+        <field name="name">Purchase Type</field>
+        <field name="res_model">purchase.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem
+        id="menu_purchase_type"
+        name="Purchase Type"
+        action="action_view_of_purchase_type"
+        parent="purchase.menu_purchase_config"
+        sequence="100"/>
+        
+    <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.view</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='branch_id']" position="after">
+                <field name="purchase_type"/>
+                <field name="order_by"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="code" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="terms_id" domain="[('condition_type', '=', 'purchase')]"/>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="attributes">
+                <attribute name="attrs">
+                    {'readonly': [('state', 'not in', ('draft', 'sent'))]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom']" position="after">
+                <field name="account_expense_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record> 
+
+    <record id="view_purchase_order_tree_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.view</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="purchase_type"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_res_company_order_form_inherit" model="ir.ui.view">
+        <field name="name">res.company.view</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_info']" position="after">
+                <page string="Report Images">
+                    <group>
+                        <group>
+                            <field name="top_right" widget="image"/>
+                            <field name="bottom_left" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="bottom_right" widget="image"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

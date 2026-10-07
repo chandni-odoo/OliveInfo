@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tender_invoice_form" model="ir.ui.view">
+        <field name="name">tender.invoice.form</field>
+        <field name="model">tender.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Tender Invoices">
+                <sheet>
+                    <group>
+                        <field name="sale_line_id" readonly="1"/>
+                        <field name="valid_invoice_ids" invisible="1"/>
+                    </group>
+
+                    <field name="line_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field
+                                name="invoice_id"
+                                domain="[('id', 'in', parent.valid_invoice_ids)]"
+                                options="{'no_create': True, 'no_open': True}"
+                            />
+                            <field name="customer_id" readonly="1"/>
+                            <field name="branch_id"   readonly="1"/>
+                            <field name="invoice_date" readonly="1"/>
+                            <field name="invoice_amount" readonly="1" widget="monetary"/>
+                            <field name="is_confirm" readonly="1"/>
+                        </tree>
+                    </field>
+
+                    <footer>
+                        <button
+                            name="action_apply"
+                            string="Apply"
+                            type="object"
+                            class="btn-primary"
+                        />
+                        <button
+                            string="Cancel"
+                            special="cancel"
+                            class="btn-secondary"
+                        />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

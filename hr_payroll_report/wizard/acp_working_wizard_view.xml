@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_acp_working_report_wizard" model="ir.ui.view">
+        <field name="name">acp.working.wizard.form</field>
+        <field name="model">acp.working.wizard</field>
+        <field name="arch" type="xml">
+            <form string="ACP Working">
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="branch_ids" widget="many2many_tags"/>
+                    <field name="customer_ids" widget="many2many_tags"/>
+                    <field name="exclude_legal_case"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object"
+                            string="Print Report" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_acp_working_report" model="ir.actions.act_window">
+        <field name="name">ACP Workings</field>
+        <field name="res_model">acp.working.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_acp_working_report"
+              name="ACP Workings"
+              parent="menu_mis_report_main"
+              action="action_acp_working_report"
+              sequence="9"/>
+</odoo>

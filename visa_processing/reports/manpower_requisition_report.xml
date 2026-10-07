@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_manpower_requisition_xlsx_report" model="ir.actions.report">
+        <field name="name">Manpower Requisition Report</field>
+        <field name="model">manpower.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">visa_processing.manpower_requisition_xlsx_report</field>
+        <field name="report_file">visa_processing.manpower_requisition_xlsx_report</field>
+    </record>
+</odoo>

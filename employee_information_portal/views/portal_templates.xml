@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_employee_info" name="Employee Information" 
+              inherit_id="portal.portal_my_home" priority="2">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Employee Information</t>
+                <t t-set="url" t-value="'/my/employee-information'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="employee_information_template" name="Employee Information">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>My Information</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table">
+                                    <tr>
+                                        <th>Name</th>
+                                        <td><t t-esc="employee.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Employee Number</th>
+                                        <td><t t-esc="employee.emp_no"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Job Title</th>
+                                        <td><t t-esc="employee.job_title or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Work Mobile</th>
+                                        <td><t t-esc="employee.mobile_phone or 'Not Available'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Manager</th>
+                                        <td><t t-esc="employee.parent_id.name or 'No Manager Assigned'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Coach</th>
+                                        <td><t t-esc="employee.coach_id.name or 'No Coach Assigned'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><t t-esc="dict(employee._fields['emp_status'].selection)[employee.emp_status] if employee.emp_status else 'Not Available'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Branch</th>
+                                        <td><t t-esc="employee.branch_id.name or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Company</th>
+                                        <td><t t-esc="employee.company_id.name or 'Not Specified'"/></td>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table">
+                                    <tr>
+                                        <th>Original Hire Date</th>
+                                        <td>
+                                            <span t-field="employee.original_hire_date" 
+                                                t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                            <t t-if="not employee.original_hire_date">Not Specified</t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>QID No.</th>
+                                        <td><t t-esc="employee.qid_no or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>QID Validity</th>
+                                        <td>
+                                            <span t-field="employee.qid_validity" 
+                                                t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                            <t t-if="not employee.qid_validity">Not Specified</t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Passport No.</th>
+                                        <td><t t-esc="employee.passport_id or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Passport Expiry Date</th>
+                                        <td>
+                                            <span t-field="employee.passport_expiry_date" 
+                                                t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                            <t t-if="not employee.passport_expiry_date">Not Specified</t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Camp Information</th>
+                                        <td><t t-esc="employee.camp_details or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nationality</th>
+                                        <td><t t-esc="employee.country_id.name or 'Not Specified'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Marital Status</th>
+                                        <td><t t-esc="dict(employee._fields['marital'].selection)[employee.marital] if employee.marital else 'Not Available'"/></td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <th>Ethnic</th>
+                                        <td><t t-esc="employee.ethinic_code_id.name or 'Not Specified'"/></td>
+                                    </tr> -->
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5>Other Details</h5>
+                                <ul class="nav nav-tabs" id="employeeRecordsTabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="documents-tab" data-toggle="tab" href="#documents" role="tab">
+                                            Documents 
+                                            <span class="badge badge-info ml-2"><t t-esc="len(employee.ducument_line_ids)"/></span>
+                                        </a>
+                                    </li>
+                                    <!-- <li class="nav-item">
+                                        <a class="nav-link" id="training-tab" data-toggle="tab" href="#training" role="tab">
+                                            Training 
+                                            <span class="badge badge-info ml-2"><t t-esc="len(employee.training_line_ids)"/></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="certification-tab" data-toggle="tab" href="#certification" role="tab">
+                                            Certifications 
+                                            <span class="badge badge-info ml-2"><t t-esc="len(employee.certification_ids)"/></span>
+                                        </a>
+                                    </li> -->
+                                </ul>
+
+                                <div class="tab-content mt-3" id="employeeRecordsTabContent">
+                                    <div class="tab-pane fade show active" id="documents" role="tabpanel">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Document Type</th>
+                                                    <th>Document No</th>
+                                                    <th>Valid From</th>
+                                                    <th>Valid To</th>
+                                                    <th>Document Place</th>
+                                                    <th>Status</th>
+                                                    <th>Remarks</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="employee.ducument_line_ids" t-as="doc_line">
+                                                    <tr>
+                                                        <td><t t-esc="doc_line.document_line_id.name"/></td>
+                                                        <td><t t-esc="doc_line.document_number"/></td>
+                                                        <td><t t-esc="doc_line.valid_from" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                        <td><t t-esc="doc_line.valid_to" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                        <td><t t-esc="doc_line.doc_issue_place"/></td>
+                                                        <td><t t-esc="doc_line.status"/></td>
+                                                        <td><t t-esc="doc_line.remarks"/></td>
+                                                        <td>
+                                                            <t t-if="doc_line.attachment">
+                                                                <a t-att-href="'/download/employee_document/%s' % doc_line.id"
+                                                                download="document.pdf">
+                                                                    <i class="fa fa-download"/> Download
+                                                                </a>
+                                                            </t>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- <div class="tab-pane fade" id="training" role="tabpanel">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Training Name</th>
+                                                    <th>Training Date</th>
+                                                    <th>Location</th>
+                                                    <th>Trainer</th>
+                                                    <th>Validity Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="employee.training_line_ids" t-as="training">
+                                                    <tr>
+                                                        <td><t t-esc="training.training_name"/></td>
+                                                        <td><t t-esc="training.training_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                        <td><t t-esc="training.location"/></td>
+                                                        <td><t t-esc="training.trainer"/></td>
+                                                        <td><t t-esc="training.validity_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="certification" role="tabpanel">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Certification Name</th>
+                                                    <th>Certificate Date</th>
+                                                    <th>Institution</th>
+                                                    <th>Specialization</th>
+                                                    <th>Trainer</th>
+                                                    <th>Validity Date</th>
+                                                    <th>Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="employee.certification_ids" t-as="certification">
+                                                    <tr>
+                                                        <td><t t-esc="certification.certificate_type.name"/></td>
+                                                        <td><t t-esc="certification.certificate_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                        <td><t t-esc="certification.institution"/></td>
+                                                        <td><t t-esc="certification.specialization"/></td>
+                                                        <td><t t-esc="certification.trainer"/></td>
+                                                        <td><t t-esc="certification.validity_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                                                        <td><t t-esc="certification.remark"/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <template id="employee_information_not_found" name="Employee Information Not Found">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="alert alert-warning">
+                    <p>No employee information found for your user account. 
+                       Please contact HR if you believe this is an error.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

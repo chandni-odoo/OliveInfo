@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data noupdate="1">
+		<record id="sequence_hr_employee" model="ir.sequence">
+			<field name="name">Employee Number Sequence</field>
+			<field name="code">hr.employee</field>	
+			<field name="padding">4</field>
+		    <field name="number_increment">1</field>
+			<field name="prefix">EMP/</field>
+		</record>
+		<record id="sequence_hr_applicant" model="ir.sequence">
+			<field name="name">Sequence Applicant</field>
+			<field name="code">hr.applicant</field>	
+			<field name="padding">4</field>
+		    <field name="number_increment">1</field>
+			<field name="prefix">APP/</field>
+		</record>
+		<record id="other_action_reason" model="action.reason">
+			<field name="name">Other</field>
+		</record>
+	</data>
+</odoo>

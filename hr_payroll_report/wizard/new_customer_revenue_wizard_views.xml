@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_new_customer_revenue_wizard" model="ir.ui.view">
+        <field name="name">new.customer.revenue.wizard.form</field>
+        <field name="model">new.customer.revenue.wizard</field>
+        <field name="arch" type="xml">
+            <form string="New Customer Revenue Report">
+                <sheet>
+                    <group>
+                        <field name="year"/>
+                        <field name="branch_ids" widget="many2many_tags"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_new_customer_revenue_wizard" model="ir.actions.act_window">
+        <field name="name">New Customer Revenue Report</field>
+        <field name="res_model">new.customer.revenue.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_new_customer_revenue_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_new_customer_revenue_report"
+              name="New Customer Revenue Report"
+              parent="menu_mis_report_main"
+              action="action_new_customer_revenue_wizard"
+              sequence="5"/>
+</odoo>

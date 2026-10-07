@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="asset_location_tree_view" model="ir.ui.view">
+        <field name="name">asset.location.tree.view</field>
+        <field name="model">asset.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="asset_location_form_view" model="ir.ui.view">
+        <field name="name">asset.location.form.view</field>
+        <field name="model">asset.location</field>
+        <field name="arch" type="xml">
+            <form string="Asset Location">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_asset_location" model="ir.actions.act_window">
+        <field name="name">Asset Location</field>
+        <field name="res_model">asset.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_asset_location"
+        action="action_view_of_asset_location"
+        parent="account.account_invoicing_menu"
+        name="Asset Location"
+        sequence="95"/>
+</odoo>

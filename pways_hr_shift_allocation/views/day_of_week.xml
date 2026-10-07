@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_day_of_week_tree_view" model="ir.ui.view">
+        <field name="name">hr.day.of.week.tree.view</field>
+        <field name="model">hr.day.of.week</field>
+        <field name="arch" type="xml">
+            <tree string="Day of Week">
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="week_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_day_of_week_form_view" model="ir.ui.view">
+        <field name="name">hr.day.of.week.form.view</field>
+        <field name="model">hr.day.of.week</field>
+        <field name="arch" type="xml">
+            <form string="Day of Week">
+                <sheet>  
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="week_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_day_of_week_filter" model="ir.ui.view">
+        <field name="name">hr.day.of.week.search</field>
+        <field name="model">hr.day.of.week</field>
+        <field name="arch" type="xml">
+            <search string="Days Of Week">
+                <field name="employee_id"/>
+                <field name="week_id"/>
+                <field name="date"/>
+                <group expand="1" name="group_by" string="Group By">
+                    <filter name="employee_id" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="week_id" string="Week Days" context="{'group_by': 'week_id'}"/>
+                    <filter name="date" string="date" domain="[]" context="{'group_by' : 'date'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_day_of_week" model="ir.actions.act_window">
+        <field name="name">Days of Week Employee</field>
+        <field name="res_model">hr.day.of.week</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_day_of_week_filter"/>
+        <field name="context">{'group_by': 'employee_id'}</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_day_of_week"
+        name="Days Of Week"
+        action="action_hr_day_of_week"
+        parent="pways_hr_shift_allocation.menu_hr_shift_main"
+        sequence="22"
+        />
+
+    <!-- Days Of -->
+    <record id="hr_week_tree_view" model="ir.ui.view">
+        <field name="name">week.week.tree.view</field>
+        <field name="model">week.week</field>
+        <field name="arch" type="xml">
+            <tree string="Week">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="l_code"/>
+                <field name="types"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_week_form_view" model="ir.ui.view">
+        <field name="name">week.week.form.view</field>
+        <field name="model">week.week</field>
+        <field name="arch" type="xml">
+            <form string="Week">
+                <sheet>  
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="l_code" required="1"/>
+                        </group>
+                        <group>
+                            <field name="code" required="1"/>
+                            <field name="types"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_week" model="ir.actions.act_window">
+        <field name="name">Week Employee</field>
+        <field name="res_model">week.week</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_week"
+        name="Week"
+        action="action_hr_week"
+        parent="pways_hr_shift_allocation.menu_hr_shift_main"
+        sequence="23"
+        />
+</odoo>

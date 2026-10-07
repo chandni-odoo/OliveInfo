@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="portal_hr_request" name="Portal layout : Request" inherit_id="portal.portal_breadcrumbs" priority="50">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+          <li t-if="request_id" t-attf-class="breadcrumb-item #{'active ' if not request_id else ''}">
+            <a t-if="request_id"><t t-esc="request_id.name"/></a>
+            <t t-else=""><t t-esc="request_id.name"/></t>
+          </li>
+        </xpath>
+    </template>
+
+    <template id="portal_home_my_request" name="Employee Request" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Request</t>
+                <t t-set="url" t-value="'/my/request'"/>
+                <t t-set="placeholder_count" t-value="'request_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_request" name="Pickings List">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Requests</t>
+            </t>
+            <t t-if="not requests_ids">
+              <p>There are currently no request for your account.</p>
+            </t>
+            <t t-if="requests" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th>Employee</th>
+                        <th>Employee Number</th>
+                        <th>Request Date</th>
+                        <th>Request Type</th>
+                        <th>Download</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="requests" t-as="record">
+                    <tr>
+                        <td><a t-att-href="'/my/request/%s' % record.id"><t t-esc="record.name"/></a></td>
+                        <td><t t-esc="record.employee_id.name"/></td>
+                        <td><t t-esc="record.employee_id.emp_no"/></td>
+                        <td><t t-esc="record.request_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                        <td><span t-field="record.type_id.name"/></td>
+                        <td>
+                            <t t-if="record.final_document">
+                                <a t-att-href="'/download/final_document/%s' % record.id"
+                                t-att-download="record.final_document_filename or 'document'">
+                                    <i class="fa fa-download"/> Download
+                                </a>
+                            </t>
+                            <t t-else="">
+                                No document
+                            </t>
+                        </td>
+                        <td><span t-field="record.state"/></td>
+                    </tr>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+    <template id="portal_searchbar_extend_request" name="Search Information" inherit_id="portal.portal_searchbar">
+        <xpath expr="//div[@t-if='searchbar_sortings']" position="before">
+            <div class="form-inline">
+                <div class="btn-group">
+                    <button t-if="create_request" type="button" style="margin-right: 10px;border-radius: 2px;" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myrequest">Create Request</button>
+
+                    <div class="modal fade" id="myrequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title w-100 text-center">Create Request</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form name="create_request_form" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Employee</label>
+                                                    <input type="text" readonly="readonly" class="form-control o_website_form_input" 
+                                                        name="employee_name" 
+                                                        t-att-value="employee_name or (current_employee.name if current_employee else '')" 
+                                                        id="employee_name_field" />
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">On Behalf Of</label>
+                                                    <select name="on_behalf_of" class="form-control">
+                                                        <t t-foreach="employees or []" t-as="emp">
+                                                            <option t-att-value="emp.id" t-att-selected="emp.id == current_employee.id">
+                                                                <t t-esc="emp.name" />
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Types</label>
+                                                    <select name="request_selection" class="form-control" id="#request_selection">
+                                                        <option value="">Request Type...</option>
+                                                        <t t-foreach="requests_type_ids or []" t-as="l">
+                                                            <t t-if="'termination' not in l.name.lower()">
+                                                                <option t-att-value="l.id" t-att-selected="l.id" name="l.id">
+                                                                    <t t-esc="l.name" />
+                                                                </option>
+                                                            </t>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Request Date</label>
+                                                    <input type="date" class="form-control o_website_form_input request_date" name="request_date"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-6" id="relieving_date_container">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Relieving Date</label>
+                                                    <input type="date" class="form-control o_website_form_input" name="relieving_date"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-6" id="resignation_date_container" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Resignation Date</label>
+                                                    <input type="date" class="form-control o_website_form_input" name="resignation_date"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Language</label>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="languages" id="lang_na" value="na" 
+                                                            t-att-checked="'checked' if not record or record.languages == 'na' else None"/>
+                                                        <label class="form-check-label" for="lang_na">Not Applicable</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="languages" id="lang_english" value="english"
+                                                            t-att-checked="'checked' if record and record.languages == 'english' else None"/>
+                                                        <label class="form-check-label" for="lang_english">English</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="languages" id="lang_arabic" value="arabic"
+                                                            t-att-checked="'checked' if record and record.languages == 'arabic' else None"/>
+                                                        <label class="form-check-label" for="lang_arabic">Arabic</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="languages" id="lang_both" value="both"
+                                                            t-att-checked="'checked' if record and record.languages == 'both' else None"/>
+                                                        <label class="form-check-label" for="lang_both">Both</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-6" id="reason_for_leaving_container" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Reason for Leaving</label>
+                                                    <select name="reason_for_leaving_id" class="form-control">
+                                                        <option value="">Select Reason...</option>
+                                                        <t t-foreach="leaving_reasons" t-as="reason">
+                                                            <option t-att-value="reason.id">
+                                                                <t t-esc="reason.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6" id="notice_period_container" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Notice Period</label>
+                                                    <div id="notice_period_field" class="form-control-plaintext">
+                                                        <t t-if="current_employee and current_employee.notice_id">
+                                                            <t t-esc="current_employee.notice_id.name"/>
+                                                        </t>
+                                                        <t t-elif="not current_employee">
+                                                            Employee not found
+                                                        </t>
+                                                        <t t-else="">
+                                                            Not specified
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row text-center">
+                                            <div class="col-10">
+                                                <label class="col-form-label">Description</label>
+                                                <textarea class="form-control o_website_form_input" rows="1" name="description_request" id="description_request"
+                                                    placeholder="Description" style="width: 520px;margin-left: 50px;margin-top: 10px;margin-right: 18px;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center">
+                                            <div class="col-10">
+                                                <label class="col-form-label">Requirements/Remark</label>
+                                                <textarea class="form-control o_website_form_input" rows="2" name="requirements" placeholder="Requirements" style="width: 520px;margin-left: 50px;margin-top: 10px;margin-right: 18px;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center">
+                                            <div class="col-5">
+                                                <label class="col-form-label">Attachments</label>
+                                                <input type="file" class="form-control o_website_form_input" name="attachments" style="margin-left: 30px;width:230px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-center">
+                                                <div id="request_error" class="d-none alert alert-danger" style="width: 510px;margin-left: 45px;margin-top:10px;height: 35px;line-height: 0.5;"></div>
+                                            </div>
+                                        </div>
+                                    </form> 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary send_info_request">Submit</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 220px;">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- <template id="portal_searchbar_extend_request" name="Search Information" inherit_id="portal.portal_searchbar">
+        <xpath expr="//div[@t-if='searchbar_sortings']" position="before">
+            <div class="form-inline">
+                <div class="btn-group">
+                    <button  t-if="create_request" type="button" style="margin-right: 10px;border-radius: 2px;" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myrequest">Create Request</button>
+
+                    <div class="modal fade" id="myrequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title w-100 text-center">Create Request</h5>
+                            </div>
+                          <div class="modal-body">
+                            <form name="create_request_form" method="post">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row text-center">
+                                    <div class="col-5">
+                                        <label class="col-form-label">Employee</label>
+                                        <input type="text" readonly="readonly" class="form-control o_website_form_input" 
+                                            name="employee_name" style="margin-left: 30px;width:230px;" 
+                                            t-att-value="employee_name or (current_employee.name if current_employee else '')" 
+                                            id="employee_name_field" />
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="col-form-label">On Behalf Of</label>
+                                        <select name="on_behalf_of" class="form-control" style="margin-left: 70px;width:230px;">
+                                            <t t-foreach="employees or []" t-as="emp">
+                                                <option t-att-value="emp.id" t-att-selected="emp.id == current_employee.id">
+                                                    <t t-esc="emp.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="col-form-label" style="margin-right: 101px;">Types</label>
+                                        <select name="request_selection" class="form-control" id="#request_selection" style="margin-left: 30px;">
+                                            <option value="">Request Type...</option>
+                                            <t t-foreach="requests_type_ids or []" t-as="l">
+                                                <t t-if="'termination' not in l.name.lower()">
+                                                    <option t-att-value="l.id" t-att-selected="l.id" name="l.id">
+                                                        <t t-esc="l.name" />
+                                                    </option>
+                                                </t>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="col-form-label">Request Date</label>
+                                        <input type="date" class="form-control o_website_form_input request_date" name="request_date" style="margin-left: 70px;width:230px;"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="row text-center">
+                                    <div class="col-5" id="relieving_date_container">
+                                        <label class="col-form-label">Relieving Date</label>
+                                        <input type="date" class="form-control o_website_form_input" name="relieving_date" 
+                                            style="margin-left: 30px;width:230px;"/>
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="col-form-label">Language</label>
+                                        <div class="form-group" style="margin-left: 70px; width: 230px;">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="languages" id="lang_na" value="na" 
+                                                    t-att-checked="'checked' if not record or record.languages == 'na' else None"/>
+                                                <label class="form-check-label" for="lang_na">Not Applicable</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="languages" id="lang_english" value="english"
+                                                    t-att-checked="'checked' if record and record.languages == 'english' else None"/>
+                                                <label class="form-check-label" for="lang_english">English</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="languages" id="lang_arabic" value="arabic"
+                                                    t-att-checked="'checked' if record and record.languages == 'arabic' else None"/>
+                                                <label class="form-check-label" for="lang_arabic">Arabic</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="languages" id="lang_both" value="both"
+                                                    t-att-checked="'checked' if record and record.languages == 'both' else None"/>
+                                                <label class="form-check-label" for="lang_both">Both</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-10">
+                                        <textarea class="form-control o_website_form_input" rows="1" name="description_request" id="description_request"
+                                            placeholder="Description" style="width: 520px;margin-left: 50px;margin-top: 10px;margin-right: 18px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-10">
+                                        <label class="col-form-label">Requirements</label>
+                                        <textarea class="form-control o_website_form_input" rows="2" name="requirements" placeholder="Requirements" style="width: 520px;margin-left: 50px;margin-top: 10px;margin-right: 18px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-5">
+                                        <label class="col-form-label">Attachments</label>
+                                        <input type="file" class="form-control o_website_form_input" name="attachments" style="margin-left: 30px;width:230px;"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <div id="request_error" class="d-none alert alert-danger" style="width: 510px;margin-left: 45px;margin-top:10px;height: 35px;line-height: 0.5;"></div>
+                                        
+                                    </div>
+                                </div>
+                            </form> 
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary send_info_request" >Submit</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 220px;">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template> -->
+</odoo>

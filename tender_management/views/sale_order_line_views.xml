@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_line_for_its" model="ir.ui.view">
+        <field name="name">sale.order.line.its.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_extended.view_sale_order_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="branch_code" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='customer_bin']" position="after">
+                <field name="billing_percent" attrs="{'column_invisible': [('parent.branch_code', '!=', '2045')]}"/>
+                <button name="action_open_tender_invoice"
+                    type="object"
+                    string="Invoices"
+                    class="btn-primary"
+                    attrs="{'invisible': ['|',
+                            ('parent.branch_code', '!=', '2045'),
+                            ('billing_percent', '&lt;=', 0)
+                        ]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

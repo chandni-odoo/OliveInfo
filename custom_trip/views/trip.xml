@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_equipment_view_forminherit" model="ir.ui.view">
+        <field name="name">maintenance.equipment.form.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form" />
+        <field name="arch" type="xml">
+            <field name="assign_date" position="after">
+                <field name="size" />
+                <field name="coll_del_status" readonly="1"/>
+                <field name="task_id" />
+            </field>
+            <xpath expr="//notebook" position="inside">
+                <page string="Trip Sheets Info">
+                    <field name="skip_load_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="date_from" />
+                            <field name="trip_id" />
+                            <field name="coll_del" />
+                            <field name="task_id" />
+                            <field name="customer_id" />
+                            <field name="driver_id" />
+                            <field name="vehicle_type_id" />
+                            <field name="vehicle_no_id" />
+                            <field name="partner_location_id" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <!-- Assign Roll Number Wizard Form View  -->
+    <record id="view_so_extra_charge_wizard_form" model="ir.ui.view">
+        <field name="name">so.extra.charge.wizard.form</field>
+        <field name="model">so.extra.charge.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group string="Minimum Charge Details">
+                    <field name="so_line_id" />
+                    <group>
+                        <field name="charge_type" placeholder="Select Value" />
+                        <field name="charge" placeholder="Select Value" />
+                    </group>
+                    <group>
+                        <field name="price" />
+                        <field name="qty" attrs="{'invisible': [('charge', '!=', 'qty')]}" />
+                    </group>
+                </group>
+                <group string="Extra / Additional Charges in excess of minimum">
+                    <group>
+                        <!-- <field name="ec_charge_type" placeholder="Select Value"/> -->
+                        <field name="ec_price" />
+                        <field name="is_trip_extra" />
+                    </group>
+                    <group>
+                        <field name="ec_unit_id" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Generate charges" name="button_generate_charges" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!-- Action Of Form & Tree Views Of Move Classes -->
+    <record id="action_so_extra_charge_wizard_form" model="ir.actions.act_window">
+        <field name="name">Minimum And Extra Charge</field>
+        <field name="res_model">so.extra.charge.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_so_extra_charge_wizard_form" />
+        <field name="target">new</field>
+    </record>
+    <record id="view_sale_order_trip_sheet_charge_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <button class="oe_highlight oe_stat_button" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" name="%(custom_trip.action_so_extra_charge_wizard_form)d" string="Charge" type="action" />
+                <!-- <field name="equipment_qty" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='equipment_type_id']" position="after">
+                <field name="equipment_qty" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" />
+                <field name="rate" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}" />
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Extra Charge" attrs="{'invisible': [('branch_for', '!=',  'es')]}">
+                    <field name="extra_charge_ids" options="{'no_create': True}">
+                        <tree editable="bottom">
+                            <field name="charge_type" />
+                            <field name="charge" />
+                            <field name="price" />
+                            <field name="qty" />
+                            <field name="ec_charge_type" string="Extra Charge Type" />
+                            <field name="ec_price" string="Extra Price" />
+                            <field name="so_line_id" />
+                        </tree>
+                    </field>
+                </page>
+                <page string="Trip Sheet" attrs="{'invisible': [('branch_for', '!=',  'es')]}">
+                    <field name="trip_ids" widget='one2many' nolabel="1" class="oe_inline oe_no_button" />
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="trip_view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project_extended.view_task_form2_inherit" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_outsource_vendor" attrs="{'invisible': [('branch_for', '!=', 'es')]}" />
+                <field name="is_treatment_company" attrs="{'invisible': [('branch_for', '!=', 'es')]}" />
+                <field name="vendor_name_id" attrs="{'invisible': [('is_outsource_vendor','=', False)]}" />
+                <field name="treatment_company_id" attrs="{'invisible': [('is_treatment_company','=', False)]}" />
+                <field name="equipment_qty" />
+            </xpath>
+        </field>
+    </record>
+    <record id="view_task_form2_trip_sheets_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Trip Sheet">
+                    <field name="trip_sheet_ids" widget='one2many' nolabel="1" class="oe_inline oe_no_button" />
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <!--   <record id="trip_fleet_vehicle_view_form" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='asset_sequence']" position="after">
+                <field name="is_trailer"/>
+            </xpath>
+        </field>
+    </record> -->
+    <record id="view_custom_trip_sheet_filter" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.search</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="arch" type="xml">
+            <search string="Days Of Week">
+                <field name="customer_id" />
+                <field name="trip_type" />
+                <field name="driver_id" />
+                <field name="site" />
+                <field name="task_id" />
+                <field name="vehicle_no_id" />
+                <field name="sequence" />
+                <field name="req_seq" />
+                <group expand="1" name="group_by" string="Group By">
+                    <filter name="customer_id" string="Customer" context="{'group_by': 'customer_id'}" />
+                    <filter name="trip_type" string="Type" context="{'group_by': 'trip_type'}" />
+                    <filter name="driver_id" string="Driver" domain="[]" context="{'group_by' : 'driver_id'}" />
+                    <filter name="vehicle_no_id" string="Vehicle" domain="[]" context="{'group_by' : 'vehicle_no_id'}" />
+                    <filter name="task_id" string="Task" domain="[]" context="{'group_by' : 'task_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="custom_trip_sheet_view_tree" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.tree</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="stage == 'cancel'" 
+decoration-success="stage == 'done'"
+decoration-warning="stage == 'hold'"
+decoration-primary="stage == 'completed'"
+decoration-muted="stage == 'draft'">
+                <field name="req_seq" />
+                <field name="sequence"/>
+                <field name="date_from" />
+                <field name="date" />
+                <field name="trip_type" />
+                <field name="customer_id" />
+                <field name="site" />
+                <field name="vehicle_no_id" />
+                <field name="vehicle_type_from_vehicle" />
+                <field name="task_seq_code" string="Task Code"/>
+                <field name="sale_order_id" string="Sale Order"/>
+                <field name="on_call" string="On Call"/>
+                <field name="driver_id" />
+                <field name="landfill" optional="hide"/>
+                <field name="billable_qty" optional="hide"/>
+                <field name="equipment_qty" optional="hide"/>
+                <field name="task_id"/>
+                <field name="stage"/>
+            </tree>
+        </field>
+    </record>
+    <record id="custom_trip_sheet_view_form" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.form</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="arch" type="xml">
+            <form string="Trip Sheet">
+                <header>
+                    <button string="Completed" class="oe_highlight" attrs="{'invisible': [('stage','=', 'completed')]}" name="button_approve" type="object" />
+                    <!--                    <button name="button_back_to_draft"  string="Back To Draft" attrs="{'invisible': [('stage','=', 'draft')]}" type="object" class="oe_highlight"/>-->
+                    <field name="stage" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="req_seq" placeholder="Enter Request No..." />
+                        </h1>
+                    </div>
+                    <div style="text-align:center">
+                        <center>
+                            <h2>
+                                <field name="sequence" readonly="1" />
+                            </h2>
+                        </center>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="additional_on_call" />
+                        </group> 
+                    </group>
+                    <group>
+                        <group col="2">
+                            <field name="partner_id"/>
+                            <field name="task_id" domain="[('partner_id','=',partner_id)]"/>
+                            <field name="trip_type" widget="radio" />
+                            <field name="driver_id" />
+                            <field name="helper_ids" widget="many2many_tags" />
+                            <field name="vehicle_no_id" />
+                            <field name="vehicle_type_from_vehicle" />
+                            <div colspan="8" col="4">
+                                <label for="date_from" style="width:30%" />
+                                <field name="date_from" placeholder="Date From" class="oe_inline" />
+                                <field name="date_to" placeholder="Date To" class="oe_inline" />
+                            </div>
+                            <div colspan="8" col="4">
+                                <label for="km_from" style="width:30%" />
+                                <field name="km_from" placeholder="Km From" class="oe_inline" />
+                                <field name="km_to" placeholder="Km To" class="oe_inline" />
+                            </div>
+                            <field name="mobile" invisible="1" />
+                            <field name="remark" invisible="1" />
+                            <field name="landfill" invisible="1" />
+                            <field name="trailer_no_id" />
+                            <field name="weight" />
+                            <!-- <field name="user_id" attrs="{'required':[('resource_type','=','user')], 'invisible': [('resource_type','=','material')]}"/> -->
+                            <!-- <field name="date" attrs="{'required': [('compactor','=', False), 'invisible': [('compactor','=', True)]}"/> -->
+                            <!-- <field name="order_id"/> -->
+                        </group>
+                        <group col="2">
+                            <field name="compactor" readonly="0" />
+                            <field name="customer_id" readonly="1"  invisible="1"/>
+                            <field name="site" />
+                            <field name="vehicle_type_id" />
+                            <field name="equipment_type_id" />
+                            <field name="waste_type_id" />
+                            <field name="vendor_name" />
+                            <field name="treatment_company" />
+                            <field name="non_billable" />
+                            <field name="auth_person" invisible="1" />
+                            <field name="signature" invisible="1" />
+                            <field name="attachment_id" invisible="1" />
+                            <field name="reason" attrs="{'invisible': [('non_billable','=', False)]}" />
+                            <field name="billable_qty" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Skip/Hook Loader/Tanker/Medical Waste" attrs="{'invisible': [('compactor','=', True)]}">
+                            <field name="skip_load_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="slh" optional="hide" />
+                                    <field name="billable" />
+                                    <field name="coll_del" />
+                                    <field name="maintenance_equ_id" />
+                                    <!-- <field name="maintenance_equipment_ids" widget="many2many_tags" /> -->
+                                    <field name="size" />
+                                    <field name="qty" sum="Quantity" />
+                                    <field name="equipment_qty" sum="Equipment Quantity" />
+                                    <field name="so_equipment_qty" optional="hide" sum="sfo Equipment Quantity" />
+                                    <field name="unit_id" />
+                                    <field name="haz_material" optional="hide" />
+                                    <field name="gross_wt" optional="hide" />
+                                    <field name="tare_wt" optional="hide" />
+                                    <field name="net_wt" optional="hide" />
+                                    <field name="packing" optional="hide" />
+                                    <field name="nos" optional="hide" />
+                                    <field name="kg" optional="hide" />
+                                    <field name="volume" optional="hide" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Compactor Trip Sheet" attrs="{'invisible': [('compactor','=', False)]}">
+                            <group>
+                                <field name="compactor_trip_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="billable" />
+                                        <field name="date_from" />
+                                        <field name="date_to" />
+                                        <field name="maintenance_equ_id" />
+                                        <!-- domain="[('task_id', '=', parent.task_id)]"  -->
+                                        <!-- <field name="maintenance_equipment_ids" domain="[('task_id', '=', parent.task_id)]" widget="many2many_tags" /> -->
+                                        <field name="size" />
+                                        <field name="driver_id" />
+                                        <field name="helper_ids" widget="many2many_tags" />
+                                        <!-- <field name="bin_size"/> -->
+                                        <field name="bin_lift" sum="Billable Quantity" />
+                                        <field name="billable_qty" sum="Bin Lift Quantity" />
+                                        <field name="equipment_qty" sum="Equipment Quantity" />
+                                        <field name="so_equipment_qty" optional="hide" sum="sfo Equipment Quantity" />
+                                        <field name="weight" optional="hide" />
+                                        <field name="cbm" optional="hide" />
+                                        <field name="reason" optional="hide" />
+                                        <field name="remark" optional="hide" />
+                                        <field name="trip_type" optional="hide" />
+                                        <field name="landfill" optional="hide" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id='action_trip_sheet' model='ir.actions.act_window'>
+        <field name="name">Trip Sheet</field>
+        <field name="res_model">custom.trip.sheet</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('on_call_pending','=',False)]</field>
+    </record>
+    <menuitem id="menu_trip_sheet" name="Trip Sheet" parent="project.menu_main_pm" action="action_trip_sheet" />
+</odoo>

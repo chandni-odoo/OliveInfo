@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend the CRM Lead form view -->
+        <record id="view_crm_lead_form_mro_extend" model="ir.ui.view">
+            <field name="name">crm.lead.form.mro.extend</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">  
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <button string="Create RFQ" name="button_create_rfq_mro" type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': ['|', ('branch_for', '!=', 'mro'), ('indent_request_done', '!=', False)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='start_date']" position="attributes">
+                    <attribute name="attrs">{'column_invisible':[('parent.branch_for','=','mro')]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='end_date']" position="attributes">
+                    <attribute name="attrs">{'column_invisible':[('parent.branch_for','=','mro')]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='std_hrs']" position="attributes">
+                    <attribute name="attrs">{'column_invisible':[('parent.branch_for','=','mro')]}</attribute>
+                </xpath>
+
+                <!-- ADD MRO FIELDS -->
+                <!-- <xpath expr="//field[@name='service_ids']/tree/field[@name='frequency_id']" position="after"> -->
+                <xpath expr="//field[@name='service_ids']/tree" position="inside">
+                    <!-- <field name="available_qty"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/> -->
+
+                    <field name="unit_price"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/>
+
+                    <field name="cost"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/>
+
+                    <field name="margin"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/>
+
+                    <field name="etd"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/>
+
+                    <field name="brand_id"
+                        attrs="{'column_invisible':[('parent.branch_for','!=','mro')]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

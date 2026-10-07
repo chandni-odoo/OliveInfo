@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Peolplesol Fleet",
+    'summary':'This module modify fleet',
+    'description': 'This module modify fleet',
+    'category': 'fleet',
+    'version': '15.0.1',
+    'author':'Preciseways',
+    'website': "http://www.preciseways.com",
+    'depends': ['fleet','hr','repair', 'sale_extended'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/sequence.xml',
+        'views/fleet_view.xml',
+        'views/res_partner.xml',
+        'views/handover.xml',
+        'views/maintance.xml',
+        'views/vehicle_tyre_details.xml',
+        'views/vehicle_fuel_log.xml',
+        'views/out_grower_view.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

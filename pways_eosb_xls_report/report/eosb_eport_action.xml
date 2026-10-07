@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="eosb_xlsx" model="ir.actions.report">
+            <field name="name">EOSB Excel Report</field>
+            <field name="model">employee.eosb.wizard</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">pways_eosb_xls_report.eosb_xlsx</field>
+            <field name="report_file">pways_eosb_xls_report.eosb_xlsx</field>
+            <field name="binding_model_id" ref="model_employee_eosb_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="eosb_xlsx_branch" model="ir.actions.report">
+            <field name="name">EOSB Branch Excel Report</field>
+            <field name="model">employee.eosb.wizard</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">pways_eosb_xls_report.eosb_xlsx_branch</field>
+            <field name="report_file">pways_eosb_xls_report.eosb_xlsx_branch</field>
+            <field name="binding_model_id" ref="model_employee_eosb_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

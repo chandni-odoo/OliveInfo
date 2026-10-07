@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="hr_request_tree_view">
+        <field name="name">request.request.tree.view</field>
+        <field name="model">request.request</field>
+        <field name="arch" type="xml">
+            <tree string="Hr Request">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="employee_id"/> 
+                <field name="branch_id"/>          
+                <field name="type_id" string='Type'/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_request_form_view">
+        <field name="name">request.request.form.view</field>
+        <field name="model">request.request</field>
+        <field name="arch" type="xml">
+            <form string="HR Request">
+                <header>
+                    <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" states="draft"/>
+                    <!-- <button name="button_approve" string="Approve" type="object" class="oe_highlight" states="confirm" attrs="{'invisible': [('can_approve', '=', False)]}"/> -->
+                    <button name="button_approve" string="Approve" type="object" class="oe_highlight"
+                        attrs="{
+                            'invisible': ['|', ('state', '!=', 'confirm'), ('can_approve', '=', False)]
+                        }"/>
+                    
+                    <!-- Reject button - only visible in 'confirm' state and when user can approve -->
+                    <button name="button_reject" string="Reject" type="object" class="oe_highlight"
+                        attrs="{
+                            'invisible': ['|', ('state', '!=', 'confirm'), ('can_approve', '=', False)]
+                        }"/>
+                    <button name="button_complete" string="Completed" type="object" class="oe_highlight" states="approve"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve,reject,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" required="1"/>
+                            <!-- <field name="department_id"/> -->
+                            <field name="branch_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="manager_id" readonly="1"/>
+                            <field name="can_approve" invisible="1"/>
+                            <field name="is_resignation" invisible="1"/>
+                            <field name="is_termination" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="type_id" required="1"/>
+                            <field name="relieving_date_visible" invisible="1"/>
+                            <field name="language_field_visible" invisible="1"/>
+                            <field name="relieving_date" attrs="{'invisible': [('relieving_date_visible', '=', False)], 'required': [('relieving_date_visible', '=', True)]}"/>
+                            <field name="languages" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('language_field_visible', '=', False)]}"/>
+                            <field name="resignation_date" attrs="{'invisible': [('is_resignation', '=', False)]}"/>
+                            <field name="notice_id" readonly="1" attrs="{'invisible': [('is_resignation', '=', False)]}"/>
+                            <field name="reason_for_leaving_id" attrs="{'invisible': [('is_resignation', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description"/>
+                    </group>
+                    <!-- <group string="Manager Approval" attrs="{'invisible': [('state', 'not in', ['confirm', 'approve', 'submit'])]}">
+                        <field name="approval_comment" attrs="{'readonly': [('state', 'in', ['approve'])], 'required': [('state', '=', 'confirm'), ('is_resignation', '=', True)]}"/>
+                    </group> -->
+                    <group string="Manager Approval" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <field name="approval_comment" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                        <field name="rejection_comment" string="Rejection Comment"/>
+                    </group>
+                    <group>
+                        <field name="requirements"/>
+                        <field name="attachments" filename="attachments_filename"/>
+                        <field name="attachments_filename" invisible="1"/>
+                        <field name="final_document" filename="final_document_filename" string="Attach Final Document"/>
+                        <field name="final_document_filename" invisible="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_leaving_reason_tree_view">
+        <field name="name">hr.leaving.reason.tree.view</field>
+        <field name="model">hr.leaving.reason</field>
+        <field name="arch" type="xml">
+            <tree string="Hr Request">
+                <field name="name"/>
+                <field name="notes"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_leaving_reason_form_view">
+        <field name="name">hr.leaving.reason.form.view</field>
+        <field name="model">hr.leaving.reason</field>
+        <field name="arch" type="xml">
+            <form string="Leaving Reasons">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_types_request_tree_view">
+        <field name="name">hr.request.type.tree.view</field>
+        <field name="model">hr.request.type</field>
+        <field name="arch" type="xml">
+            <tree string="Hr Request">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_types_request_form_view">
+        <field name="name">hr.request.type.form.view</field>
+        <field name="model">hr.request.type</field>
+        <field name="arch" type="xml">
+            <form string="Hr Request">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="action_request">
+        <field name="name">Employee Requests</field>
+        <field name="res_model">request.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_request_type">
+        <field name="name">Request Type</field>
+        <field name="res_model">hr.request.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_leaving_reason">
+        <field name="name">Leaving Reason</field>
+        <field name="res_model">hr.leaving.reason</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="employee_request" name="Employee Request"
+                  sequence="7" parent="hr.menu_hr_root"/>
+        
+    <menuitem id="menu_hr_request" name="Employee Requests"
+        action="action_request" parent="employee_request" sequence="3"
+        />
+    <menuitem id="menu_hr_request_type" name="Requests Type"
+        action="action_request_type" parent="employee_request" sequence="4"
+        /> 
+    <menuitem id="menu_hr_leaving_reason" name="Leaving Reason"
+        action="action_leaving_reason" parent="employee_request" sequence="5"
+        /> 
+                
+</odoo>

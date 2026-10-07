@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_work_entry_regeneration_wizard_inherit" model="ir.ui.view">
+        <field name="name">hr.work.entry.regeneration.wizard</field>
+        <field name="model">hr.work.entry.regeneration.wizard</field>
+        <field name="inherit_id" ref="hr_work_entry_contract.hr_work_entry_regeneration_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="employee_ids" widget="many2many_tags" colspan='6'/>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="required">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

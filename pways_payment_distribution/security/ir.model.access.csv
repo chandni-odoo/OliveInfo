@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_distribution,access_payment_distribution,model_payment_distribution,base.group_user,1,1,1,1
+access_payment_distribution_line,access_payment_distribution_line,model_payment_distribution_line,base.group_user,1,1,1,1
+pways_payment_distribution.access_select_invoice_line,access_select_invoice_line,pways_payment_distribution.model_select_invoice_line,base.group_user,1,1,1,1

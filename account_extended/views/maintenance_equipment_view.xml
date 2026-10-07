@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_vehicle_view_form_inherit_peoplesol" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <field name="next_assignation_date" position="after">
+                <field name="asset_id" readonly="1"/>
+                <field name="asset_sequence"/>
+            </field>
+        </field>
+    </record>
+    <record id="hr_equipment_view_forminherit" model="ir.ui.view">
+        <field name="name">maintenance.equipment.form.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <field name="maintenance_team_id" position="after">
+                <field name="asset_id" readonly="1"/>
+                <field name="asset_sequence"/>
+            </field>
+            <!-- <xpath expr="//field[@name='location']"  position="after">
+                <field name="pro_category_ids" domain="[('detailed_type', '=', 'service')]" widget="many2many_tags"/>
+                <field name="equ_type_id"/>
+            </xpath> -->
+        </field>
+    </record>
+
+    <!-- <record id="equipment_type_tree_view" model="ir.ui.view">
+        <field name="name">equipment.type.tree.view</field>
+        <field name="model">equipment.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record> -->
+
+    <!-- <record id="equipment_type_form_view" model="ir.ui.view">
+        <field name="name">equipment.type.form.view</field>
+        <field name="model">equipment.type</field>
+        <field name="arch" type="xml">
+            <form string="Equipment Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record> -->
+
+    <!-- <record id="action_equipment_type" model="ir.actions.act_window">
+        <field name="name">Equipment Types</field>
+        <field name="res_model">equipment.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_equipment_type"
+        name="Equipment Type"
+        action="action_equipment_type"
+        parent="maintenance.menu_maintenance_configuration"
+        sequence="20"/> -->
+</odoo>

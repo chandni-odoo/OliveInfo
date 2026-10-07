@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_leave_settlement,access_leave_settlement,model_leave_settlement,base.group_user,1,1,1,1
+access_leave_settlement_line,access_leave_settlement_line,model_leave_settlement_line,base.group_user,1,1,1,1
+access_leave_settlement_wizard,access_leave_settlement_wizard,model_leave_settlement_wizard,base.group_user,1,1,1,1
+access_hr_leave_allocation_lines,access_hr_leave_allocation_lines,model_hr_leave_allocation_lines,base.group_user,1,1,1,1

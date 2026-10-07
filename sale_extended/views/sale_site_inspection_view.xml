@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="site_inspection_wizard_form_view" model="ir.ui.view">
+        <field name="name">site.inspection.wizard.form.view</field>
+        <field name="model">site.inspection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Site Inspection Wizard">
+                <sheet>
+                    <!--                    <div class="oe_title">-->
+                    <!--                        <h1>-->
+                    <!--                            <field name="name"/>-->
+                    <!--                        </h1>-->
+                    <!--                    </div>-->
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="sale_id" invisible="1"/>
+                            <field name="crm_id" invisible="1"/>
+                            <field name="site_inspection_id" invisible="1"/>
+                            <field name="site_visit_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Confirm Order and Send Notification" name="send_mail_to_assignee" type="object"
+                            class="btn-primary" attrs="{'invisible': [('sale_id', '==', False)]}"/>
+                    <button string="Confirm Order and Don't Send Notification" name="confirm_dont_send" type="object"
+                            class="btn-primary" attrs="{'invisible': [('sale_id', '==', False)]}"/>
+                    <button string="Create Site Visit" name="send_mail_to_assignee" type="object" class="btn-primary"
+                            attrs="{'invisible': [('crm_id', '==', False)]}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+    <record id="action_site_inspection_wizard" model="ir.actions.act_window">
+        <field name="name">Site Inspection Wizard</field>
+        <field name="res_model">site.inspection.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="site_inspection_wizard_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="sale_site_inspection_kanban_view" model="ir.ui.view">
+        <field name="name">sale.site.inspection.kanban.view</field>
+        <field name="model">sale.site.inspection</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <field name="name"/>
+                                </h4>
+                            </div>
+                            <br></br>
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <field name="company_id"/>
+                                </h4>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="sale_site_inspection_tree_view" model="ir.ui.view">
+        <field name="name">sale.site.inspection.tree.view</field>
+        <field name="model">sale.site.inspection</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="company_id"/>
+                <field name="contact_person_id"/>
+                <field name="partner_location_id"/>
+                <field name="prepared_id"/>
+                <field name="verified_id"/>
+                <field name="approved_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="sale_site_inspection_form_view" model="ir.ui.view">
+        <field name="name">sale.site.inspection.form.view</field>
+        <field name="model">sale.site.inspection</field>
+        <field name="arch" type="xml">
+            <form string="Site Inspection">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" t-options='{"widget": "date"}'/>
+                            <field name="assign_id"/>
+                            <field name="branch_id"/>
+                            <field name="company_id"/>
+                            <field name="customer_id"/>
+                            <field name="contact_person_id"
+                                   domain="[('parent_id', 'child_of', company_id),('type', '!=', 'other')]"/>
+                            <!-- <field name="partner_location_id" domain="[('parent_id', 'child_of', company_id),('type', '=', 'other')]"/> -->
+                            <field name="partner_location_id"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="no_of_manpower"/>
+                            <field name="job_id"/>
+                            <field name="sale_id" invisible="1"/>
+                            <separator string="Availability at Site"/>
+                            <field name="is_first_aid" type="checkbox"/>
+                            <field name="is_drinking_water" type="checkbox"/>
+                            <field name="is_resting_area" type="checkbox"/>
+                        </group>
+                        <group>
+                            <field name="job_nature"/>
+                            <field name="nature_of_business"/>
+                            <field name="hazard_id"/>
+                            <field name="ppe_requirement"/>
+                            <field name="additional_info"/>
+                            <field name="no_of_workers"/>
+                            <field name="note"/>
+                            <field name="other_competator"/>
+                            <field name="salary_range"/>
+                            <label for="latitude" string="Geolocation"/>
+                            <div class="o_row">
+                                <span class="oe_grey">(</span>
+                                <field name="latitude"/>
+                                <span class="oe_grey" attrs="{'invisible':[('latitude','&lt;=',0)]}">N</span>
+                                <span class="oe_grey" attrs="{'invisible':[('latitude','&gt;=',0)]}">S</span>
+                                <field name="longitude"/>
+                                <span class="oe_grey" attrs="{'invisible':[('longitude','&lt;=',0)]}">E</span>
+                                <span class="oe_grey" attrs="{'invisible':[('longitude','&gt;=',0)]}">W</span>
+                                <span class="oe_grey">)</span>
+                            </div>
+                            <br/>
+                            <br/>
+                            <separator string="Approval"/>
+                            <field name="prepared_id"/>
+                            <field name="verified_id"/>
+                            <field name="approved_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_view_of_sale_site_inspection">
+        <field name="name">Site Inspection</field>
+        <field name="res_model">sale.site.inspection</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="sale_site_inspection_tree_view"/>
+    </record>
+
+    <menuitem
+            id="menu_site_inspecction"
+            name="Site Inspection "
+            action="action_view_of_sale_site_inspection"
+            parent="sale.sale_order_menu"
+            sequence="20"/>
+</odoo>

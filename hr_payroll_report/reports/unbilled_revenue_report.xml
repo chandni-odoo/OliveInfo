@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_unbilled_revenue_report_xlsx" model="ir.actions.report">
+        <field name="name">Unbilled Revenue Report</field>
+        <field name="model">unbilled.revenue.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.unbilled_revenue_report_xlsx</field>
+        <field name="report_file">hr_payroll_report.unbilled_revenue_report_xlsx</field>
+        <field name="print_report_name">'Unbilled_Revenue_Report'</field>
+    </record>
+</odoo>

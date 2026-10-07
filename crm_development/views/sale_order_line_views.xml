@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_line_margin_view" model="ir.ui.view">
+        <field name="name">sale.order.line.margin.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_extended.view_sale_order_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="branch_for" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_indent_request_from_sale"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o"
+                        attrs="{
+                            'invisible': [
+                                '|',
+                                ('branch_for', '!=', 'mro'),
+                                ('indent_count', '=', 0)
+                            ]
+                        }">
+
+                    <field name="indent_count"
+                        string="RFQ"
+                        widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_tender_from_sale"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list-alt"
+                            attrs="{
+                                'invisible': [
+                                    '|',
+                                    ('branch_for', '!=', 'mro'),
+                                    ('tender_count', '=', 0)
+                                ]
+                            }">
+                        <field name="tender_count"
+                            widget="statinfo"
+                            string="Tender"/>
+
+                    </button>
+                </xpath>
+                
+            <xpath expr="//field[@name='order_line']/tree/field[@name='customer_bin']" position="after">
+                <field name="incoterm_ids" widget="many2many_tags" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="sales_price" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="margin_type" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="margin_unit" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="margin" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="landed_cost" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="gross_margin" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="profit" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="total_price" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+                <field name="delivery_time" attrs="{'column_invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='incoterm_ids']" position="after">
+                <button name="action_open_landing_cost"
+                        type="object"
+                        string="Landing Cost"
+                        class="btn-primary"
+                        attrs="{'invisible': [('parent.branch_for', '!=', 'mro')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

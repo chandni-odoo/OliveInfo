@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="planning_view_form_inherit_people" model="ir.ui.view">
+        <field name="name">planning.slot.inherit.people</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet//field[@name='resource_id']" position="before">
+                <field name="resource_change_type" widget="radio" string="Type"/>
+                <field name="task_resource_id"/>
+                <field name="warning_message" no_label="1" class='text-danger' string=""/>
+                <field name="emp_code" invisible="1"/>
+                <field name="existing_resource_id" attrs="{'invisible': [('resource_change_type', '=', 'add')]}"/>
+                <field name="resource_ids" widget="many2many_tags"/>
+                <field name="shift_id"/>
+
+                <button string="Planning Extended" type="object" name="extend_planning"/>
+                <button string="DEMOBILIZE" type="object" name="btn_demobilize"/>
+
+            </xpath>
+            <xpath expr="//form//sheet//field[@name='template_creation']" position="after">
+                <field name="week_ids">
+                    <tree editable="bottom">
+                        <field name="week_id"/>
+                        <field name="code" invisible="1"/>
+                        <field name="l_code" readonly="1"/>
+                        <field name="types"/>
+                        <field name="week_selection_ids" widget="many2many_tags" required="1"/>
+                        <field name="planning_id" invisible="1"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr="//form//sheet//field[@name='resource_id']" position="replace">
+                <field name="resource_id" context="{'from_planning': True}" invisible="1"
+                       options="{'no_create_edit': True}"
+                       attrs="{'readonly': ['|', ('start_datetime', '=', False), ('end_datetime', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//form//sheet//field[@name='role_id']" position="replace">
+                <field name="role_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//form//sheet//field[@name='sale_line_id']" position="replace">
+                <field name="sale_line_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//form//sheet//field[@name='sale_line_id']" position="replace">
+                <field name="sale_line_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='start_datetime']" position="attributes">
+                <attribute name="widget">date</attribute>
+            </xpath>
+            <xpath expr="//field[@name='end_datetime']" position="attributes">
+                <attribute name="widget">date</attribute>
+            </xpath>
+
+            <!--            <xpath expr="//footer/button[hasclass('send_and_print')]" position='attributes'>-->
+            <!--            <xpath expr="//footer" position="inside">-->
+            <!--                <span>wnidwidbwdudwddbwdwdwdiwdw</span>-->
+            <!--            </xpath>-->
+
+        </field>
+    </record>
+
+    <record id="project_forecast.planning_slot_view_form" model="ir.ui.view">
+        <field name="name">planning.slot.form</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='resource_id']" position="before">
+                <field name="project_id" invisible="1" context="{'default_allow_forecast': True}"
+                       options="{'no_open': True}"/>
+                <field name="task_id" invisible="1"
+                       context="{'default_project_id': project_id, 'default_allow_forecast': True}"
+                       options="{'no_open': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='allocated_hours']" position="after">
+                <field name="allow_forecast" invisible="1"/>
+                <field name="planned_hours" widget="float_time" invisible="1"/>
+                <field name="forecast_hours" widget="float_time" invisible="1"
+                       decoration-danger="planned_hours &gt; 0 and forecast_hours > planned_hours"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="planning_slot_search_view_inherit" model="ir.ui.view">
+        <field name="name">planning.slot.search</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='resource_id']" position="after">
+                <field name="emp_code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="planning_slot_tree_view_inherit" model="ir.ui.view">
+        <field name="name">planning.slot.tree</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='resource_id']" position="after">
+                <field name="emp_code"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

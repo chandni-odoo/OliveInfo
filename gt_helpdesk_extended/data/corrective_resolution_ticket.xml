@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="closing_ticket_resolution_corrective" model="mail.template">
+            <field name="name">Corrective and Resolution</field>
+            <field name="model_id" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>
+            <field name="subject">Resolution of Your Complaint {{ object.display_name }}</field>
+            <!--            <field name="email_from">{{ (object.employee_id.user_id.email_formatted or user.email_formatted) }}</field>-->
+            <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear
+                        <!--                        <span t-esc="object"/>-->
+                        <span t-esc="object.partner_name"/>,
+                    </p>
+                    <p>
+                        <t t-if="object.check_description() == True">
+                            I hope this message finds you well. After investigating your
+                            recent complaint, we've addressed the issue concerning
+                            <t t-out="object.description"/>
+                        </t>
+                    </p>
+
+                    <p>Furthermore, we have taken corrective actions to enhance our processes, ensuring a more
+                        seamless experience for you and future customers. These corrective measures involve
+                        <t t-out="object.corrective_action"/>
+                    </p>
+
+                    <p>Your specific complaint resolution message is:
+                        <t t-out="object.resolution_action"/>
+                    </p>
+
+
+                    <p>Your input is vital to our commitment to improvement. If you have any further questions or
+                        feedback, contact me directly at
+                        <t t-out="object.user_id.phone"/>
+
+                    </p>
+                    <p>Thank you for your understanding, and we value your continued trust.</p>
+                    <p>Sincerely,</p>
+                    <p>
+                        <t t-out="object.user_id.name"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.function"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.phone"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.mobile"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.company_id.name"/>
+                    </p>
+                </div>
+                <div>
+                    <t t-set="access_token" t-value="object.rating_get_access_token()"/>
+                    <t t-set="partner" t-value="object.rating_get_partner_id()"/>
+                    <table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin:0;">
+                        <tbody>
+                            <tr>
+                                <td valign="top" style="font-size: 14px;">
+                                    <p>Dear
+                                        <span t-esc="object.partner_name"/>,
+                                    </p>
+                                    Please take a moment to rate our services related to the ticket "<strong
+                                        t-out="object.name or ''">Table legs are unbalanced</strong>"
+                                    <t t-if="object.rating_get_rated_partner_id().name">
+                                        assigned to <strong t-out="object.rating_get_rated_partner_id().name or ''">
+                                        Mitchell Admin</strong>.
+                                        <br/>
+                                    </t>
+                                    <t t-else="">
+                                        .
+                                        <br/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <table border="0" cellpadding="0" cellspacing="0" summary="o_mail_notification"
+                                           style="width:100%; margin: 32px 0px 32px 0px;">
+                                        <tr>
+                                            <td style="font-size: 14px;">
+                                                <strong>Tell us how you feel about our service</strong>
+                                                <br/>
+                                                <span style="text-color: #888888">(click on one of these smileys)</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 14px;">
+                                                <table style="width:100%;text-align:center;margin-top:2rem;">
+                                                    <tr>
+                                                        <td>
+                                                            <a t-attf-href="/rate/{{ access_token }}/5">
+                                                                <img alt="Satisfied"
+                                                                     src="/rating/static/src/img/rating_5.png"
+                                                                     title="Satisfied"/>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a t-attf-href="/rate/{{ access_token }}/3">
+                                                                <img alt="Okay"
+                                                                     src="/rating/static/src/img/rating_3.png"
+                                                                     title="Okay"/>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a t-attf-href="/rate/{{ access_token }}/1">
+                                                                <img alt="Dissatisfied"
+                                                                     src="/rating/static/src/img/rating_1.png"
+                                                                     title="Dissatisfied"/>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" style="font-size: 14px;">
+                                    We appreciate your feedback. It helps us to improve continuously.
+                                    <br/>
+                                    <span style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;">
+                                        This customer survey has been sent because your ticket has been moved to the
+                                        stage
+                                        <b t-out="object.stage_id.name or ''">In Progress</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+            <!--            <field name="report_template" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>-->
+            <field name="report_name">{{ (object.name or '') }}</field>
+            <field name="lang">{{ object.emp_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

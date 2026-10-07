@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lpo_control_form_inherit" model="ir.ui.view">
+        <field name="name">lpo.control.form.inherit</field>
+        <field name="model">lpo.control</field>
+        <field name="inherit_id" ref="project_extended.lpo_control_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='attachment_id']" position="after">
+                <field name="total_invoice_posted" widget="monetary"/>
+                <field name="total_invoice_unposted" widget="monetary"/>
+                <field name="total_unbilled" widget="monetary"/>
+            </xpath>
+            <xpath expr="//field[@name='branch_id']" position="after">
+                <field name="total_amount_used" widget="monetary"/>
+                <field name="total_po_value" widget="monetary"/>
+                <field name="total_available_balance" widget="monetary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

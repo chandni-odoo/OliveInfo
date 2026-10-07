@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_leave_allocation_view_form_inherit" model="ir.ui.view">
+            <field name="name">hr.leave.allocation.view.form.inherit</field>
+            <field name="model">hr.leave.allocation</field>
+            <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <field name="is_staff" attrs="{'invisible':[('allocation_type','=', 'regular')], 'readonly': ['|', ('is_officer', '=', False), ('state', 'not in', ('draft', 'confirm'))]}"/>
+                    <field name="total_accrual_days" attrs="{'invisible':['|', ('is_staff','!=', True), ('allocation_type','=', 'regular')]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_holidays.open_view_public_holiday" model="ir.actions.act_window">
+            <field name="name">Public Holidays</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">resource.calendar.leaves</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('resource_id', '=', False),('holiday_task', '=', False)]</field>
+            <field name="view_id" ref="hr_holidays.resource_calendar_leaves_tree_inherit"/>
+            <field name="context">{
+                'search_default_filter_date': True}</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_service_agrrement">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sale_extended.external_layout_template_service_agrrement">
+                        <t t-set="agreement" t-value="o.get_agreement()"/>
+                        <t t-if="agreement.branch_id.branch_for == 'hro' or agreement.branch_id.branch_for == 'mro'">
+                        <center><b>SERVICE AGREEMENT</b></center>
+                        <center>This <strong>Service Agreement</strong> entered into on this <strong><span t-field="agreement.date_of_agreement"/></strong> by and</center>
+                        <br/>
+                        
+                        <center><b>BETWEEN</b></center>
+                        <br/>
+                        
+                        <p style="text-align:left"><strong><span t-field="agreement.partner_id"/></strong> a company organized and duly registered under the laws of the state of
+                        <strong><span t-field="agreement.country_id"/></strong> with Commercial registration no <strong><t t-esc="agreement.partner_id.vat"/></strong> whose registered office is at Office No <strong><span t-field="agreement.partner_id.street"/><span t-field="agreement.partner_id.street2"/> <span t-field="agreement.partner_id.city"/> <span t-field="agreement.partner_id.state_id"/> <span t-field="agreement.partner_id.zip"/> <span t-field="agreement.partner_id.country_id"/></strong> (referred to hereinafter” <strong><span t-field="agreement.partner_id"/></strong> ")  and duly represented herein by Mr./Ms <strong> <span t-field="agreement.representative"/></strong>.</p>
+                        <br/>
+                        
+                        <center><b>AND</b></center>
+                        <br/>
+                        
+                        <p style="text-align:left"><strong><span t-field="agreement.company_id"/></strong> a limited liability company organized and registered under the laws of the State of <strong><span t-field="agreement.country_id"/></strong> with Commercial registration No. <strong><span t-esc="agreement.company_id.vat"/></strong> whose registered office is <strong><span t-field="agreement.street"/><span t-field="agreement.street2"/> <span t-field="agreement.city"/> <span t-field="agreement.state_id"/> <span t-field="agreement.zip"/> <span t-field="agreement.country_id"/></strong> (referred to hereinafter” <strong><span t-field="agreement.company_id"/></strong> ") and duly represented herein by Mr./Ms <strong> <span t-field="agreement.company_representative"/></strong>.</p>
+                        <br/>
+                       
+                        <p style="text-align:left"> Each of <strong><span t-field="agreement.partner_id"/></strong> and <strong><span t-field="agreement.company_id"/></strong> is a “Party” to this Agreement; each Party is hereinafter referred to individually as “Party” and collectively as “Parties”. </p>
+                        <br/>
+                        
+                        <p style="text-align:left"><b>RECITALS:</b></p>
+                        <br/>
+                        <p style="text-align:left">(a) DULSCO is a leading provider of Human Resource Consultancy and Garbage Collection, Removing and Transport Services in the region. DULSCO has the requisite skill, knowledge, experience and the necessary regulatory approval to carry out the Services requested by the CLIENT pursuant to this Agreement; and </p>
+                        <p style="text-align:left">(b) The CLIENT wishes to appoint DULSCO to provide Services on the terms and conditions as set out in this Agreement.</p>
+                        <p style="text-align:left">(c) The Parties agree that the estimated value of Services (as defined hereinafter) provided under this Agreement shall not be less than <strong>QAR <span t-esc="agreement.sale_id.amount_total"/></strong> For the avoidance of doubt, it is expressly clarified that, the Parties shall mutually agree on a monthly basis, the value of Services provided. </p>
+                        <br/>
+                        <p style="text-align:left"><b>NOW THEREFORE IT IS AGREED BY AND BETWEEN THE PARTIES HERETO AS FOLLOWS:</b></p>
+                        <p style="text-align:left">Confirm proof authority to sign the agreement and bind the company</p>
+                        <br/>
+                        <ol type="1">
+                            <p style="text-align:left"><li>Interpretation</li></p>
+                            <p style="text-align:left">1.1 In this Agreement:</p>
+                            <br/>
+                            <p style="text-align:left"><b>Applicable Law</b> shall mean all applicable provisions of all statutes, laws, rules, regulations, administrative codes, ordinances, decrees, orders, decisions, injunctions, awards judgments, permits and licenses of or from governmental authorities, including those relating to or governing the use or regulation of the Services in the State of Qatar;</p>
+                            <p style="text-align:left"><b>Business Day </b> has the meaning ascribed to it in Clause 13.3;</p>
+                            <p style="text-align:left"><b>Commencement Date</b> means <strong>[<span t-field="agreement.date_of_agreement"/></strong>]</p>
+                            <p style="text-align:left"><b>Confidential Information </b> has the meaning ascribed to it in Clause 7;</p>
+                            <p style="text-align:left"><b>Force Majeure Events</b> have the meaning ascribed to them in Clause 14.6;</p>
+                            <p style="text-align:left"><b>Personnel</b> means those employees of DULSCO seconded to the CLIENT in accordance with the provisions of this Agreement;</p>
+                            <p style="text-align:left"><b>Service Fees</b> means the fee or fees specified in Clause 4.1 and Schedule (Ref: Quote No. <strong><span t-field="agreement.sale_id"/></strong> Dated <strong><span t-esc="agreement.sale_id.date_order"/></strong> of this Agreement and payable by the CLIENT to DULSCO in respect of the Services; and</p>
+                            <p style="text-align:left"><b>Services</b> means the recruitment and related services to be provided by DULSCO under this Agreement including, without limitation, the services identified in as detailed in Clause 2.1 of this Agreement.</p>
+
+                            <p style="text-align:left"><b>1.2 In this Agreement:</b></p>
+                            <ol type="a">
+                                <p style="text-align:left"><li>references to a person include an individual, a body corporate, a partnership and an unincorporated association of persons; and</li></p>
+                                <p style="text-align:left"><li>references to a Party to this Agreement include references to the successors or assigns (immediate or otherwise) of that Party.</li></p>
+                            </ol>
+
+                            <p style="text-align:left">1.3 Clauses 1.1 and 1.2 apply unless expressly defined or set out otherwise.</p>
+
+                            <p style="text-align:left">1.4 The headings in this Agreement do not affect its interpretation.</p>
+
+                            <p style="text-align:left">1.5 The schedules and appendices to this Agreement form part of it and any reference to “Clauses”, “Schedules” or “Appendices” means a clause, schedule or appendix to this Agreement respectively.</p>
+
+                            <p style="text-align:left">1.6 The words “includes” or “including” shall mean “including without limitation”.</p>
+
+                            <p style="text-align:left">1.7 If there is any conflict or inconsistency between a term in the main part of this Agreement and a term in any of the Schedules or other documents referred to or otherwise incorporated into this Agreement, the term in the main part of this Agreement shall prevail to the extent of the conflict or inconsistency.</p>
+                            <br/>
+                            <br/>
+                            <p style="text-align:left"><li><b>SCOPE OF SERVICE</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">2.1 At the request and specific instructions of the CLIENT, DULSCO shall provide the Services as set out in Schedule I of this Agreement (“Services”) (hereinafter referred to as the “Personnel”). The Personnel provided by DULSCO to the CLIENT will always remain under the complete control and supervision of the CLIENT and DULSCO shall not interfere with the work of the Personnel while they are deputed to the CLIENT. DULSCO shall not be responsible for any direct or indirect acts of the Personnel until the time they are at the CLIENT site and working under the direct supervision of the CLIENT.</p>
+
+                            <p style="text-align:left">2.2 All visa applications are subject to government approvals and DULSCO shall not be responsible for any rejections by the relevant authorities.</p>
+
+                            <p style="text-align:left">2.3 Under the terms of this Agreement, DULSCO shall at all times act as an independent contractor. This Agreement does not in any way create a relationship of principal and an agent between CLIENT, and DULSCO shall not act or attempt or represent itself as an agent of CLIENT.</p>
+
+                            <p style="text-align:left"><li><b>TERM</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">3.1 This Agreement shall be for a period of <strong>[<span t-field="agreement.valid_from"/></strong>] year from the Commencement Date. The Parties agree to renew this Agreement with mutual consent.</p>
+
+                            <p style="text-align:left"><li><b>SERVICE FEES</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">4.1 In consideration of the Services to be rendered, the CLIENT will pay DULSCO a service fee, as set out, in Schedule I to this Agreement (“Service Fees”).</p>
+
+                            <p style="text-align:left">4.2 The Parties agree that two (2) months prior to the expiry of the Term, the parties shall discuss and mutually agree that the Service Fees shall be reviewed.</p>
+
+                            <p style="text-align:left"><li><b>PAYMENT TERMS</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">5.1 The payment conditions under this Agreement shall be as follows:</p>
+
+                            <ol type="a">
+                            <p style="text-align:left"><li>In consideration for DULSCO performing the Services under the provisions of this Agreement, DULSCO shall invoice the CLIENT monthly in relation to the Service Fee.</li></p>
+
+                            <p style="text-align:left"><li>The CLIENT shall make payment of the invoice within thirty (30) Days from the date of the invoice.</li></p>
+
+                            <p style="text-align:left"><li>Invoices shall be paid by the CLIENT either by cheque or by wire transfer to DULSCO’s designated bank account.</li></p>
+                            </ol>
+
+                            <p style="text-align:left">5.2 Any overdue payments by the CLIENT shall attract a penal interest @ 2% per month.</p>
+                            <br/>
+                            <br/>
+                            <p style="text-align:left"><li><b>STATUTORY COMPLIANCE</b>
+                            </li></p>
+                            <ol type="a">
+                            <p style="text-align:left"><li>DULSCO will comply with the provisions of all statutes; ordinance, rules and regulations as applicable to the Services;</li></p>
+                            <p style="text-align:left"><li>Both Parties shall provide the each a copy of their Commercial Registration (CR), Computer Card and Tax Card;</li></p>
+                            <p style="text-align:left"><li>If any government or statutory levy, cess, duties , rates or taxes, including VAT imposed in respect of supply of the Services during the Term shall be fully to the CLIENT’s account and will be charged to the CLIENT forthwith.</li></p>
+                            </ol>
+
+                            <p style="text-align:left"><li><b>CONFIDENTIALITY</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">DULSCO shall not disclose any CLIENT confidential information to anyone outside CLIENT and use such information only in connection with the service provided to CLIENT during and after the termination of this Agreement. DULSCO shall require its Personnel to execute an undertaking with respect to this confidentiality provision.</p>
+
+                            <p style="text-align:left"><li><b>Liability AND INDEMNITY</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">8.1 It is clearly agreed and understood by the Parties hereto that DULSCO’s responsibility hereunder is limited to its obligations as defined in Schedule I of this Agreement.</p>
+
+                            <p style="text-align:left">8.2 DULSCO shall not be liable for any damages caused or implied as a result of the direct and indirect actions of the Personnel while performing duties for the CLIENT; including any third party losses or claims (to the extent not covered by insurance) or any claim for loss of profits or consequential loss or any loss due to willful negligence, misconduct or fraud. </p>
+
+                            <p style="text-align:left">8.3 The CLIENT hereby agrees to indemnify and hold DULSCO harmless from any liability arising from any and all claims, requests, debts, expenses, losses and actions instituted by the Personnel arising out of their secondment to the CLIENT by DULSCO including but not limited to any claims or requests that the Personnel makes to the Ministry of Labour/Courts in the State of Qatar. The CLIENT shall make sure that the working environment at its premises does not compromise the health/safety of the Personnel and that all Applicable Law at its premises is complied with. CLIENT will fully indemnify DULSCO for any breach thereof. </p>
+
+                            <p style="text-align:left">8.4 Notwithstanding anything to the contrary to any other clause in this Agreement; the maximum liability of DULSCO under or arising out of and/or in relation to this Agreement is limited to 5% of the total monthly fees paid for the specific Personnel individually and up-to a maximum of QAR 5,000 (QAR Five Thousand) in aggregate for all liabilities under or arising out of and/or in relation to this agreement. DULSCO shall have no liability of whatsoever nature under or arising out of and/or in relation to this Agreement unless all of the fees due to DULSCO have been received in full by DULSCO. DULSCO shall have no liability in respect of any claim unless notice of the claim is given to DULSCO specifying the matters giving rise to the claim within three (3) Business Days of such matters being known to the CLIENT. No claims shall be made against any director, employee or sub-contractor of DULSCO individually.</p>
+
+                            <p style="text-align:left">8.5 Neither Party shall, in any event, be liable for any indirect or speculative or consequential or penal damages, including, but not limited to, any loss of use, loss of data, business interruptions, and loss of income or profits, irrespective of whether it had an advance notice of the possibility of any such damages. Neither Party shall also be liable for any third party claims.</p>
+
+                            <p style="text-align:left"><li><b>TERMINATION</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">9.1 Either Party may terminate this Agreement for convenience by giving a written advance notice of thirty (30) days to the other Party.</p>
+
+                            <p style="text-align:left">9.2 Either Party may terminate this Agreement for a remediable breach if such breach has not been cured within thirty (30) days of a written notice by the aggrieved Party.</p>
+
+                            <p style="text-align:left">9.3 If the CLIENT wants to withdraw or terminate any Personnel after the expiry of the probation period of the Personnel; it must give a written advance notice equivalent to the notice period of the Personnel as set out in the specific employment contract of such Personnel or equivalent billing in lieu thereof.</p>
+
+                            <p style="text-align:left">9.4 Termination of this Agreement shall not entitle either Party to set off any outstanding payments due to each other as on date of termination. Any such payment due to one Party shall be cleared in full by the other within thirty (30) days of termination. </p>
+
+                            <p style="text-align:left">9.5 DULSCO shall, upon receipt of any notice of termination, proceed in an orderly, rapid and economic way with the procedures to terminate its Services under this Agreement. The CLIENT shall proceed to pay all dues and claims that have accrued till the last day of rendering of Services by DULSCO, after the notice of termination.</p>
+
+                            <p style="text-align:left">9.6 The CLIENT shall also ensure that upon termination, all documentation (and copies thereof) shall be delivered to DULSCO immediately.</p>
+
+                            <p style="text-align:left">9.7 DULSCO may terminate this Agreement at any time and without the need for any prior written termination notice upon the occurrence of any of the following events:</p>
+
+                            <ol type="a">
+                            <p style="text-align:left"><li>Any change on ownership or management of the CLIENT; and/or</li></p>
+
+                            <p style="text-align:left"><li>Acquisition or attainment of a controlling influence over the business of the CLIENT by a third party; and/or</li></p>
+
+                            <p style="text-align:left"><li>The CLIENT attaining either directly or indirectly an interest in a company competing with the business of DULSCO; and/or</li></p>
+
+                            <p style="text-align:left"><li>The CLIENT is declared bankrupt, makes an assignment for the benefit of creditors, appoints or suffers the appointment of a receiver or trustee over its property and/or files a petition for insolvency. </li></p>
+                            </ol>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <p style="text-align:left"><li><b>OBLIGATIONS OF THE CLIENT</b></li></p>
+                            <br/>
+                            <br/>
+                            <p style="text-align:left"><b>10.1 Disciplinary/Legal action</b></p>
+
+                            <p style="text-align:left">The CLIENT shall specify the duties of the Personnel in writing to DULSCO. The CLIENT or DULSCO will inform each other of any acts of misconduct or inability or failure to provide the services by the Personnel and discuss the action /steps to be taken. The CLIENT shall be responsible for taking all necessary measures and/or legal actions against the Personnel in breach, in consultation with DULSCO.</p>
+
+                            <p style="text-align:left"><b>10.2 Sourcing of Candidate (only if recruitment service is agreed):</b></p>
+
+                            <ol type="a">
+                            <p style="text-align:left"><li>The CLIENT will provide accurate job descriptions and its operation information so that DULSCO is able to source accurate profiles matching to those job descriptions;</li></p>
+
+                            <p style="text-align:left"><li>The CLIENT will provide timely and adequate access to resources to interview candidates proposed by DULSCO;</li></p>
+
+                            <p style="text-align:left"><li>The CLIENT will give timely and accurate feedback within twenty four (24) hours to DULSCO to enable faster closing of the positions.</li></p>
+                            </ol>
+
+                            <p style="text-align:left"><b>10.3 Safety and Health</b></p>
+
+                            <p style="text-align:left">The CLIENT warrants and undertakes that it shall comply with the local and federal rules and Applicable Law in relation to health and safety requirements, working hours, overtime and all requirements and specifications. The CLIENT shall not assign work of a hazardous nature (with particular reference to health and safety risks) without prior written approval of DULSCO and in any event, notwithstanding such approval, only where there is provision of adequate work and personal safety and protection equipment and training.</p>
+
+                            <p style="text-align:left"><b>10.4 Work Location </b></p>
+
+                            <p style="text-align:left">The CLIENT shall intimate the locations in writing as to where the Personnel shall be deputed. The Personnel shall be deputed only at CLIENT’s assigned premises to perform activities related to CLIENT’S products or services. The CLIENT shall be solely responsible for costs and consequences including penalties, fines, damages etc. arising out of any action initiated by any regulatory authorities if the Personnel are found working at any third party premises. Should the CLIENT wish to relocate the Personnel, the CLIENT shall send a written intimation to DULSCO no later than three (3) days prior to such requested relocation. The CLIENT shall provide a clear job description of the Personnel in the Schedule and any deviation from this job description shall be deemed to be variation of this Agreement and shall be mutually discussed and agreed in writing between the Parties.</p>
+
+                            <p style="text-align:left"><b>10.5 Non solicitation</b></p>
+
+                            <p style="text-align:left">The CLIENT shall not recruit or attempt to recruit any DULSCO Personnel.</p>
+                            <br/>
+                            <br/>
+                            <p style="text-align:left"><b>10.6 Attendance records</b></p>
+
+                            <p style="text-align:left">The CLIENT shall maintain the attendance records of the Personnel and shall submit such records to DULSCO no later than three (3) Business Days prior to the end of the calendar month or at such frequency as mutually agreed between the Parties in order to enable DULSCO to process the salaries and benefits of the Personnel. </p>
+
+                            <p style="text-align:left"><b>10.7 Withdrawal of Personnel</b></p>
+
+                            <p style="text-align:left">The CLIENT may request for a withdrawal of any of the Personnel in case of proven theft, fraud and/or immoral or unethical acts. The CLIENT shall fully intimate DULSCO of the actions of the Personnel along with any evidence substantiating such acts. In the event that DULSCO is fully satisfied that such an act has been committed, DULSCO shall withdraw the Personnel and a fee proportionate to the number of days worked by the Personnel shall be payable by the CLIENT to DULSCO. The CLIENT may, in any other case, request for the withdrawal of any of the Personnel subject to the payment of one (1) month’s Service Fees to DULSCO.</p>
+
+                            <p style="text-align:left"><li><b>DULSCO OBLIGATIONS:</b></li></p>
+                            <br/>
+                            <p style="text-align:left">11.1 DULSCO shall bear the responsibility of paying salaries and benefits, to Personnel in time, provided the CLIENT pays as per the terms agreed and as per Applicable Law.</p>
+
+                            <p style="text-align:left">11.2 DULSCO shall assist in sourcing candidates for selection based on specifications mutually agreed in writing between the Parties from time to time.</p>
+
+                            <p style="text-align:left">11.3 DULSCO shall be responsible for the transportation of the Personnel to the CLIENT’s site of work or to any other location that is mutually agreed in writing between the Parties from time to time.</p>
+
+                            <p style="text-align:left">11.4 DULSCO shall, at the specific written request of CLIENT, provide a supervisor at an additional fee. </p>
+
+                            <p style="text-align:left"><li><b>ETHICAL CONDUCT AND COMPLIANCE </b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">12.1 Each of the Parties hereto represents and warrants that, in the performance of this Agreement and in the pursuit of any business to which this Agreement relates, it has complied with and shall at all times comply with (and shall ensure that its subcontractors, agents and employees have complied with and at all times will comply with) all applicable laws and ethical practices.</p>
+
+                            <p style="text-align:left">12.2 In particular and not in derogation of the foregoing, each Party represent and warrant that:</p>
+
+                            <ol type="a">
+                            <p style="text-align:left"><li>it, its owners, officers, directors, employees, subcontractors, and agents, have not and shall not offer, pay, promise to pay or authorize the payment of any money, or offer, gift, promise to give or authorize the giving of anything of value to:</li></p>
+                            </ol>
+                            <ol type="i">
+                            <p style="text-align:left"><li>any official for the purpose of influencing any act or decision of such official in his official capacity </li></p>
+
+                            <p style="text-align:left"><li>inducing such official to do or omit to do any act in violation of the lawful duty of such official; or</li></p>
+
+                            <p style="text-align:left"><li>securing any improper advantage; or</li></p>
+
+                            <p style="text-align:left"><li>nducing such official to use his influence with a government or instrumentality thereof to affect or influence any act or decision of such government or instrumentality in order to obtain or retain any business to which this Agreement may relate, or directing any such business to either Party hereto.</li></p>
+
+                            <p style="text-align:left">12.3 During the period of this Agreement, and for a period to and including five (5) years after the expiration or earlier termination hereof, each Party shall fully cooperate with any request of the other Party with respect to any possible violation of law, governmental investigation or inquiry.  Each Party shall also make its books, records and accounts related to any business to which this Agreement relates available to the other Party during normal business hours for review or audit for compliance with this Article by said other Party, at said other Party’s expense. </p>
+                            </ol>
+                            
+
+                            <p style="text-align:left"><li><b>Notices</b></li></p>
+                            <br/>
+
+                            <p style="text-align:left">13.1 Any notice or other document to be served under this Agreement may be delivered or sent by commercial courier or facsimile to the Party to be served at its address set out in the preamble of this Agreement or in Schedule 1 or as otherwise agreed between the Parties.</p>
+
+                            <p style="text-align:left">13.2 When providing service of a notice or document it shall be deemed given in the case of commercial courier, when delivered as evidenced by delivery slip, and in the case of facsimile, upon proof of successful transmission.</p>
+
+                            <p style="text-align:left">13.3 In the event of notice being given after 4:00 pm on a regular Business Day, or on a day which is not a Business Day, the date of service shall be deemed to be the next Business Day.  For purposes of this clause, “Business Day” means a day (other than a Friday and Saturday) on which banks are generally open in the State of Qatar for normal business operations.</p>
+
+                            <p style="text-align:left"><li><b>MISCELLANEOUS</b></li></p>
+                            <br/>
+                            <p style="text-align:left">14.1 This Agreement shall continue to remain in existence until terminated in accordance with the termination clause mentioned herein.</p>
+
+                            <p style="text-align:left">14.2 Any additions, modifications, amendment or waivers of any terms and conditions thereof shall be valid only if made in writing and accepted by both the Parties.</p>
+
+                            <p style="text-align:left">14.3 This Agreement constitutes an entire agreement between the Parties and supersedes all agreements and communications between the Parties either verbal or written.</p>
+
+                            <p style="text-align:left">14.4 No waiver or forbearance by either Party in enforcing any of its rights under this Agreement shall prejudice or affect its ability to enforce such rights or any of its other rights hereunder at any time in the future. No waiver shall be effective unless it is made in writing and signed by the waiving Party. For the avoidance of doubt, it is agreed that a waiver of a right on one occasion shall not constitute a waiver of the same right in the future.</p>
+
+                            <p style="text-align:left">14.5 
+                                If a provision of this Agreement is or becomes illegal, invalid or unenforceable in any jurisdiction, that shall not affect either the validity or enforceability in that jurisdiction of any other provision of this Agreement; or the validity or enforceability in other jurisdictions of that or any other provision of this Agreement.
+                            </p>
+
+                            <p style="text-align:left">14.6 Neither Party to this Agreement will be liable for breach of this Agreement to the extent caused by or arising from the following events, including but not limited to Acts of God, fires, floods, weather, or other catastrophes, epidemics or quarantine restrictions, storms, war (whether declared or not), civil strife, labor disputes, strike, lock-out or other labor problems, accidents, riots , shortage of materials, acts of Government authorities the prohibition or restriction by Applicable Law or regulation of any Government or any other matters whether or not of the same nature of the foregoing, which are beyond the control of the Party thereby affected and which could not have been reasonably foreseeable, and which are not caused by acts or omissions of the Party in breach and affected and that could not have been avoided and that have rendered the performance of this Agreement impossible (“Force Majeure Events”). Upon the occurrence of a Force Majeure Event preventing either Party from performing its respective obligations hereunder, the obligations of the affected Party which have been affected shall be suspended during the period affected by Force Majeure. The Party suffering such event will promptly notify the other Party in writing and if the period of suspension lasts for longer than thirty (30) Business Days, then the affected Party may decide at any time thereafter to terminate all or any part of this Agreement.</p>
+
+                            <p style="text-align:left">14.7 This Agreement is written and executed in two (2) copies. Each Party shall retain one (1) copy for their files. This Agreement may be executed in one or more counterparts, each of which shall be deemed an original, but all of which together shall constitute one and the same instrument.  Execution by facsimile/email signature shall be deemed to be, and shall have the same effect as, execution by original signature.</p>
+
+                            <p style="text-align:left">14.8 Both Parties herby undertake to further comply with the provisions of all Applicable Law.</p>
+
+                            <p style="text-align:left">14.9 The Parties are independent contractors under this Agreement. Nothing herein contained shall be deemed to create or establish an employment, agency, joint venture, or partnership relationship between the Parties or any of their agents or employees, or any other legal arrangement that would impose liability upon one Party for the act or failure to act of the other Party. Neither Party shall have any express or implied power to enter into any contracts, commitments or negotiations or to incur any liabilities in the name of, or on behalf of, the other Party, or to bind the other Party in any respect whatsoever.</p>
+
+                            <p style="text-align:left"><li><b>GOVERNING LAW</b></li></p>
+                            <br/>
+                            <p style="text-align:left">
+                                This Agreement shall be governed, construed, and enforced in accordance with the laws of the State of Qatar, without regard to its conflict of laws rules.
+                            </p>
+
+                            <p style="text-align:left"><li><b>JURISDICTION</b></li></p>
+                            <br/>
+                            <p style="text-align:left">The Parties submit all their disputes arising out of or in connection with this Agreement to the exclusive jurisdiction of the Courts of Doha, Qatar.</p>
+
+                            <p style="text-align:left"><b>IN WITNESS WHEREOF</b> the Parties to this Agreement have set their hand and seal in this Agreement.</p>
+                        </ol>
+                      </t>          
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

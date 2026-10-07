@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="job_order_stage_tree" model="ir.ui.view">
+        <field name="name">job.order.stage.tree</field>
+        <field name="model">job.order.stage</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_job_order_stage" model="ir.actions.act_window">
+        <field name="name">Job Order Stage</field>
+        <field name="res_model">job.order.stage</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_allocation_report_xlsx" model="ir.actions.report">
+        <field name="name">Employee Allocation Report</field>
+        <field name="model">employee.allocation.report</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">fleet_extended.employee_allocation_report_xlsx</field>
+        <field name="report_file">fleet_extended.employee_allocation_report_xlsx</field>
+    </record>
+
+</odoo>

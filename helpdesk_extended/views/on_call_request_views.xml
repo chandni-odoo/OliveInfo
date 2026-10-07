@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="custom_trip_sheet_view_tree_inherit" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.inherit.tree</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="inherit_id" ref="custom_trip.custom_trip_sheet_view_tree"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="equipment_type_id" />
+                <field name="waste_type_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="custom_trip_sheet_view_form_inherit" model="ir.ui.view">
+        <field name="name">custom.trip.sheet.form.inherit</field>
+        <field name="model">custom.trip.sheet</field>
+        <field name="inherit_id" ref="custom_trip.custom_trip_sheet_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='on_call']" position="after">
+                <field name="on_call_pending"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="action_call_request_trip_sheets" model="ir.actions.act_window">
+        <field name="name">Call Requests</field>
+        <field name="res_model">custom.trip.sheet</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('on_call', '=', True), ('on_call_pending', '=', True),('vehicle_no_id', '=', False), ('shift_id', '=', False), ('stage', '=', 'draft')]</field>
+        <field name="context">{'search_default_on_call': True}</field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem id="menu_call_requests" 
+              name="Call Requests" 
+              action="action_call_request_trip_sheets" 
+              parent="mtech_vehicle_extended.menu_operation_schedule" 
+              sequence="5"/>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sick_leave_rule_tree_view" model="ir.ui.view">
+        <field name="name">sick.leave.rule.tree.view</field>
+        <field name="model">sick.leave.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sick_leave_rule_form_view" model="ir.ui.view">
+        <field name="name">sick.leave.rule.form.view</field>
+        <field name="model">sick.leave.rule</field>
+        <field name="arch" type="xml">
+            <form string="Sick Leave Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                            <page string="Sick Leave Rule Lines">
+                                <field name="rule_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="rule_line_id" invisible='1'/>
+                                        <field name="from_day" required='1'/>
+                                        <field name="to_day"/>
+                                        <field name="is_service_year_only"/>
+                                        <field name="leave_type" required='1'/>
+                                    </tree>
+                                </field>
+                            </page>
+                       </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sick_leave_rule" model="ir.actions.act_window">
+        <field name="name">Sick Leave Rule</field>
+        <field name="res_model">sick.leave.rule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="hr_employee_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name='tz' position="after">
+                <field name='sick_leave_rule_id'/>
+            </field>
+        </field>
+    </record>
+
+
+    <menuitem
+        id="menu_sick_leave_rule"
+        name="Sick Leave Rules"
+        action="action_sick_leave_rule"
+        parent="hr_holidays.menu_hr_holidays_configuration"
+        sequence="6"
+        />
+</odoo>

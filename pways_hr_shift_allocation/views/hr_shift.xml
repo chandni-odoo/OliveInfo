@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_shift_tree_view" model="ir.ui.view">
+        <field name="name">hr.shift.tree.view</field>
+        <field name="model">hr.shift</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="shift_type_id"/>
+                <field name="hours_from" widget="float_time"/>
+                <field name="hours_to" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_shift_form_view" model="ir.ui.view">
+        <field name="name">hr.shift.form.view</field>
+        <field name="model">hr.shift</field>
+        <field name="arch" type="xml">
+            <form string="Employee Details">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>   
+                    <group>
+                        <group>
+                            <field name="hours_from" widget="float_time" required='1'/>
+                            <field name="shift_type_id"/>
+                        </group>
+                        <group> 
+                            <field name="hours_to" widget="float_time" required='1'/>
+                            <field name="meal_hours" widget="float_time"/>
+                        </group> 
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_view_of_hr_shift" model="ir.actions.act_window">
+        <field name="name">Employee Shifts</field>
+        <field name="res_model">hr.shift</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_shift_main"
+        name="Employee Shifts"
+        parent="hr.menu_human_resources_configuration"
+        sequence="15"
+        />
+
+    <menuitem
+        id="menu_hr_shift"
+        name="Employee Shifts"
+        action="action_view_of_hr_shift"
+        parent="menu_hr_shift_main"
+        sequence="15"
+        />
+</odoo>

@@ -1,0 +1,15 @@
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="camp_details_report" model="ir.actions.report">
+        <field name="name">Camp Report</field>
+        <field name="model">accommodation.camp</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">employee_accommodation.camp_details_template</field>
+        <field name="report_file">employee_accommodation.camp_details_template</field>
+        <field name="binding_model_id" ref="employee_accommodation.model_accommodation_camp"/>
+        <field name="paperformat_id" ref="employee_accommodation.paperformat_employee_accommodation"/>
+        <field name="binding_type">report</field>
+    </record>   
+
+</odoo> -->

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_extended.hr_employee_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='camp_info']" position="replace">
+                <field name="camp_details"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_employee_form_inherit_button" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                    <button 
+                        string="Housing" 
+                        type="object" 
+                        name="action_open_housing" 
+                        class="btn-primary"
+                        icon="fa-building"/>
+                </div>
+        </field>
+    </record>
+
+</odoo>

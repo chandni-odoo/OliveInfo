@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="initial_complaint_response_email_template" model="mail.template">
+            <field name="name">Initial Complaint Response</field>
+            <field name="model_id" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>
+            <field name="subject">Acknowledgment of Your Complaint {{ object.display_name }}</field>
+            <!--            <field name="email_from">{{ (object.employee_id.user_id.email_formatted or user.email_formatted) }}</field>-->
+                        <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear
+                        <span t-esc="object.partner_name"/>,
+                    </p>
+                    <p>Thank you for reaching out. Your case
+                        <t t-out="object.display_name"/>
+                        has been noted, and we're
+                        investigating. Your satisfaction is crucial, and we're committed to resolving this promptly.
+                    </p>
+                    <p>
+                        <t t-if="object.check_description() == True">
+                            Details:
+                            <t t-out="object.description"/>
+                        </t>
+                    </p>
+                    <p>We appreciate your patience. Updates will follow, but if you have more info, reply here or
+                        contact us at<t t-out="object.user_id.phone"/>.
+                    </p>
+                    <p>Best,</p>
+                    <p>
+                        <t t-out="object.user_id.name"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.function"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.phone"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.mobile"/>
+                    </p>
+                    <p>
+                        <t t-out="object.user_id.company_id.name"/>
+                    </p>
+
+                </div>
+            </field>
+            <!--            <field name="report_template" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>-->
+            <field name="report_name">{{ (object.name or '') }}</field>
+            <field name="lang">{{ object.emp_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

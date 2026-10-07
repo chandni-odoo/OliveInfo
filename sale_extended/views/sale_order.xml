@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="sale_view_inherit123_update" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_crm.sale_view_inherit123"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='opportunity_id']" position="replace">
+                <field name="opportunity_id" help="Log in the chatter from which opportunity the order originates"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale.view_quotation_tree" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Quotation" class="o_sale_order" sample="1" decoration-info="state in ['draft', 'sent']"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Number" readonly="1" decoration-bf="1"/>
+                <!-- <field name="version" optional="show"/> -->
+                <!-- <field name="version_date" optional="show"/> -->
+                <field name="create_date" string="Creation Date" widget="date" optional="show"/>
+                <field name="commitment_date" widget="date" optional="hide"/>
+                <field name="expected_date" widget="date" optional="hide"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="team_id" optional="hide"/>
+                <field name="tag_ids" optional="hide" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show" readonly="1"/>
+                <field name="amount_untaxed" sum="Total Tax Excluded" widget="monetary" optional="hide"/>
+                <field name="amount_tax" sum="Tax Total" widget="monetary" optional="hide"/>
+                <field name="amount_total" sum="Total Tax Included" widget="monetary" decoration-bf="1"
+                       optional="show"/>
+                <field name="state" decoration-success="state == 'sale' or state == 'done'"
+                       decoration-info="state == 'draft' or state == 'sent'" widget="badge" optional="show"/>
+                <field name="invoice_status" optional="hide"/>
+                <field name="message_needaction" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="start_date" /> <!-- attrs="{'invisible': [('branch_for', '!=',  'hro')]}"-->
+                <field name="end_date" /><!--attrs="{'invisible': [('branch_for', '!=',  'hro')]}" -->
+                <field name="contract_type" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="sale_type" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="advance_billing"/>
+                <!-- <field name=" partner_location_id " domain="[('id', 'child_of', partner_id), ('type', '=', 'other')]"/> -->
+                <field name="partner_location_id" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <!-- <field name="no_of_bins" attrs="{'invisible': [('branch_for', '!=',  'es')]}" /> -->
+                <field name="terms_id" domain="[('condition_type', '=', 'sale')]"
+                       attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+
+                <!--                Point no 10 PS2-->
+                <field name="food"
+                       attrs="{'invisible': ['|', ('branch_for', '!=',  'hro'), ('sale_type', 'in', ['bundle','cost_plus'])]}"/>
+                <field name="accommodation"
+                       attrs="{'invisible': ['|', ('branch_for', '!=',  'hro'), ('sale_type', 'in', ['bundle','cost_plus'])]}"/>
+                <field name="transport"
+                       attrs="{'invisible': ['|', ('branch_for', '!=',  'hro'), ('sale_type', 'in', ['bundle','cost_plus'])]}"/>
+                <field name="fat"
+                       attrs="{'invisible': ['|', ('branch_for', '!=',  'hro'), ('sale_type', 'in', ['bundle','cost_plus'])]}"/>
+
+                <field name="is_costing" invisible="1"/>
+                <field name="is_customer_onboarding" invisible="1"/>
+                <field name="branch_for" invisible="0"/>
+            </xpath>
+            <xpath expr="//group[@name='sale_header']" position="inside">
+                <group>
+                    <field name="attachment_ids" widget="many2many_binary"
+                           attrs="{'invisible': [('is_costing', '=', False)]}"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='branch_id']" position="before">
+                <field name="customer_id" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="credit_limit" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="ava_credit_bal" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+            </xpath>
+             <xpath expr="//field[@name='branch_for']" position="after">
+                <field name="is_hold"/>
+                <field name="hold_reason"/>
+                <field name="trip_sheet_email"/>
+                <field name="trip_sheet_whatsapp"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+                <attribute name="string">Salary</attribute>
+                <attribute name="attrs">{'column_invisible': [('parent.branch_for', '!=', 'hro')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <field name="period" invisible="1"/>
+                <field name="duration" invisible="1"/>
+                <!-- <field name="frequency_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <!-- <field name="trip_no" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <!-- <field name="weekday" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <!-- <field name="time" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <field name="partner_location_id" readonly="0"/>
+                <field name="trade_test" attrs="{'column_invisible':[('parent.branch_for', '!=',  'hro')]}"
+                       readonly="0"/>
+                <field name="start_date" />
+                <!-- attrs="{'column_invisible':[('parent.branch_for', '!=',  'hro')]}"
+                       readonly="0"-->
+                <field name="end_date" />
+                <!--attrs="{'column_invisible':[('parent.branch_for', '!=',  'hro')]}" readonly="0" -->
+                <field name="ot_hrs" invisible="1"/>
+                <field name="contract_type" attrs="{'column_invisible':[('parent.sale_type', '=', 'standard')]}"/>
+                <field name="task_id" optional="hide"/>
+                <!-- <field name="frequency_id" attrs="{'column_invisible':[('parent.branch_for', '!=',  'es')]}"/> -->
+                <field name="active" invisible="1" groups="sale_extended.unarchive_sale_line_group"/>
+                <field name="display_extra_line"
+                       attrs="{'column_invisible': [('parent.display_extra_line', '=', True)]}" invisible="1"/>
+                <button class="oe_stat_button" name="duplicate_order_line" type="object" icon="fa-arrow-right"
+                        attrs="{'invisible':[('display_extra_line','=',True)]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="waste_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                <field name="equipment_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"
+                       string="Equip. Type"/>
+                <field name="vehicle_type_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                <field name="frequency_id" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/>
+                <!-- <field name="trip_no" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <!-- <field name="weekday" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+                <!-- <field name="time" attrs="{'column_invisible': [('parent.branch_for', '!=',  'es')]}"/> -->
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="context">
+                    {'default_start_date':start_date,'default_end_date':end_date,'default_partner_location_id':partner_location_id}
+                </attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <field name="agency_fee"
+                       attrs="{'column_invisible':['|' ,('parent.sale_type', '=', 'standard'), ('parent.sale_type', '=', 'bundle')]}"/>
+                <field name="sale_amount"
+                       attrs="{'column_invisible':['|' ,('parent.sale_type', '=', 'standard'), ('parent.sale_type', '=', 'bundle')]}"/>
+                <field name="std_hrs" attrs="{'column_invisible': [('parent.branch_for', '!=', 'hro')]}"/>
+                <field name="ot_hrs" attrs="{'column_invisible': [('parent.branch_for', '!=', 'hro')]}"/>
+                <field name="month_days"
+                       attrs="{'column_invisible': [('parent.branch_for', '!=', 'hro'), ('parent.sale_type','=', 'standard')]}"/>
+                <field name="overtime" attrs="{'column_invisible': [('parent.branch_for', '!=', 'hro')]}"/>
+                <field name="sp_overtime" attrs="{'column_invisible': [('parent.branch_for', '!=', 'hro')]}"/>
+                <field name="no_of_bins"
+                       attrs="{'column_invisible': [('parent.branch_for', 'in', ['hro','es','mro'])]}"/>
+                <field name="own_bin" optional="hide"
+                       attrs="{'column_invisible': [('parent.branch_for', 'in', ['es','mro'])]}"/>
+                <field name="customer_bin" optional="hide"
+                       attrs="{'column_invisible': [('parent.branch_for', 'in', ['es','mro'])]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=',
+                    parent.company_id), ('branch_id', '=', parent.branch_id)]
+                </attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tax_totals_json']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//group[@name='order_details']/field[@name='date_order'][1]" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['costing', 'sale', 'done', 'cancel'])]}
+                </attribute>
+            </xpath>
+            <xpath expr="//group[@name='order_details']/field[@name='date_order'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['costing', 'draft', 'sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//div[@class='o_td_label'][1]" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['costing', 'sale', 'done', 'cancel'])]}
+                </attribute>
+            </xpath>
+            <xpath expr="//div[@class='o_td_label'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['costing', 'draft', 'sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_order_template_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_costing', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="help_quantity" string="Quantity(Help)" attrs="{'invisible': [('branch_for', '=',  'mro')]}"
+                       decoration-info="1"/>
+            </xpath>
+            <xpath expr="//group[@name='order_details']/field[@name='show_update_pricelist']" position="before">
+                <div class="o_td_label" groups="base.group_no_one"
+                     attrs="{'invisible': ['|',('state', 'in', ['sale', 'done', 'cancel']),('is_costing', '=', False)]}">
+                    <label for="costing_date" string="Costing Date"/>
+                </div>
+                <field name="costing_date" nolabel="1" groups="base.group_no_one"
+                       attrs="{'invisible': ['|',('state', 'in', ['sale', 'done', 'cancel']),('is_costing', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="create_quotation_new" type="object"
+                        string="Create Quotation" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'costing')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="before">
+                <button name="create_agreement" type="object"
+                        string="Create Agreement" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'customer_approve')]}"/>
+                <button name="create_pre_approval" type="object"
+                        string="Pre Approval" class="oe_highlight"
+                        attrs="{'invisible': ['|',('state', 'not in', ['customer_approve','agreement']),('customer_id', '=',False)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][2]" position="replace">
+                <!-- <button name="action_confirm" id="action_confirm" data-hotkey="v"
+                        string="Confirm" class="btn-primary" type="object"
+                        attrs="{'invisible': [('state', '!=', 'pre_approval')]}"/> -->
+                    <field name="pre_approval_completed" invisible="1"/>
+                <button name="action_confirm" id="action_confirm" data-hotkey="v"
+                        string="Confirm" class="btn-primary" type="object"
+                        attrs="{'invisible': [
+                            '|',
+                            ('state', '!=', 'pre_approval'),
+                            ('pre_approval_completed', '=', False)
+                        ]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in',
+                    ['draft','sent','customer_approve','agreement','pre_approval','sale']), ('id', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,customer_approve,agreement,pre_approval,sale</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='employee_id']" position="attributes">
+                <attribute name="attrs">{'column_invisible':[('parent.state', '!=', 'sale'),'&amp;',('parent.sale_type',
+                    '!=', 'cost_plus')]}
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']" position="after">
+                <button name="%(sale_extended.sale_customer_approve_action)d" type="action"
+                        string="Customer Approve" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'sent')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('state', 'in', ['draft', 'sent']), ('invoice_count','&gt;=',1)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send'][4]" position="replace">
+                <button name="action_quotation_send" string="Send by Email" type="object"
+                        states="sent,customer_approve,agreement,sale" data-hotkey="g"/>
+            </xpath>
+            <xpath expr="//button[@name='preview_sale_order']" position="before">
+                <button type="object" name="onboarding_request" class="oe_stat_button" icon="fa-pencil-square-o"
+                        attrs="{'invisible': [('onboarding_count', '=', 0)]}">
+                    <field name="onboarding_count" widget="statinfo" string="Onboarding Request"/>
+                </button>
+                <button type="object" name="site_inspection" class="oe_stat_button" icon="fa-pencil-square-o"
+                        attrs="{'invisible': [('site_count', '=', 0)]}">
+                    <field name="site_count" widget="statinfo" string="Site Inspection"/>
+                </button>
+                <button type="object" name="so_agreement" class="oe_stat_button" icon="fa-pencil-square-o"
+                        attrs="{'invisible': [('so_agreement_count', '=', 0)]}">
+                    <field name="so_agreement_count" widget="statinfo" string="Agreement"/>
+                </button>
+                <button type="object" name="so_site_visit" class="oe_stat_button" icon="fa-pencil-square-o"
+                        attrs="{'invisible': [('so_sitevisit_count', '=', 0)]}">
+                    <field name="so_sitevisit_count" widget="statinfo" string="Site Visit"/>
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']" position="after">
+                <button string="Create Onboarding Request" type="object" name="create_onboarding_request"
+                        class="oe_highlight"
+                        attrs="{'invisible':['|', ('is_customer_onboarding', '=', False), ('state','in',['costing', 'sale']) ]}"/>
+                <button name="create_site_inspection" type="object" string="Site Inspection" class="oe_highlight"
+                        attrs="{'invisible': ['|', ('branch_for', '!=', 'hro'),  ('state', '!=', 'pre_approval')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+                <attribute name="string">Unit Price/Salary</attribute>
+                <attribute name="readonly">False</attribute>
+                <!--                <attribute name="attrs">{'readonly': [('state', '!=', 'costing')]}</attribute>-->
+                <attribute name="attrs">{'readonly': [('state', '=', 'cancel')]}</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Documents" name="document" attrs="{'invisible': [('branch_for', '=',  'mro')]}">
+                    <field name="document_line_ids" widget='one2many' nolabel="1" class="oe_inline oe_no_button">
+                        <tree editable="bottom">
+                            <field name="document_line_id"/>
+                            <field name="document_number"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="status"/>
+                            <field name="receipt_no"/>
+                            <field name="receipt_date"/>
+                            <field name="remarks"/>
+                            <field name="attachment" widget="binary"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Additional Charges" name="additional_charge"
+                      attrs="{'invisible': [('branch_for', '=',  'mro')]}">
+                    <field name="addtionl_charge_sale_order_ids" widget='one2many' nolabel="1"
+                           class="oe_inline oe_no_button">
+                        <tree string="Quotation Template Lines" editable="bottom">
+                            <field name="sequence_ref"/>
+                            <field name="employee_id"
+                                   attrs="{'column_invisible':[('parent.state', '!=', 'sale'),'&amp;',('parent.sale_type', '!=', 'cost_plus')]}"/>
+                            <field name="product_id" domain="[('default_code', 'not in', ['SOC','NOC'])]"/>
+                            <field name="based_cost" required="1"/>
+                            <field name="recurring"/>
+                            <field name="charge_date" attrs="{'readonly': [('recurring', '=', True)]}" />
+                            <field name="so_id" invisible="1"/>
+                            <field name="so_line_id" attrs="{'invisible': [('product_id', '=', False)]}"/>
+                            <field name ="task_id" optional="hide"/>
+                            <!-- <field name="name"/> -->
+                            <field name="quantity"/>
+                            <field name="product_uom_category_id" invisible="1"/>
+                            <field name="product_uom"/>
+                            <!-- <field name="uom_id" groups="uom.group_uom"/> -->
+                            <field name="price_unit"/>
+                            <field name="amount" optional="hide"/>
+                            <field name="remarks"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Instruction" name="instruction" attrs="{'invisible': [('branch_for', '=',  'mro')]}">
+                    <field name="instruction" placeholder="Instruction..."/>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'not in', ['costing','draft','sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//group[@name='sale_shipping']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="partner_id" position="after">
+                <field name="contact_name" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="email" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="mobile" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="scope_of_work" invisible='1'/>
+                <field name="subject" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="min_contract" attrs="{'invisible': [('branch_for', '=',  'mro')]}"/>
+                <field name="duration_in_days" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="week_of" options="{'no_quick_create': True, 'no_create_edit' : True}"
+                       widget="many2many_tags" domain="[('l_code', '=', 'F')]"
+                       attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="week_of_no" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="total_week_off" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+                <field name="total_working_days" attrs="{'invisible': [('branch_for', '!=',  'hro')]}"/>
+
+            </field>
+            <xpath expr="//notebook" position="before">
+                <field name="display_extra_line" invisible="1"/>
+                <button name="hide_show_extra_line" type="object" string="ExtraCharges"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="domain">[('display_extra_line','=',True)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_sale_advance_payment_inv" model="ir.ui.view">
+        <field name="name">Invoice Orders</field>
+        <field name="model">sale.advance.payment.inv</field>
+        <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='advance_payment_method']" position="after">
+                <field name="task_ids" widget="many2many_tags"/>
+                <field name="inv_date"/>
+                <field name="date"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

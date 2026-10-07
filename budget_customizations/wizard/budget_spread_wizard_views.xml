@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ 
+    <!-- ===== Wizard Form View ===== -->
+    <record id="view_budget_spread_report_wizard_form" model="ir.ui.view">
+        <field name="name">budget.spread.report.wizard.form</field>
+        <field name="model">budget.spread.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget Spread Report">
+                <sheet>
+                    <group>
+                        <group string="Filters">
+                            <field name="company_ids" widget="many2many_tags"/>
+                            <field name="branch_ids"  widget="many2many_tags"/>
+                            <field name="budget_ids"  widget="many2many_tags"
+                                   domain="[('company_id', 'in', company_ids)]"/>
+                        </group>
+                        <group string="Period">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report"
+                            string="Generate Excel Report"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+ 
+    <!-- ===== Action to open wizard ===== -->
+    <record id="action_budget_spread_report_wizard" model="ir.actions.act_window">
+        <field name="name">Budget Spread Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">budget.spread.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+ 
+    <!-- ===== Menu entry under Accounting > Reporting ===== -->
+    <menuitem
+        id="menu_budget_spread_report"
+        name="Budget Spread Report"
+        parent="account.account_reports_management_menu"
+        action="action_budget_spread_report_wizard"
+        groups="budget_customizations.group_account_admin"/>
+ 
+</odoo>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <record id="view_accrued_revenue_wizard_form" model="ir.ui.view">
+        <field name="name">accrued.revenue.wizard.form</field>
+        <field name="model">accrued.revenue.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Accrued Revenue Entry Generate">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" invisible="1"/>
+                            <field name="journal_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="accrual_account_id" domain="[('user_type_id', '=', %(account.data_account_type_current_assets)d), ('company_id', '=', context.get('company_id', company_id))]" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="reversal_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">  
+                                    <field name="account_id" domain="[('user_type_id', '=', %(account.data_account_type_current_assets)d), ('company_id', '=', context.get('company_id', parent.company_id))]"/>
+                                    <field name="task_id" readonly="1"/>
+                                    <field name="label"/>
+                                    <field name="unbilled_value" string="Credit"/>
+                                    <field name="is_debit_line" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <group>
+                            <div class="alert alert-info" role="alert">
+                                <p>This will create accrued revenue entries as of the selected date and automatically reverse them on the reversal date.</p>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_entry" string="CREATE ENTRY" type="object" class="oe_highlight"/>
+                    <button string="CANCEL" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record> -->
+
+    <record id="view_accrued_revenue_wizard_form" model="ir.ui.view">
+        <field name="name">accrued.revenue.wizard.form</field>
+        <field name="model">accrued.revenue.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Accrued Revenue Entry Generate">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" invisible="1"/>
+                            <!-- <field name="journal_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="accrual_account_id" domain="[('user_type_id', '=', %(account.data_account_type_current_assets)d), ('company_id', '=', context.get('company_id', company_id))]" options="{'no_create': True, 'no_open': True}"/> -->
+                            <field name="journal_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="accrual_account_id" domain="[('user_type_id', '=', %(account.data_account_type_current_assets)d), ('company_id', '=', context.get('company_id', company_id))]" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="branch_id" required="1" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="reversal_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="account_id" domain="[('user_type_id', '=', %(account.data_account_type_current_assets)d), ('company_id', '=', context.get('company_id', parent.company_id))]"/>
+                                    <field name="task_id" readonly="1"/>
+                                    <field name="label"/>
+                                    <field name="debit_value" sum="Total Debit" attrs="{'readonly': [('is_debit_line', '=', False)]}"/>
+                                    <field name="credit_value" sum="Total Credit" attrs="{'readonly': [('is_debit_line', '=', True)]}"/>
+                                    <field name="is_debit_line" invisible="1"/>
+                                    <!-- <field name="line_type"/> -->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <group>
+                            <div class="alert alert-info" role="alert">
+                                <p>This will create accrued revenue entries as of the selected date and automatically reverse them on the reversal date.</p>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_entry" string="CREATE ENTRY" type="object" class="oe_highlight"/>
+                    <button string="CANCEL" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Action to open the wizard from sale order -->
+    <record id="action_accrued_revenue_wizard" model="ir.actions.act_window">
+        <field name="name">Accrued Revenue Entry Generate</field>
+        <field name="res_model">accrued.revenue.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>

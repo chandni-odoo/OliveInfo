@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pl_report_xlsx" model="ir.actions.report">
+        <field name="name">Comparative Profit &amp; Loss Report</field>
+        <field name="model">pl.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.pl_report_xlsx</field>
+        <field name="report_file">hr_payroll_report.pl_report_xlsx</field>
+        <field name="binding_model_id" ref="model_pl_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

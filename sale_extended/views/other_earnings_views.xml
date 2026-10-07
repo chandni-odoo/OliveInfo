@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_other_earnings_inherit" model="ir.ui.view">
+        <field name="name">other.earnings.inherit.form</field>
+        <field name="model">other.earnings</field>
+        <field name="inherit_id" ref="peoplesol_other_earnings.other_earnings_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='applied_to']" position="after">
+                <field name="cost_reference"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

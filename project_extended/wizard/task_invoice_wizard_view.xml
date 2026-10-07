@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="receive_date_wizard_form_view" model="ir.ui.view">
+        <field name="name">task.invoice.wizard</field>
+        <field name="model">task.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="journal_id" domain="[('type', '=', 'sale')]"/>
+                            <field name="partner_id" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Create Invoice" name="create_task_invoice" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_for_task_invoice_wizard" model="ir.actions.act_window">
+        <field name="name">Create Overtime Invoice</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">task.invoice.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+
+    <record id="demobilize_wizard_form_view" model="ir.ui.view">
+        <field name="name">task.demobilize.wizard</field>
+        <field name="model">task.demobilize.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="demobilize_date"/>
+                            <field name="remark"/>
+                            <field name="emp_ids" widget="many2many_tags" edit="false"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Demobilize" name="task_emp_demobilize" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_for_task_demobilize_wizard" model="ir.actions.act_window">
+        <field name="name">Task Demobilize</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">task.demobilize.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+
+</odoo>

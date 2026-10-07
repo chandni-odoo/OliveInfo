@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+<!--        muskan-->
+        <record id="send_mail_to_assignee" model="mail.template">
+            <field name="name">EMAIL TEMPLATE NAME</field>
+            <field name="model_id" ref="gt_helpdesk_extended.model_helpdesk_ticket"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">odoo@dulsco.qa</field>
+            <field name="email_to">{{object.user_id.login}}</field>
+            <field name="subject">{{'Need to discuss'}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <h1>Assignee has been change</h1>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="resource_reporting_tree_view" model="ir.ui.view">
+        <field name="name">resource.reporting.tree.view</field>
+        <field name="model">resource.reporting</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="emp_name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="resource_reporting_form_view" model="ir.ui.view">
+        <field name="name">resource.reporting.form.view</field>
+        <field name="model">resource.reporting</field>
+        <field name="arch" type="xml">
+            <form string="Resource Reporting">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="emp_id"/>
+                            <field name="emp_name" required="1"/>
+                            <field name="emp_code"/>
+                            <field name="task_id"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="branch_id"/>
+                            <field name="billable"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Action -->
+    <record id="action_resource_reporting" model="ir.actions.act_window">
+        <field name="name">Resource Reporting</field>
+        <field name="res_model">resource.reporting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_resource_reporting"
+        name="Resource Reporting"
+        action="action_resource_reporting"
+        parent="hr.menu_human_resources_configuration"
+        sequence="200"
+        />
+</odoo>

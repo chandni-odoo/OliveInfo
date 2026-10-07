@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_hr_disciplinary_action_tree" model="ir.ui.view">
+        <field name="name">disciplinary.action.line.tree</field>
+        <field name="model">disciplinary.action.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="employee_manager"/>
+                <field name="employee_status"/>
+                <field name="action_type_id"/>
+                <field name="action"/>
+                <field name="date"/>
+                <field name="action_amount"/>
+                <field name="remarks"/>
+                <field name="severity"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_disciplinary_action_search" model="ir.ui.view">
+        <field name="name">disciplinary.action.line.search</field>
+        <field name="model">disciplinary.action.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="employee_job_title"/>
+                <field name="employee_branch"/>
+                <field name="employee_manager"/>
+                <field name="employee_status"/>
+                <field name="action"/>
+            </search>
+        </field>
+    </record>
+
+
+
+
+    <!-- Action -->
+    <record id="action_hr_disciplinary_action" model="ir.actions.act_window">
+        <field name="name">Disciplinary Action</field>
+        <field name="res_model">disciplinary.action.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_disciplinary_action_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new document
+            </p>
+            <p>
+                Also you will find here all the related documents and download it by clicking on any individual
+                document.
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Menuitem -->
+    <menuitem id="menu_hr_employee_reports"
+              name="Employee Reports"
+              parent="hr.menu_hr_root"
+              sequence="7"/>
+              
+    <menuitem id="menu_hr_disciplinary_action"
+              name="HR Disciplinary Action"
+              parent="menu_hr_employee_reports"
+              action="action_hr_disciplinary_action"
+              sequence="7"/>
+</odoo>

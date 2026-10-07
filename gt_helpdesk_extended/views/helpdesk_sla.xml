@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="helpdesk_extended_sla_view" model="ir.ui.view">
+            <field name="name">helpdesk.extended.sla.view</field>
+            <field name="model">helpdesk.sla</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_sla_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ticket_type_id']" position="after">
+                    <field name="sub_type_id"/>
+                </xpath>
+                <group>
+                    <separator colspan="2" string="Escalation Managers" class="mt32"/>
+                    <group>
+                        <field name="employee_ids"/>
+                    </group>
+                    <!--                    <field name="stage_id" string="Reach Stage"-->
+                    <!--                           domain="[('team_ids', '=', team_id), ('id', 'not in', exclude_stage_ids)]" required="1"-->
+                    <!--                           context="{'default_team_ids': team_id and [(6, 0, [team_id])]}"/>-->
+                    <!--                    <label for="time" string="In"/>-->
+                    <!--                    <div class="o_row">-->
+                    <!--                        <field name="time" widget="float_time"/>-->
+                    <!--                        <span class="o_field_widget o_readonly_modifier">Working Hours</span>-->
+                    <!--                    </div>-->
+                    <!--                    <field name="exclude_stage_ids" widget="many2many_tags"-->
+                    <!--                           domain="[('id', '!=', stage_id), ('team_ids', '=', team_id)]"-->
+                    <!--                           context="{'default_team_ids': team_id and [(6, 0, [team_id])]}"/>-->
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

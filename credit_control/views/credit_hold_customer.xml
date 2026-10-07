@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_credit_hold_customers_tree" model="ir.ui.view">
+        <field name="name">res.partner.credit.hold.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Credit Hold Customers">
+                <field name="name"/>
+                <field name="address_no"/>
+                <field name="credit_limit"/>
+                <field name="total_exposure"/>
+                <field name="ava_credit_bal" decoration-danger="credit_bal_negative == True"/>
+                <field name="credit_bal_negative" invisible="1"/>
+                <field name="hold_reason"/>
+                <field name="hold_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_request_credit_approvers_tree" model="ir.ui.view">
+        <field name="name">res.partner.request.credit.approvers.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Request Credit Approvers">
+                <field name="name"/>
+                <field name="address_no"/>
+                <field name="credit_limit"/>
+                <field name="total_exposure"/>
+                <field name="ava_credit_bal" decoration-danger="credit_bal_negative == True"/>
+                <field name="credit_bal_negative" invisible="1"/>
+                <field name="hold_reason"/>
+                <field name="approver_1" string="First Approver"/>
+                <field name="approver_2" string="Second Approver"/>
+                <field name="approver_3" string="Third Approver"/>
+                <field name="hold_position"/>
+                <field name="hold_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_credit_hold_customers" model="ir.actions.act_window">
+        <field name="name">Credit Hold Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('hold_option', '=', 'credit_block'), ('credit_block', '=', 'yes')]</field>
+        <field name="view_id" ref="view_credit_hold_customers_tree"/>
+        <field name="context">{'default_customer': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers with credit hold found
+            </p>
+            <p>
+                Customers will appear here when their available credit balance becomes negative.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_request_credit_approvers" model="ir.actions.act_window">
+        <field name="name">Request Credit Approvers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('hold_option', '=', 'credit_block'), ('credit_block', '=', 'yes')]</field>
+        <field name="view_id" ref="view_request_credit_approvers_tree"/>
+        <field name="context">{'default_customer': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers with credit hold found
+            </p>
+        </field>
+    </record>
+
+    <record id="action_credit_hold_first_escalate" model="ir.actions.act_window">
+        <field name="name">First Escalate</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <!-- <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('hold_position', '=', 'first_escalate'),('approver_1', '=', uid)]</field> -->
+        <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('first_approval_request', '=', True),('approver_1', '=', uid)]</field>
+        <field name="view_id" ref="view_credit_hold_customers_tree"/>
+        <field name="context">{'default_customer': True, 'default_hold_position': 'first_escalate'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers with credit hold found
+            </p>
+            <p>
+                Customers will appear here when their available credit balance becomes negative.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_credit_hold_second_escalate" model="ir.actions.act_window">
+        <field name="name">Second Escalate</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <!-- <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('hold_position', '=', 'released_by_1st'),('approver_2', '=', uid)]</field> -->
+        <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('second_approval_request', '=', True),('approver_2', '=', uid)]</field>
+        <field name="view_id" ref="view_credit_hold_customers_tree"/>
+        <field name="context">{'default_customer': True, 'default_hold_position': 'second_escalate'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers with credit hold found
+            </p>
+            <p>
+                Customers will appear here when they are escalated to second level.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_credit_hold_third_escalate" model="ir.actions.act_window">
+        <field name="name">Third Escalate</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <!-- <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('hold_position', '=', 'released_by_2nd'),('approver_3', '=', uid)]</field> -->
+        <field name="domain">[('hold_option', '=', 'credit_block'),('credit_block', '=', 'yes'), ('third_approval_request', '=', True),('approver_3', '=', uid)]</field>
+        <field name="view_id" ref="view_credit_hold_customers_tree"/>
+        <field name="context">{'default_customer': True, 'default_hold_position': 'third_escalate'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers with credit hold found
+            </p>
+            <p>
+                Customers will appear here when they are escalated to third level.
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Server action for releasing credit hold -->
+    <record id="action_server_release_credit_hold" model="ir.actions.server">
+        <field name="name">Release Credit Hold</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.release_credit_hold_action()
+        </field>
+    </record>
+
+    <record id="action_server_request_credit_release" model="ir.actions.server">
+        <field name="name">Request Credit Release</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_request_credit_release()
+        </field>
+    </record>
+
+    <menuitem id="menu_credit_hold_customers_main"
+              name="Credit Hold Customers"
+              parent="account.menu_finance_receivables"
+              sequence="200"/>
+    <menuitem id="menu_credit_hold_customers"
+              name="Credit Hold Customers"
+              parent="menu_credit_hold_customers_main"
+              action="action_credit_hold_customers"
+              sequence="1"/>
+
+    <menuitem id="menu_request_credit_approvers"
+              name="Request Credit Approvers"
+              parent="menu_credit_hold_customers_main"
+              action="action_request_credit_approvers"
+              sequence="2"/>
+
+    <menuitem id="menu_credit_hold_first_escalate"
+              name="First Escalate"
+              parent="menu_credit_hold_customers_main"
+              action="action_credit_hold_first_escalate"
+              sequence="3"/>
+
+    <menuitem id="menu_credit_hold_second_escalate"
+              name="Second Escalate"
+              parent="menu_credit_hold_customers_main"
+              action="action_credit_hold_second_escalate"
+              sequence="4"/>
+    <menuitem id="menu_credit_hold_third_escalate"
+              name="Third Escalate"
+              parent="menu_credit_hold_customers_main"
+              action="action_credit_hold_third_escalate"
+              sequence="5"/>
+    
+</odoo>

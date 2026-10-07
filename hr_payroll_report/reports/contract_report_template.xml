@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_contract_salary_report" model="ir.actions.report">
+        <field name="name">Employee Contract Salary Report</field>
+        <field name="model">contract.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payroll_report.contract_report_xlsx</field>
+        <field name="report_file">hr_payroll_report.contract_report_xlsx</field>
+    </record>
+</odoo>

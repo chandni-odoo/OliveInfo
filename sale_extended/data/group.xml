@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <data>
+        <record id="unarchive_sale_line_group" model="res.groups">
+            <field name="name">Unarchive Sale Order Line(GT)</field>
+            <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        </record>
+    </data>
+</odoo>

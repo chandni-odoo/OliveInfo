@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="occupancy_report_xlsx_action" model="ir.actions.report">
+        <field name="name">Occupancy Excel Report</field>
+        <field name="model">occupancy.excel.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">employee_accommodation.occupancy_report_xlsx</field>
+        <field name="report_file">employee_accommodation.occupancy_report_xlsx</field>
+        <field name="print_report_name">'Occupancy_Report_%s.xlsx' % (object.to_date.strftime('%Y-%m-%d') if object.to_date else '')</field>
+        <field name="binding_model_id" ref="employee_accommodation.model_accommodation_check_in"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

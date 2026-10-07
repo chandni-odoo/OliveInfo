@@ -1,0 +1,7 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_request_request,access.request.request,model_request_request,base.group_user,1,1,1,1
+access_hr_request_type,access.hr.request.type,model_hr_request_type,base.group_user,1,1,1,1
+access_clearance_request,access.clearance.request,model_clearance_request,base.group_user,1,1,1,1
+access_clearance_approval_history,access.clearance.approval.history,model_clearance_approval_history,base.group_user,1,1,1,1
+access_hr_leaving_reason,access.hr.leaving.reason,model_hr_leaving_reason,base.group_user,1,1,1,1
+

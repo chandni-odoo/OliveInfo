@@ -1,0 +1,36 @@
+<odoo>
+	<data>
+		<record id="project_shift_wizard_view_form" model="ir.ui.view">
+			<field name="name">project.shift.wizard.view</field>
+			<field name="model">project.shift.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<group>
+							<field name="employee_id"/>
+							<field name="from_date"/>
+							<field name="from_hour"/>
+						</group>
+						<group>
+							<field name="weekend_date"/>
+							<field name="to_date"/>
+							<field name="to_hour"/>
+						</group>
+					</group>
+					<footer>
+						<button name="button_create_over_time" string="Save" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="project_shift_wizard_action" model="ir.actions.act_window">
+			<field name="name">ProjectShift</field>
+			<field name="res_model">project.shift.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="project_extended.project_shift_wizard_view_form"/>
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>

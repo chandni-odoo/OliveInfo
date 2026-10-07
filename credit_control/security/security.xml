@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="credit_request_approved_group" model="res.groups">
+        <field name="name">Credit Request Approver</field>
+    </record>
+
+    <record id="group_credit_manager" model="res.groups">
+        <field name="name">Credit Manager</field>
+    </record>
+
+    <record id="credit_first_approver_group" model="res.groups">
+        <field name="name">Credit First Approver</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <record id="credit_second_approver_group" model="res.groups">
+        <field name="name">Credit Second Approver</field>
+    </record>
+    
+    <record id="credit_third_approver_group" model="res.groups">
+        <field name="name">Credit Third Approver</field>
+    </record>
+
+    <record id="res_partner_approver_security_rule" model="ir.rule">
+        <field name="name">Partner Approver Security</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="domain_force">
+            ['|', '|', '|',
+                ('approver_1', '=', user.id),
+                ('approver_2', '=', user.id),
+                ('approver_3', '=', user.id),
+                ('last_approver', '=', user.id)
+            ]
+        </field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_account_admin_group2" model="res.groups">
+        <field name="name">Accounts Admin 2</field>
+    </record>
+</odoo>

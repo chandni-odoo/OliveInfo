@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_task_bulk_reported_wizard_form_view" model="ir.ui.view">
+        <field name="name">employee.task.reported.wizard.form</field>
+        <field name="model">employee.task.reported.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="task_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Reported" name="action_task_bulk_reported" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_task_bulk_reported_wizard" model="ir.actions.act_window">
+        <field name="name">Create Task Bulk Reported</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.task.reported.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+</odoo>

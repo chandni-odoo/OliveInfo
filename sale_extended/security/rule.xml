@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <data>
+
+        <!--        Task-->
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name','=','ir_rule_private_task')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+        <record id="project.ir_rule_private_task" model="ir.rule">
+            <field name="domain_force">[
+                ('branch_id','in', user.branch_ids.ids), '|',
+                ('project_id.privacy_visibility', '!=', 'followers'),
+                '|', '|', ('project_id', '!=', False),
+                ('parent_id', '!=', False),
+                ('user_ids', 'in', user.id),
+                ]
+            </field>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name', '=', 'ir_rule_private_task')]"/>
+            </function>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name','=','project_manager_all_project_tasks_rule')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+        <record id="project.project_manager_all_project_tasks_rule" model="ir.rule">
+            <field name="domain_force">[(1, '=', 1),'|', ('branch_id','=',False),('branch_id','in',
+                user.branch_ids.ids)]
+            </field>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name', '=', 'project_manager_all_project_tasks_rule')]"/>
+            </function>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+
+        <!--        Project-->
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name','=','project_public_members_rule')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+        <record id="project.project_public_members_rule" model="ir.rule">
+            <field name="domain_force">[ ('branch_id','in', user.branch_ids.ids)]
+            </field>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name', '=', 'project_public_members_rule')]"/>
+            </function>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name','=','project_project_manager_rule')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+        <record id="project.project_project_manager_rule" model="ir.rule">
+            <field name="domain_force">[(1, '=', 1),'|', ('branch_id','=',False),('branch_id','in',
+                user.branch_ids.ids)]
+            </field>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'project'), ('name', '=', 'project_project_manager_rule')]"/>
+            </function>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+    </data>
+
+</odoo>

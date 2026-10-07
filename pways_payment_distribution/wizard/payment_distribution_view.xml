@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_distribution_form_view" model="ir.ui.view">
+        <field name="name">payment.distribution.form.view</field>
+        <field name="model">payment.distribution</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Payment Distribution">
+                <group>
+                    <group>
+                        <field name="is_cheque" invisible="1"/>
+                        <field name="is_bank" invisible="1"/>
+                        <field name="journal_id" options='{"create":False,"create_edit": False,"no_open": True}'/>
+                        <field name="payment_type"/>
+                        <field name="reference"/>
+                        <field name="payment_amount"/>
+                        <field name="cheque_no" attrs="{'invisible':[('is_bank', '=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="invoice_type"/>
+                        <field name="payment_date" required="True"/>
+                        <field name="receipt_date"/>
+                        <field name="partner_id" options='{"create":False,"create_edit": False,"no_open": True}'/>
+                    </group>
+                    <group/>
+                    <group>
+                        <button name="select_invoices" string="Select Invoices" type="object"/>
+                    </group>
+                </group>
+                <field name="distribution_line_ids">
+                    <tree string="Payment Distribution Line" editable="bottom" create="false">
+                        <field name="partner_id" force_save="1"/>
+                        <field name="invoice_id" force_save="1"/>
+                        <field name="date_invoice" force_save="1"/>
+                        <field name="invoice_total" orce_save="1"/>
+                        <field name="residual" force_save="1"/>
+                        <field name="currency_id" force_save="1"/>
+                        <field name="amount_to_pay"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button class="oe_highlight" name="make_payment_distribution" string="Make Payment" type="object"/>
+                    <button class="oe_highlight" special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="payment_distribution_action" model="ir.actions.act_window">
+         <field name="name">Payment Distribution</field>
+         <field name="res_model">payment.distribution</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_mode">tree,form</field>
+         <field name="view_id" ref="payment_distribution_form_view"/>
+         <field name="target">new</field>
+    </record>
+
+    <menuitem id="payment_distrubution_customer_menu" name="Payment Distribution" parent="account.menu_finance_receivables" sequence="0"/>
+    <menuitem name="Payment Distribution" sequence='1' action="payment_distribution_action" id="menu_payment_distrubution_customer_id" parent="payment_distrubution_customer_menu"/>
+    <menuitem id="payment_distrubution_vendor_menu" name="Payment Distribution" parent="account.menu_finance_payables" sequence="0"/>
+    <menuitem name="Payment Distribution" sequence='1' action="payment_distribution_action" id="menu_payment_distrubution_vendor_id" parent="payment_distrubution_vendor_menu"/>
+
+
+    <record id="select_invoice_line_tree_view" model="ir.ui.view">
+        <field name="name">select.invoice.line.view.tree</field>
+        <field name="model">select.invoice.line</field>
+        <field name="arch" type="xml">
+            <form string="Select Invoices">
+                <label for="select_all" string="Select All"/>
+                <field name="select_all"/>
+                <field name="select_invoice_ids">
+                    <tree string="Select" editable="top" create="false">
+                        <field name="check"/>
+                        <field name="partner_id" force_save="1"/>
+                        <field name="invoice_id" force_save="1"/>
+                        <field name="date_invoice" force_save="1"/>
+                        <field name="invoice_total" orce_save="1"/>
+                        <field name="residual" force_save="1"/>
+                        <field name="currency_id" force_save="1"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button class="oe_highlight" name="confirm_invoice" string="Confirm" type="object"/>
+                    <button class="oe_highlight" name="cancel_wizard" string="Cancel" type="object"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

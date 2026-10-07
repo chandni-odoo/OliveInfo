@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_request_request,access_request_request,model_request_request,base.group_user,1,1,1,1
+access_hr_request_type,access_hr_request_type,model_hr_request_type,base.group_user,1,1,1,1

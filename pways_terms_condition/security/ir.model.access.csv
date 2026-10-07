@@ -1,0 +1,2 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+pways_terms_condition.access_terms_condition,access_terms_condition,pways_terms_condition.model_terms_condition,base.group_user,1,1,1,1

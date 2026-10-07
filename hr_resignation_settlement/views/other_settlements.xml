@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_form_loan_inherit" model="ir.ui.view">
+            <field name="name">hr.gratuity.form.inherit</field>
+            <field name="model">hr.gratuity</field>
+            <field name="inherit_id" ref="hr_gratuity_settlement.employee_gratuity_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='draft_function']" position="after">
+                    <button name="action_create_emp_settement" type="object" attrs="{'invisible': [('state','!=', 'approve')]}" string="Create Employee Settlements"/>
+                </xpath>
+                <xpath expr="//div[@class='oe_title']" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_open_settelement" type="object" icon="fa-edit" string="Settlements" attrs="{'invisible': []}"></button>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="other_settlements_tree" model="ir.ui.view">
+            <field name="name">other.settlements.tree</field>
+            <field name="model">other.settlements</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Gratuity">
+                    <field name ="name"/>
+                    <field name ="employee_name"/>
+                    <field name ="total_payable_amount" sum="Total" widget="monetary" />
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name ="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="other_settlements_form" model="ir.ui.view">
+            <field name="name">other.settlements.form</field>
+            <field name="model">other.settlements</field>
+            <field name="arch" type="xml">
+                <form string="Employee Settlements">
+                    <header>
+                        <!-- <button name="create_advance_payment_entry" type="object"  attrs="{'invisible': [('state','in', ['draft', 'done'])]}" string="Create Advance Payment"/> -->
+                        <button name="validate_function" type="object" string="Validate" class="oe_highlight" states="draft"/>
+                        <button name="compute_function" type="object" string="Compute" class="oe_highlight" states='validate'/>
+                        <button name="approve_function" type="object" string="Confirm" class="oe_highlight" states="validate"/>
+                        <button name="cancel_function" type="object" string="Cancel" states="draft,validate"/>
+                        <button name="draft_function" type="object" string="Set to Draft" states="cancel"/>
+                        <!-- <button name="create_extra_journal_entries" type="object" string="Create Journal Entries" states="approve" class="oe_highlight"/> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,validate,approve"/>
+                    </header>
+                        <sheet>
+                            <div class="oe_button_box" name="button_box">
+                                <button class="oe_stat_button" name="action_advance_salary" type="object" icon="fa-usd" attrs="{'invisible': [('state','in', ['draft']), ('total_advance_salary','=', 0)]}">
+                                    <field name="total_advance_salary" widget="statinfo"/>
+                                </button>
+                                <button class="oe_stat_button" name="action_journal_entries" type="object" icon="fa-usd" string="Journal Entries" attrs="{'invisible': [('state','!=', 'done')]}">
+                                </button>
+                            </div>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" readonly="1"/>
+                                </h1>
+                            </div>
+                                <group>
+                                    <group>
+                                        <field name ="employee_name"  string="Employee" required="True" domain="[('id', 'in', employee_ids)]" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="employee_ids" invisible="1"/>
+                                        <field name ="employee_dept" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="branch_id"/>
+                                        <field name ="employee_job_id" required="True" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name='gratuity_id'/>
+                                    </group>
+                                    <group>
+                                        <field name="journal_id"  attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="revealing_date" required="True" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="joined_date" required="True" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="last_date" required="True" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="request_date" required="True" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="reason" required="True" attrs="{'readonly': [('state','=','approve')]}" widget="radio" options="{'horizontal':true}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="basic_salary" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="net_amount" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="gross_amount" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="gross_salary" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="worked_years"  attrs="{'readonly': [('state','=','approve')]}" widget="float"/>
+                                        <field name="service_days" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="absentees_count" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="unproductive_days" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="sum_unproductive_days" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="notice_id"  attrs="{'readonly': [('state','=','approve')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="leave_balance"  attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="leave_pay" attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="unpaid_days"  attrs="{'readonly': [('state','=','approve')]}"/>
+                                        <field name="unpaid_days_amount" attrs="{'readonly': [('state','=','approve')]}"/>
+                                    </group>  
+                                </group>
+                                <notebook>
+                                    <page string="Computations">
+                                        <group string='Gratuity Settlements'/>
+                                        <field name="gratuity_ids">
+                                            <tree editable="none">
+                                                <field name="description" required="1"/>
+                                                <field name="other_input_type"/>
+                                                <field name="remarks"/>
+                                                <field name="quantity"/>
+                                                <field name="amount"/>
+                                                <field name="total"/>
+                                            </tree>
+                                        </field>
+                                        <group string='Leave Details'/>
+                                        <field name="leave_ids">
+                                            <tree editable="none">
+                                                <field name="description" required="1"/>
+                                                <field name="other_input_type"/>
+                                                <field name="remarks"/>
+                                                <field name="quantity"/>
+                                                <field name="amount"/>
+                                                <field name="total"/>
+                                            </tree>
+                                        </field>
+                                        <group string='Other Settlements'/>
+                                        <field name="other_sattlement_ids">
+                                            <tree editable="none">
+                                                <field name="description" required="1"/>
+                                                <field name="other_input_type"/>
+                                                <field name="remarks"/>
+                                                <field name="quantity"/>
+                                                <field name="amount"/>
+                                                <field name="total"/>
+                                            </tree>
+                                        </field>
+                                        <group string='Payslip'/>
+                                        <field name="payslip_ids" readonly="1" force_save="1">
+                                            <tree editable="none">
+                                                <field name="number"/>
+                                                <field name="date_from"/>
+                                                <field name="date_to"/>
+                                                <field name="employee_id"/>
+                                                <field name="payslip_run_id"/>
+                                                <field name="company_id"/>
+                                                <field name="basic_wage"/>
+                                                <field name="net_wage"/>
+                                                <field name="state"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                                 <group>
+                                    <group colspan="4">
+                                        <field name="remarks" class="oe-bordered-editor" nolabel="1" placeholder="Remarks..."/>
+                                    </group>
+                                    <group>
+                                        <field name="notice_period_amount" attrs="{'readonly': [('state','=','approve')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="total_payable_amount"/>
+                                    </group>
+
+                                </group>
+                        </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="activity_ids" widget="mail_activity" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="action_other_settlements" model="ir.actions.act_window">
+           <field name="name">Employee Settlements</field>
+           <field name="res_model">other.settlements</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- <record id="view_res_company_account_inherit" model="ir.ui.view">
+            <field name="name">res.company.view</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='debit_account_id']" position="after">
+                    <field name="advance_credit_account_id"/>
+                    <field name="advance_debit_account_id"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <record id="res_config_settings_view_form_inherits_account" model="ir.ui.view">
+            <field name="name">hr.res_config_settings_view_form.inherit.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='enrich_employee_setting']" position="after">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="advance_credit_account_id"/>
+                            <div class="text-muted">
+                                <field name="advance_credit_account_id"/>
+                            </div>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="advance_debit_account_id"/>
+                            <div class="text-muted">
+                                <field name="advance_debit_account_id"/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="other_settlements" name="Employee Settlements" parent="hr_resignation.employee_resignation"
+                  action="action_other_settlements" sequence="20" />
+
+    </data>
+</odoo>

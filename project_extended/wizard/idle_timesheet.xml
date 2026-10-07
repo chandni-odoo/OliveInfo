@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="idle_timesheet_form_view" model="ir.ui.view">
+        <field name="name">idle.timesheet.form.view.wizard</field>
+        <field name="model">idle.timesheet.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Idle Timesheet">
+                <group>
+                    <group>
+<!--                        <field name="employee_id" widget="many2many_tags"/>-->
+                        <field name="branch_id" widget="many2many_tags"/>
+                    </group>
+                    <group>
+<!--                        <field name="date_from"/>-->
+                        <field name="date_to"/>
+
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_excelsheet" type="object" string="Create" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="idle_timesheet_action" model="ir.actions.act_window">
+        <field name="name">Idle Timesheet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">idle.timesheet.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="idle_timesheet_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="menu_ide_timesheet_form"
+              name="Idle Timesheet"
+              sequence="50"
+              action="project_extended.idle_timesheet_action"
+              parent="project.menu_project_config"
+    />
+
+</odoo>

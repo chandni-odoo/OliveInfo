@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="fleet_landfill_tree" model="ir.ui.view">
+        <field name="name">fleet.landfill.tree</field>
+        <field name="model">fleet.landfill</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_fleet_landfill" model="ir.actions.act_window">
+        <field name="name">Landfill</field>
+        <field name="res_model">fleet.landfill</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <menuitem id="menu_landfill" name="Landfill" parent="fleet.fleet_configuration" action="action_fleet_landfill" />
+</odoo>

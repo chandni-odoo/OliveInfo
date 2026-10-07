@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="visa_applicant_tree_view" model="ir.ui.view">
+        <field name="name">visa.applicant.tree.view</field>
+        <field name="model">visa.applicant</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="requested_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="visa_applicant_form_view" model="ir.ui.view">
+        <field name="name">visa.applicant.form.view</field>
+        <field name="model">visa.applicant</field>
+        <field name="arch" type="xml">
+            <form string="Visa">
+                <header>
+                    <button name="button_step1"  string="step2" type="object" class="oe_highlight" states='step1'/>
+                    <button name="button_step2"  string="step3" type="object" class="oe_highlight" states='step2'/>
+                    <button name="button_step3"  string="step4" type="object" class="oe_highlight" states='step3'/>
+                    <button name="button_step4"  string="step5" type="object" class="oe_highlight" states='step4'/>
+                    <button name="button_step5"  string="step6" type="object" class="oe_highlight" states='step5'/>
+                    <button name="button_step6"  string="step7" type="object" class="oe_highlight" states='step6'/>
+              
+                    <button name="button_cancel"  string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['cancel'])]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <separator string="Visa Request"/>
+                        <group>
+                            <field name="requested_id"/>
+                            <field name="date_done"/>
+                        </group>
+                        <group>
+                            <field name="applicant_no"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="More">
+                            <field name="applicant_line_ids">
+                                 <tree editable='1'>
+                                     <field name="candidate_id"/>
+                                     <field name="branch_id"/>
+                                     <field name="partner_name"/>
+                                     <field name="visa_profession_id"/>
+                                     <field name="gender"/>
+                                     <field name="job_id"/>
+                                     <field name="nationality"/>
+                                     <field name="visa_status" attrs="{'column_invisible':[('parent.state','!=','step1')]}"/>
+                                     <field name="passport" attrs="{'column_invisible':[('parent.state','!=','step1')]}"/>
+                                     <field name="quota_no" attrs="{'column_invisible':[('parent.state','!=','step2'),('parent.state','!=','step3')]}"/>
+                                     <field name="vp_no" attrs="{'column_invisible':[('parent.state','!=','step2'),('parent.state','!=','step3')]}"/>
+                                     <field name="reason_moi" attrs="{'column_invisible':[('parent.state','!=','step2'),('parent.state','!=','step3')]}"/>
+                                     <field name="visa_status" attrs="{'column_invisible':[('parent.state','!=','step2'),('parent.state','!=','step3')]}"/>
+                                     <field name="type_of_visa" attrs="{'column_invisible':[('parent.state','!=','step2')]}"/>
+                                     <field name="date_applied" attrs="{'column_invisible':[('parent.state','!=','step3')]}"/>
+                                     <field name="applied_by" attrs="{'column_invisible':[('parent.state','!=','step3')]}"/>
+                                     <field name="qvc" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="qvc_status" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                    <!--  <field name="qvc_notification" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="qvc_passed" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/> -->
+                                     <field name="medical_status" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="finger_print" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="contract" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="qvc_cost" attrs="{'column_invisible':[('parent.state','!=','step4')]}"/>
+                                     <field name="visa_no" attrs="{'column_invisible':[('parent.state','!=','step6')]}"/>
+                                     <field name="validity" attrs="{'column_invisible':[('parent.state','!=','step6')]}"/>
+                                     <field name="ticket_status" attrs="{'column_invisible':[('parent.state','!=','step6')]}"/>
+                                     <field name="ticket_cost" attrs="{'column_invisible':[('parent.state','!=','step6')]}"/>
+                                     <field name="update_ticket_status" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="entry_date" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="visa_expiry_date" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="medical_status2" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="finger_print_status" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="contract_status" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="qid_status" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="medical_cost" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="finger_print_cost" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="contract_cost" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="qid_cost" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                     <field name="total_cost" attrs="{'column_invisible':[('parent.state','!=','step7')]}"/>
+                                 </tree>
+                             </field>
+                         </page>
+                     </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_of_visa_applicant" model="ir.actions.act_window">
+        <field name="name">Visa Application</field>
+        <field name="res_model">visa.applicant</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_visa_root"
+        name="Visa"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_visa_applicant"
+        action="action_view_of_visa_applicant"
+        parent="menu_visa_root"
+        name="HR Request For Visa"
+        sequence="1"/>
+</odoo>

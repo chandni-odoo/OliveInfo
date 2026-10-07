@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_manpower_report_wizard_form" model="ir.ui.view">
+        <field name="name">manpower.report.wizard.form</field>
+        <field name="model">manpower.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manpower Requisition Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Manpower Requisition Report</h1>
+                    </div>
+                    <group>
+                        <field name="branch_ids" widget="many2many_tags"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_manpower_report_wizard_new" model="ir.actions.act_window">
+        <field name="name">Manpower Requisition Report</field>
+        <field name="res_model">manpower.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_manpower_report_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- <menuitem id="menu_manpower_report"
+              name="Manpower Report"
+              parent="hr_recruitment.menu_hr_recruitment_root"
+              sequence="3"/>
+              
+    <menuitem id="menu_manpower_requisition_report"
+              name="Manpower Requisition Report"
+              parent="menu_manpower_report"
+              action="action_manpower_report_wizard"
+              sequence="10"/> -->
+
+    <menuitem id="menu_manpower_requisition_report_wizard"
+              name="Requisition Report"
+              parent="hr_recruitment.report_hr_recruitment"
+              action="action_manpower_report_wizard_new"
+              sequence="6"/>
+
+</odoo>

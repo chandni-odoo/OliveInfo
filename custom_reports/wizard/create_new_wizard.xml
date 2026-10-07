@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_client_project_task_form" model="ir.ui.view">
+        <field name="name">project.task.client.wizard.form</field>
+        <field name="model">project.task.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Client Timesheet">
+                <group>
+                    <group>
+                        <field name="task_id"/>
+                    </group>
+                    <group>
+                        <field name="start_to"/>
+                        <field name="end_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_excel" type="object" string="Create" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_vendor_project_task_form" model="ir.ui.view">
+        <field name="name">project.task.vendor.wizard.form</field>
+        <field name="model">project.task.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Vendor Timesheet">
+                <group>
+                    <group>
+                        <field name="task_id"/>
+                        <field name="vendor_id" required="True"/>
+                    </group>
+                    <group>
+                        <field name="start_to"/>
+                        <field name="end_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_excel_vendor" type="object" string="Create" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_timesheet_client_1" model="ir.actions.act_window">
+        <field name="name">Client Timesheet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.task.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_client_project_task_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_timesheet_vendor_1" model="ir.actions.act_window">
+        <field name="name">Vendor Timesheet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.task.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_vendor_project_task_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_project_client_timesheet_1"
+              name="Client Timesheet"
+              action="custom_reports.action_timesheet_client_1"
+              parent="project.menu_project_config"
+    />
+
+    <menuitem id="menu_project_vendor_timesheet"
+              name="Vendor Timesheet"
+              action="custom_reports.action_timesheet_vendor_1"
+              parent="project.menu_project_config"
+    />
+
+</odoo>

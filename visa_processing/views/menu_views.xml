@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_visa_processing_root"
+        name="Visa Processing"
+        sequence="75"
+        web_icon="visa_processing,static/description/icon.png"/>
+
+    <menuitem id="menu_visa_processing_operations" 
+        parent="menu_visa_processing_root"
+        name="Operation-Visa" 
+        sequence="2"/>
+    
+    <menuitem id="menu_visa_quota"
+        name="Visa Quota"
+        parent="menu_visa_processing_operations"
+        action="action_visa_quota"
+        sequence="1"/>
+
+    <menuitem id="menu_visa_request_applications"
+        name="Visa Status Update"
+        parent="menu_visa_processing_operations"
+        action="action_visa_request_applications"
+        sequence="2"/>
+
+    <menuitem id="menu_visa_non_qvc_pending"
+        name="QVC/Non-QVC Pending Status"
+        parent="menu_visa_processing_operations"
+        action="action_visa_non_qvc_pending"
+        sequence="3"/>
+
+    <menuitem id="menu_visa_request_root"
+        name="Visa Request"
+        parent="menu_visa_processing_root"
+        sequence="3"/>
+
+    <menuitem id="menu_visa_request_new"
+        name="Visa Request"
+        parent="menu_visa_request_root"
+        action="action_visa_request_new_applications"
+        sequence="1"/>
+
+    <menuitem id="menu_visa_configuration" 
+        name="Settings"
+        parent="menu_visa_processing_root"
+        sequence="4"/>
+
+    <menuitem id="menu_qvc_country"
+        name="QVC Countries"
+        parent="menu_visa_configuration"
+        action="action_qvc_country"
+        sequence="1"/>
+
+    <menuitem id="menu_qvc_center"
+        name="QVC Centers"
+        parent="menu_visa_configuration"
+        action="action_qvc_center"
+        sequence="2"/>
+
+    <menuitem id="menu_visa_reports" 
+        name="Reports"
+        parent="menu_visa_processing_root"
+        sequence="5"/>
+
+    <record id="hr_contract.hr_menu_contract_history" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('visa_processing.group_hr_employee_contract')])]"/>
+    </record>
+
+    <record id="hr_work_entry_contract_enterprise.hr_menu_contract" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('visa_processing.group_hr_employee_contract')])]"/>
+    </record>
+</odoo>

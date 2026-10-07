@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_applicant_offer_approval_line,hr.applicant.offer.approval.line,model_hr_applicant_offer_approval_line,base.group_user,1,1,1,1
+access_offer_approval_group,offer.approval.group,model_offer_approval_group,base.group_user,1,1,1,1
+access_offer_approver_line,offer.approver.line,model_offer_approver_line,base.group_user,1,1,1,1

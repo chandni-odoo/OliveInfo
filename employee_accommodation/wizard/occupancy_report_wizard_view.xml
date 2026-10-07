@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_occupancy_report_wizard" model="ir.ui.view">
+        <field name="name">occupancy.report.wizard.form</field>
+        <field name="model">occupancy.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Occupancy Report">
+                <group>
+                    <field name="to_date"/>
+                    <field name="camp_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="floor_ids" widget="many2many_tags" domain="[('camp_id', 'in', camp_ids)]"/>
+                    <field name="room_ids" widget="many2many_tags" domain="[('floor_id', 'in', floor_ids)]"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object" string="Print Report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_occupancy_report_wizard" model="ir.actions.act_window">
+        <field name="name">Occupancy Report</field>
+        <field name="res_model">occupancy.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_occupancy_report" 
+              name="Occupancy Report"
+              parent="menu_reports_root"
+              action="action_occupancy_report_wizard"
+              sequence="1"/>
+</odoo>

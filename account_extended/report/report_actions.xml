@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_customer_invoice_report" model="report.paperformat">
+            <field name="name">People Payslip A4</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">50</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="action_report_invoice_report_inherit" model="ir.actions.report">
+            <field name="name">Invoice Report Details</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">account_extended.report_invoice_custom</field>
+            <field name="report_file">account_extended.report_invoice_custom</field>
+            <field name="print_report_name">'Invoice - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="paperformat_id" ref="account_extended.paperformat_customer_invoice_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="external_layout_template">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <div class="header">
+               <div>
+                    <div style="width:77%;float:left;">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-height:70px;"/>
+                    </div>
+                    <div style="width:23%;float:right">
+                        <img t-if="company.top_right" t-att-src="image_data_uri(company.top_right)" alt="Logo" style="max-height:70px;"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0"/>
+            </div>
+            <div class="row zero_min_height">
+                <div class="col-12">
+                    <div style="border-bottom: 1px solid black;"/>
+                </div>
+            </div>
+             <div class="footer o_standard_footer">
+                <div class="row" style="margin-bottom:-25px !important;">
+                    <div class="col-12 text-center">
+                        <b>Note : This is a computer generated Invoice and does not require any signature</b>
+                        <img src="/account_extended/static/src/img/img1.jpeg" class="illustration_border" />
+                    </div>
+                    <!-- <div class="col-6">
+                        <img t-if="company.bottom_left" t-att-src="image_data_uri(company.bottom_left)" alt="Logo" style="max-height:150px;margin-bottom:10px;"/>
+                    </div>
+                    <div class="col-6" style="margin-top: 60px;" align="right">
+                        <img t-if="company.bottom_right" t-att-src="image_data_uri(company.bottom_right)" alt="Logo" style="max-height:100px;padding-top: 20px;"/>
+                    </div> -->
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

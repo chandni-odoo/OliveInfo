@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_applicant_form_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.form.inherit</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//button[@name='create_employee_from_applicant']" position="after">
+                <button name="action_create_visa_request" 
+                        string="CREATE VISA REQUEST" 
+                        type="object" 
+                        class="oe_highlight" 
+                        attrs="{'invisible': [('active', '=', False)]}"/>
+            </xpath> -->
+            <xpath expr="//sheet" position="inside">
+                <field name="has_visa_request" invisible="1"/>
+            </xpath>
+            
+            <xpath expr="//button[@name='create_employee_from_applicant']" position="after">
+                <!-- Red button for when visa request already exists -->
+                <button name="action_create_visa_request" 
+                        string="VIEW VISA REQUEST" 
+                        type="object"
+                        attrs="{'invisible': ['|', ('active', '=', False), ('has_visa_request', '=', False)]}"
+                        class="btn-danger"
+                        groups="base.group_user"/>
+                <!-- Normal button for when no visa request exists -->
+                <button name="action_create_visa_request" 
+                        string="CREATE VISA REQUEST" 
+                        type="object"
+                        attrs="{'invisible': ['|', ('active', '=', False), ('has_visa_request', '=', True)]}"
+                        class="oe_highlight"
+                        groups="base.group_user"/>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="before">
+                <field name="requisition_number" domain="[('state', '=', 'in_progress')]"/>
+            </xpath>
+            <xpath expr="//field[@name='app_status']" position="replace">
+                <field name="application_status"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_open_requisition" type="object" 
+                        class="oe_stat_button" icon="fa-list-alt"
+                        attrs="{'invisible': [('requisition_number', '=', False)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Requisition</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="after">
+                <field name="birth_date" widget="date"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Salary Offered">
+                    <field name="salary_line_ids">
+                        <tree editable="bottom">
+                            <field name="salary_component_id"/>
+                            <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="notes"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='qid_no']" position="replace">
+                <field name="qid_no" string="QID No"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="replace"/>
+            <xpath expr="//field[@name='exp_salary']" position="replace"/>
+            <xpath expr="//field[@name='date_available']" position="replace"/>
+            <xpath expr="//field[@name='status_date']" position="replace"/>
+            <xpath expr="//field[@name='hours_available']" position="replace"/>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_job_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.tree.inherit</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="requisition_number" domain="[('state', '=', 'approved')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_inherit_contract_security" model="ir.ui.view">
+        <field name="name">hr.employee.inherit.contract.security</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_contract_history']" position="attributes">
+                <attribute name="groups">visa_processing.group_hr_employee_contract</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="payroll_hr_employee_view_form_security" model="ir.ui.view">
+        <field name="name">payroll.hr.employee.view.form.security</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@icon='fa-money']" position="attributes">
+                <attribute name="groups">visa_processing.group_hr_employee_contract</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

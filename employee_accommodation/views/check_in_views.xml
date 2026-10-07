@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accommodation_check_in_form" model="ir.ui.view">
+        <field name="name">accommodation.check.in.form</field>
+        <field name="model">accommodation.check.in</field>
+        <field name="arch" type="xml">
+            <form full="1" edit="1" create="1">
+                <sheet> 
+                    <group>
+                        <group>
+                            <field name="allocation_id" readonly="1"/>
+                            <field name="employee_id"/>
+                            <field name="is_vendor_employee"/>
+                            <field name="vendor_id" attrs="{'invisible': [('is_vendor_employee', '=', False)]}"/>
+                            <field name="check_in_date"/>
+                        </group>
+                        <group>
+                            <field name="camp_id"/>
+                            <field name="floor_id"/>
+                            <field name="room_id"/>
+                            <field name="bed_id"/>
+                            <field name="status"/>
+                            <field name="facilities" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee Details">
+                            <group>
+                                <group>
+                                    <field name="nationality"/>
+                                    <field name="business_unit"/>
+                                    <field name="contact"/>
+                                    <field name="religion"/>
+                                </group>
+                                <group>
+                                    <field name="company"/>
+                                    <field name="designation"/>
+                                    <field name="date_of_join"/>
+                                    <field name="address_details"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_accommodation_check_in_tree" model="ir.ui.view">
+        <field name="name">accommodation.check.in.tree</field>
+        <field name="model">accommodation.check.in</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="allocation_id"/>
+                <field name="employee_id"/>
+                <field name="is_vendor_employee"/>
+                <field name="vendor_id" attrs="{'invisible': [('is_vendor_employee', '=', False)]}"/>
+                <field name="camp_id"/>
+                <field name="floor_id"/>
+                <field name="room_id"/>
+                <field name="bed_id"/>
+                <field name="check_in_date"/>
+                <field name="status"/>
+                <field name="nationality"/>
+                <field name="business_unit"/>
+                <field name="company"/>
+                <field name="contact"/>
+                <field name="religion"/>
+                <field name="designation"/>
+                <field name="date_of_join"/>
+                <field name="address_details"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_check_in" model="ir.actions.act_window">
+        <field name="name">Check-In</field>
+        <field name="res_model">accommodation.check.in</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_employee_list" model="ir.actions.act_window">
+        <field name="name">Occupancy List</field>
+        <field name="res_model">accommodation.check.in</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('status', '=', 'checked_in')]</field>
+    </record>
+
+</odoo>
